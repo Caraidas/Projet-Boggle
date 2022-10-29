@@ -5,6 +5,8 @@
 // Définition du type child Sibling Tree (CSTree)
 
 #define NONE -1
+#define true 1
+#define false 0
 typedef unsigned int index;
 typedef int Element;
 
@@ -48,6 +50,31 @@ CSTree example()
                        newTree(3, newTree(4, NULL, NULL), newTree(5, NULL, NULL)));
     CSTree b = newTree(1, a, NULL);
     return b;
+}
+
+// 1 false, 0 true
+int siblingLayercontains(CSTree cs, int c) {
+    if (cs == NULL) {
+        return false;
+    }
+
+    if (cs->elem == c) {
+        return true;
+    } else {
+        return siblingLayercontains(cs->nextSibling, c);
+    }
+}
+
+void appendSibling(CSTree cs, char c) {
+    if (cs == NULL) {
+        return;
+    }
+
+    if (cs->nextSibling == NULL) {
+        cs->nextSibling = newTree(c, NULL, NULL);
+    } else {
+        appendSibling(cs->nextSibling, c);
+    }
 }
 
 void printPrefix(CSTree t)
