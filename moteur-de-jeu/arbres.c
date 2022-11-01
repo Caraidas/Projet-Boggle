@@ -8,7 +8,7 @@
 #define true 1
 #define false 0
 typedef unsigned int index;
-typedef int Element;
+typedef char Element;
 
 typedef struct node
 {
@@ -43,56 +43,99 @@ CSTree newTree(Element elem, CSTree firstChild, CSTree nextSibling)
     return t;
 }
 
-CSTree example()
+void printPrefix(CSTree t)
+{
+    if (t == NULL)
+    {
+        printf("NULL");
+        return;
+    }
+    printf("%c\n", t->elem);
+    printf("%c's child : ", t->elem);
+    printPrefix(t->firstChild);
+    printf("\n");
+
+    printf("%c's sibling : ", t->elem);
+    printPrefix(t->nextSibling);
+    printf("\n");
+}
+
+/* CSTree example()
 {
     CSTree a = newTree(2,
                        NULL,
                        newTree(3, newTree(4, NULL, NULL), newTree(5, NULL, NULL)));
     CSTree b = newTree(1, a, NULL);
     return b;
-}
+}*/
 
-// 1 false, 0 true
-int siblingLayercontains(CSTree cs, int c) {
-    if (cs == NULL) {
+int siblingLayercontains(CSTree cs, char c)
+{
+    if (cs == NULL)
+    {
         return false;
     }
 
-    if (cs->elem == c) {
+    if (cs->elem == c)
+    {
         return true;
-    } else {
+    }
+    else if (cs->nextSibling == NULL)
+    {
+        return false;
+    }
+    else
+    {
         return siblingLayercontains(cs->nextSibling, c);
     }
 }
 
-void appendSibling(CSTree cs, char c) {
-    if (cs == NULL) {
+void appendSibling(CSTree *cs, char c)
+{
+    if ((*cs) == NULL)
+    {
+        (*cs) = newTree(c, NULL, NULL);
         return;
     }
-
-    if (cs->nextSibling == NULL) {
-        cs->nextSibling = newTree(c, NULL, NULL);
-    } else {
-        appendSibling(cs->nextSibling, c);
+    if ((*cs)->nextSibling == NULL)
+    {
+        (*cs)->nextSibling = newTree(c, NULL, NULL);
+    }
+    else
+    {
+        appendSibling((&(*cs)->nextSibling), c);
     }
 }
 
-void printPrefix(CSTree t)
+CSTree findElem(CSTree cs, Element elem, char *mode)
 {
-    if (t == NULL)
+    if (cs == NULL)
     {
-        return;
+        return NULL;
     }
-    printf("%d", t->elem);
-    printPrefix(t->firstChild);
-    printPrefix(t->nextSibling);
+
+    if (cs->elem != elem)
+    {
+        return findElem(cs->nextSibling, elem, mode);
+    }
+    else
+    {
+        if (mode == "child")
+        {
+            return cs->firstChild;
+        }
+        else if (mode == "sibling")
+        {
+            return cs->nextSibling;
+        }
+    }
 }
 
 void printStatic(StaticTree t)
 {
     for (int i = 0; i < t.nNodes; i++)
     {
-        printf("%d ", t.nodeArray[i].elem);
+        printf("%c ", t.nodeArray[i].elem);
     }
 }
 
