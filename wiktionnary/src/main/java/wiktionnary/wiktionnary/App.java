@@ -20,13 +20,14 @@ public class App
     		int compt = 0;
     		//int compt1 = 0; 
     		int compt2 = 0;
+    		int compt3 = 0;
     		String mot = "";
     		while((r = br.readLine()) != null)  
     		{  
     			//System.out.println(r);
     			
     			//remplacez le mot dans la balise title pour chercher ce mot
-    			if (r.contains("<title>manger</title>")) {
+    			if (r.contains("<title>balise</title>")) {
     				mot = r.replace("    <title>", "");
     				mot = mot.replace("</title>", "");
     				compt2 = 1;
@@ -39,8 +40,14 @@ public class App
     			}
     			
     			//permet d'avoir la 1er définition du mot rechercher
-    			if(compt == 1 && r.startsWith("#")) {
+    			if(compt == 1 && r.startsWith("#") && !(r.startsWith("#*")) && !(r.startsWith("##*")) && !(r.startsWith("###*"))) {
     				System.out.println(r);
+    				compt3 = 1;
+    				//break;
+    			}
+    			
+    			if(compt3 == 1 && r.startsWith(" ")) {
+    				//System.out.println(r);
     				break;
     			}
     				
@@ -48,8 +55,8 @@ public class App
     		/*if (compt1 == 500)	
     			break;
     		else
-    			compt1++;
-    		 */    		
+    			compt1++;*/
+    		     		
     			}  
     		}  
     		catch(Exception e)  
