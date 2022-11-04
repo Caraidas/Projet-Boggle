@@ -27,28 +27,31 @@ public class App
     			//System.out.println(r);
     			
     			//remplacez le mot dans la balise title pour chercher ce mot
-    			if (r.contains("<title>balise</title>")) {
+    			if (r.contains("<title>")) {
     				mot = r.replace("    <title>", "");
     				mot = mot.replace("</title>", "");
     				compt2 = 1;
-    			}
+    			} // 
     			
     			//la balise <ns> suivis de 0 signifie que ce contient title est un mot
     			if(r.contains("<ns>0") && compt2 == 1) {
     				compt = 1;
+    			}
+    			
+    			if(r.contains("== {{langue|fr}} ==") && compt == 1) {
+    				compt3 = 1;
     				System.out.println(mot);
     			}
     			
     			//permet d'avoir la 1er définition du mot rechercher
-    			if(compt == 1 && r.startsWith("#") && !(r.startsWith("#*")) && !(r.startsWith("##*")) && !(r.startsWith("###*"))) {
+    			if(compt3 == 1 && r.startsWith("#") && !(r.startsWith("#*")) && !(r.startsWith("##*")) && !(r.startsWith("###*"))) {
     				System.out.println(r);
-    				compt3 = 1;
     				//break;
     			}
-    			
-    			if(compt3 == 1 && r.startsWith(" ")) {
-    				//System.out.println(r);
-    				break;
+    			if(r.startsWith(" ") && compt3 == 1) {
+    				compt = 0;
+    				compt2 = 0;
+    				compt3 = 0;
     			}
     				
     		// décomentez pour avoir le mot accueil et lire
