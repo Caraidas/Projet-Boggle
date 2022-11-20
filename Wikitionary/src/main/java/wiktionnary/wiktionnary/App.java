@@ -20,9 +20,9 @@ public class App
     		{
 	    		String path = "C:\\Users\\33768\\Documents\\GitHub\\Projet-Boggle\\Wikitionary\\src\\main\\java\\wiktionnary\\wiktionnary\\dico.json";
 	   		 
-	            JSONObject json = new JSONObject();
+	            JSONObject json = new JSONObject();//Permet de créer un objet sous la forme {}
 	            try {
-	            	JSONObject meta = new JSONObject();
+	            	JSONObject meta = new JSONObject();//ajout des meta-données
 					meta.put("description", "definition file");
 					meta.put("created_on", "20221014T145610Z");
 		            meta.put("language", "fr");
@@ -45,12 +45,14 @@ public class App
 	    		int compt1 = 0; // a décommenté pour avoir les 500 1ers lignes
 	    		boolean titre = false;
 	    		boolean estFrancais = false;  
+	    		///////////////////Ecriture dans le JSON/////////////////////
 	    		String mot = "";
-	    		String genre="";
+	    		String genre="";//nom, adjectif, verbe , etc...
 	    		JSONArray mots = new JSONArray();//le tableau contenant tout les mots
 	    		JSONObject elem = new JSONObject();//L'élément/mot
 	    		JSONObject definitions = new JSONObject();//l'objet correspondant à l'ensemble des def associées à un genre
-	    		JSONArray arrayDef =  new JSONArray();
+	    		JSONArray arrayDef =  new JSONArray();//le tableau des definitions (mot: [def1, def2, def3..]
+	    		
 	    		while((r = br.readLine()) != null){  
 	    			//System.out.println(r);
 	    			
@@ -68,7 +70,7 @@ public class App
 	    				estMot = true;
 	    			}  
 	    			
-	    			// la série de if permet de savoir quel est le type du mot
+	    			// la série de if permet de savoir quel est le genre du mot
 	    			if (estFrancais && r.contains("nom|fr}") || r.contains("nom|fr|")) {
 	    				arrayDef = new JSONArray();
 	    				genre = "nom";
@@ -106,13 +108,12 @@ public class App
 	    				genre = "interjection";
 	    			} 
 	    			
-
-	    			System.out.println(genre);
 	    			//vérifie que le mot est français
 	    			if(r.contains("== {{langue|fr}} ==") && estMot) {
-	    				elem.put("définitions",definitions); 
+	    				elem.put("définitions",definitions);
 	    				mots.put(elem);
-	    				elem = new JSONObject();//si c'est un nouveau mot on créer un nouvel objet
+	    				
+	    				elem = new JSONObject();//si c'est un nouveau mot on réinitialise les variables
 	    				arrayDef = new JSONArray();
 	    				definitions = new JSONObject();
 	    				estFrancais = true;
@@ -123,10 +124,9 @@ public class App
 	    			//permet d'avoir les définitions du mot rechercher
 	    			if(estFrancais && r.startsWith("#") && !(r.startsWith("#*")) && !(r.startsWith("##*")) && !(r.startsWith("###*"))) {
 	    				arrayDef.put(r);
-	    				definitions.put(genre, arrayDef);
-	    				System.out.println(r);
+	    				definitions.put(genre, arrayDef);//le put va ajouter à la clé genre la définition
+	    				//System.out.println(r);
 	    				//break;  
-	    				System.out.println(definitions);
 	    			}
 	    			
 	    			//une fois la lecture des définitions du mot terminée reset les varaibles
@@ -143,16 +143,16 @@ public class App
 	    			compt1++;
 	    		     		
 	    		}
-	    		elem.put("définitions",definitions); 
+	    		elem.put("définitions",definitions); //On ajoute les définitons du dernier élément ajouté
 				mots.put(elem);
-	    		json.put("mots", mots);
+	    		json.put("mots", mots);//ajout de l'ensemble des mots dans l'objet JSON
     		}  
     		catch(Exception e)  
     		{  
     		e.printStackTrace();  
     		}  
     		try (PrintWriter out = new PrintWriter(new FileWriter(path))) {
-                out.write(json.toString(2));
+                out.write(json.toString(2));//écriture dans le fichier initialisé précédemment
            } catch (Exception e) {
                 e.printStackTrace();
             }
