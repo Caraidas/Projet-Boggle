@@ -1,8 +1,54 @@
 #include <stdio.h>
 #include <string.h>
 #include <time.h>
-#define randnum(min, max) \
-        ((rand() % (int)(((max) + 1) - (min))) + (min))
+#include <stdlib.h>
+#include <limits.h>
+
+typedef char Element;
+typedef struct cellule{
+    Element elem;
+    struct cellule* succ;
+} Cellule;
+typedef Cellule* Liste;
+
+// Constructeur principal
+Liste cons(Liste queue, Element elem){
+    Liste l = malloc(sizeof(Cellule));
+    l->elem = elem;
+    l->succ = queue;
+    return l;
+}
+
+char randomLetter(){
+    char listOfLetter[] = {'A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T'}; // liste temporaire
+    int freq[] = {5,10,15,20,25,30,35,40,45,50,55,60,65,70,75,80,85,90,95,100};
+    int num = rand() % (100 - 0 + 1) + 0;
+    int i;
+    printf("num %d \n",num);
+
+    for (i = 0; i<20;i++){
+        if (freq[i]>= num){
+            return listOfLetter[i];
+        }
+    }
+
+    return '0';
+}
+
+void print(Liste l, int x, int compt) {
+    if(compt == x){
+        compt = 0;
+        printf("\n");
+    }
+    if (l==NULL) {
+        printf("\n");
+    }
+    else {
+        printf("%c ", l->elem);
+        compt++;
+        print(l->succ,x,compt);
+    }
+}
 
 void append(char* s, char c) {
         int len = strlen(s);
@@ -10,12 +56,37 @@ void append(char* s, char c) {
         s[len+1] = '\0';
 }  
 
+int has_txt_extension(char const *name) {
+    size_t len = strlen(name);
+    if (len > 4 && strcmp(name + len - 4, ".txt") == 0)
+        return 1;
+    return 0;
+}
+
+void showGrid(int sizeX, int sizeY, char *tableau[]){
+    int i;
+    int j;
+
+    for (i = 0; i<sizeX; i++){
+        for (j = 0; j<sizeY; j++){
+            printf("%c ", tableau[i][j]);
+        } 
+    }
+}
+
 int main(int argc, char* argv[])
 {
     //vérfication qu'il y est bien 3 arguments passé
     if (argc > 4 || argc < 3){
-        printf("il faut 3 arguments pour executer le programme");
-        return 1;
+        printf("il faut 3 arguments pour executer le programme.\n");
+        return 254;
+    }
+
+    //vérifie si un fichier txt est en paramètre 
+    int is_TXT = has_txt_extension(argv[1]);
+    if (is_TXT == 0){
+        printf("vous devez mettre le fichier fréquences.txt en argument.\n");
+        return 0;
     }
 
     //initialisation des variables
@@ -26,26 +97,18 @@ int main(int argc, char* argv[])
 
     int x = *sizeX - '0';
     int y = *sizeY - '0';
+    int total = x*y;
 
-    char *ptr;
-    char line[256];
-    char frequence[49] = "";
+    int i;
 
-    FILE* file = fopen(fileName, "r");
+    Liste l=NULL;
+
+    // liste temporaire
     
 
-    printf("\nx = %d\ny = %d\n",x,y);
-    while (fgets(line, sizeof(line), file)) {
-        ptr = strtok(line, " ");
-        append(frequence, *ptr);
-        ptr = strtok(NULL, " ");
-        append(frequence, *ptr);
-        
+    for (i = 0; i<total; i++){
+        l=cons(l, randomLetter());
     }
-    printf("%s\n", frequence);
-
-    fclose(file);
-    printf("%c\n",frequence[0]);
-
+    print(l,x,0);
     return 0;
 }
