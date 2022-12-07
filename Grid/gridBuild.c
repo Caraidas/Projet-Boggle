@@ -4,6 +4,10 @@
 #include <stdlib.h>
 #include <limits.h>
 
+#define MAX 100000
+#define SIZE 100
+#define NUMS_TO_GENERATE 10
+
 typedef char Element;
 typedef struct cellule{
     Element elem;
@@ -19,20 +23,30 @@ Liste cons(Liste queue, Element elem){
     return l;
 }
 
-char randomLetter(){
+Liste randomLetter(Liste l, int total){
     char listOfLetter[] = {'A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T'}; // liste temporaire
     int freq[] = {5,10,15,20,25,30,35,40,45,50,55,60,65,70,75,80,85,90,95,100};
-    int num = rand() % (100 - 0 + 1) + 0;
-    int i;
-    printf("num %d \n",num);
-
-    for (i = 0; i<20;i++){
-        if (freq[i]>= num){
-            return listOfLetter[i];
+    srand(time(NULL));
+    int num;
+    for (int j = 0; j < total; j++){
+        num = rand() % 101;
+        printf("num %d \n",num);      
+        for (int i = 0; i<20;i++){
+            if (freq[i]>= num){
+                l=cons(l, listOfLetter[i]);
+                break;
+            }
         }
     }
+    /*
+    for (i = 0; i<total; i++){
+         randomLetter());
+    }*/
+    
 
-    return '0';
+    
+
+    return l;
 }
 
 void print(Liste l, int x, int compt) {
@@ -91,6 +105,7 @@ int main(int argc, char* argv[])
 
     //initialisation des variables
 
+
     char const* const fileName = argv[1];
     char const* const sizeX = argv[2];
     char const* const sizeY = argv[3];
@@ -106,9 +121,7 @@ int main(int argc, char* argv[])
     // liste temporaire
     
 
-    for (i = 0; i<total; i++){
-        l=cons(l, randomLetter());
-    }
+    l = randomLetter(l, total);
     print(l,x,0);
     return 0;
 }
