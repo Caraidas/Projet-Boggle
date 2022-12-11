@@ -107,6 +107,10 @@ public class App
 	    				arrayDef = new JSONArray();
 	    				genre = "interjection";
 	    			} 
+				else if (estFrancais && r.contains("pronom personnel|fr}") || r.contains("pronom personnel|fr|")) {
+	    				arrayDef = new JSONArray();
+	    				genre = "pronom personnel";
+	    			} 
 	    			
 	    			//vérifie que le mot est français
 	    			if(r.contains("== {{langue|fr}} ==") && estMot) {
