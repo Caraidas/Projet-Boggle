@@ -45,6 +45,7 @@ public class App
 	    		int compt1 = 0; // a décommenté pour avoir les 500 1ers lignes
 	    		boolean titre = false;
 	    		boolean estFrancais = false;  
+	    		boolean estDefFrancais = false;
 	    		///////////////////Ecriture dans le JSON/////////////////////
 	    		String mot = "";
 	    		String genre="";//nom, adjectif, verbe , etc...
@@ -74,43 +75,57 @@ public class App
 	    			if (estFrancais && r.contains("nom|fr}") || r.contains("nom|fr|")) {
 	    				arrayDef = new JSONArray();
 	    				genre = "nom";
+	    				estDefFrancais = true;
 	    			}
 	    			else if (estFrancais && r.contains("verbe|fr}") || r.contains("verbe|fr|")) {
 	    				arrayDef = new JSONArray();
 	    				genre = "verbe";
+	    				estDefFrancais = true;
 	    			}
 	    			else if (estFrancais && r.contains("article indéfini|fr}") || r.contains("article indéfini|fr|")) {
 	    				arrayDef = new JSONArray();
 	    				genre = "article indéfini";
+	    				estDefFrancais = true;
 	    			}
 	    			else if (estFrancais && r.contains("onomatopée|fr}") || r.contains("onomatopée|fr|")) {
 	    				arrayDef = new JSONArray();
 	    				genre = "onomatopée";
+	    				estDefFrancais = true;
 	    			}
 	    			else if (estFrancais && r.contains("adjectif|fr}") || r.contains("adjectif|fr|")) {
 	    				arrayDef = new JSONArray();
 	    				genre = "adjectif";
+	    				estDefFrancais = true;
 	    			}
 	    			else if (estFrancais && r.contains("symbole|fr}") || r.contains("symbole|fr|")) {
 	    				arrayDef = new JSONArray();
 	    				genre = "symbole";
+	    				estDefFrancais = true;
 	    			}
 	    			else if (estFrancais && r.contains("préposition|fr}") || r.contains("préposition|fr|")) {
 	    				arrayDef = new JSONArray();
 	    				genre = "préposition";
+	    				estDefFrancais = true;
 	    			}
 	    			else if (estFrancais && r.contains("pronom indéfini|fr}") || r.contains("pronom indéfini|fr|")) {
 	    				arrayDef = new JSONArray();
 	    				genre = "pronom indéfini";
+	    				estDefFrancais = true;
 	    			}
 	    			else if (estFrancais && r.contains("interjection|fr}") || r.contains("interjection|fr|")) {
 	    				arrayDef = new JSONArray();
 	    				genre = "interjection";
+	    				estDefFrancais = true;
 	    			} 
-				else if (estFrancais && r.contains("pronom personnel|fr}") || r.contains("pronom personnel|fr|")) {
-	    				arrayDef = new JSONArray();
-	    				genre = "pronom personnel";
-	    			} 
+					else if (estFrancais && r.contains("pronom personnel|fr}") || r.contains("pronom personnel|fr|")) {
+		    				arrayDef = new JSONArray();
+		    				genre = "pronom personnel";
+		    				estDefFrancais = true;
+		    			}
+					else if(r.startsWith("==")) {
+						estDefFrancais = false;
+						genre = "";
+	    			}
 	    			
 	    			//vérifie que le mot est français
 	    			if(r.contains("== {{langue|fr}} ==") && estMot) {
@@ -125,8 +140,13 @@ public class App
 	    				elem.put("title",mot); 
 	    			}
 	    			
+	    			
 	    			//permet d'avoir les définitions du mot rechercher
-	    			if(estFrancais && r.startsWith("#") && !(r.startsWith("#*")) && !(r.startsWith("##*")) && !(r.startsWith("###*"))) {
+	    			if(estFrancais && r.startsWith("#") && !(r.startsWith("#*")) && !(r.startsWith("##*")) && !(r.startsWith("###*")) && estDefFrancais) {
+	    				r.replace("# ", "");
+	    				r.replace("## ", "");
+	    				r.replace("### ", "");
+	    				r.replace("<\\/text>", "");
 	    				arrayDef.put(r);
 	    				definitions.put(genre, arrayDef);//le put va ajouter à la clé genre la définition
 	    				//System.out.println(r);
