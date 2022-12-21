@@ -7,6 +7,7 @@
 #define MAX 100000
 #define SIZE 100
 #define NUMS_TO_GENERATE 10
+#define MAX_NUMBERS 100
 
 typedef char Element;
 typedef struct cellule{
@@ -23,52 +24,16 @@ Liste cons(Liste queue, Element elem){
     return l;
 }
 
-Liste randomLetter(Liste l, int total){
-    char listOfLetter[] = {'A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T'}; // liste temporaire
-    int freq[] = {5,10,15,20,25,30,35,40,45,50,55,60,65,70,75,80,85,90,95,100};
-    srand(time(NULL));
-    int num;
-    for (int j = 0; j < total; j++){
-        num = rand() % 101;
-        printf("num %d \n",num);      
-        for (int i = 0; i<20;i++){
-            if (freq[i]>= num){
-                l=cons(l, listOfLetter[i]);
-                break;
-            }
-        }
-    }
-    /*
-    for (i = 0; i<total; i++){
-         randomLetter());
-    }*/
-    
 
-    
-
-    return l;
-}
-
-void print(Liste l, int x, int compt) {
-    if(compt == x){
-        compt = 0;
-        printf("\n");
-    }
+void print(Liste l, int x) {
     if (l==NULL) {
         printf("\n");
     }
     else {
         printf("%c ", l->elem);
-        compt++;
-        print(l->succ,x,compt);
+        print(l->succ,x);
     }
-}
-
-void append(char* s, char c) {
-        int len = strlen(s);
-        s[len] = c;
-        s[len+1] = '\0';
-}  
+} 
 
 int has_txt_extension(char const *name) {
     size_t len = strlen(name);
@@ -100,7 +65,7 @@ int main(int argc, char* argv[])
     int is_TXT = has_txt_extension(argv[1]);
     if (is_TXT == 0){
         printf("vous devez mettre le fichier fréquences.txt en argument.\n");
-        return 0;
+        return 253;
     }
 
     //initialisation des variables
@@ -115,13 +80,45 @@ int main(int argc, char* argv[])
     int total = x*y;
 
     int i;
+    int number;
+
+    int numbers[MAX_NUMBERS];
+    int numberCount = 0;
+
+    char lettres[] = {'A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'};
+
+    FILE *file = fopen(fileName, "r");
 
     Liste l=NULL;
 
     // liste temporaire
-    
 
-    l = randomLetter(l, total);
-    print(l,x,0);
+    char word[MAX_NUMBERS];
+
+    while (fscanf(file, "%s %d", word, &number) == 2) {
+
+        // Store the number in the array
+        numbers[numberCount] = number;
+        numberCount++;
+    }
+    fclose(file);
+
+    
+    srand(time(NULL));
+    int num;
+    int var;
+    for (int j = 0; j < total; j++){
+        num = rand() % 79; 
+        for (int i = 0; i<26;i++){
+            var = numbers[i];
+            if (var >= num){
+                l=cons(l, lettres[i]);
+                break;
+            }
+        }
+    }
+
+    printf("grille aléatoire :\n");
+    print(l,x);
     return 0;
 }
