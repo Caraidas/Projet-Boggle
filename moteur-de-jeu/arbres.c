@@ -107,6 +107,56 @@ void appendSibling(CSTree *cs, char c)
     }
 }
 
+void appendChild(CSTree *cs, char c)
+{
+    if ((*cs) == NULL)
+    {
+        (*cs) = newTree(c, NULL, NULL);
+        return;
+    }
+    if ((*cs)->firstChild == NULL)
+    {
+        (*cs)->firstChild = newTree(c, NULL, NULL);
+    }
+    else
+    {
+        appendSibling((&(*cs)->firstChild), c);
+    }
+}
+
+int containsSibling(CSTree *cs, char c)
+{
+    if ((*cs) == NULL)
+    {
+        return false;
+    }
+    if ((*cs)->elem == c)
+    {
+        return true;
+    }
+    else
+    {
+        return containsSibling(&(*cs)->nextSibling, c);
+    }
+}
+
+CSTree getCharInCS(char c, CSTree *cs)
+{
+    if ((*cs) == NULL)
+    {
+        return NULL;
+    }
+    if ((*cs)->elem == c)
+    {
+        printf("%c", (*cs)->elem);
+        return (*cs);
+    }
+    else
+    {
+        return getCharInCS(c, &(*cs)->nextSibling);
+    }
+}
+
 CSTree findElem(CSTree cs, Element elem, char *mode)
 {
     if (cs == NULL)

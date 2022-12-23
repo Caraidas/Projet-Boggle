@@ -3,57 +3,48 @@
 #include <limits.h>
 #include <string.h>
 #include "arbres.c"
+#include "utils.c"
 
-void insertWordInTree(char *word, CSTree *cs)
-{
-    for (int i = 0; i < strlen(word); i++)
-    {
-        char letter = word[i];
-        printf("%c\n", letter);
 
-        if (siblingLayercontains(*cs, letter) == false)
-        {
-            appendSibling(cs, letter);
-
-            if (strlen(word) <= 1)
-            {
-                CSTree child = findElem(*cs, letter, "child");
-                memmove(word, word + 1, strlen(word));
-                insertWordInTree(word, &child);
-            }
-        }
-        else
-        {
-            if (strlen(word) <= 1)
-            {
-                CSTree child = findElem(*cs, letter, "child");
-                memmove(word, word + 1, strlen(word));
-                insertWordInTree(word, &child);
-            }
+void insertWordR(char *word, CSTree *cs, int i) {
+    char letter = word[i];
+    if (letter == '\0') {
+        return;
+    } else {
+        if (containsSibling(&(*cs), word[i]) == false) {
+            appendSibling(&(*cs), word[i]);
+            insertWordR(word, &(getCharInCS(word[i], &(*cs))->firstChild), i + 1);
+        } else {
+            insertWordR(word, &(getCharInCS(word[i], &(*cs))->firstChild), i + 1);
         }
     }
+}
+
+void insertWord(char *word, CSTree *cs) {
+
+    insertWordR(word, &(*cs), 0);
 }
 
 // Export les données de file (txt) vers un fichier lex
 CSTree exportIntoLex(char *file)
 {
-    FILE *f; // déclaration du fichier
+    FILE *fic = fopen(file, "r"); // déclaration du fichier
+    signed char word[256];
+    CSTree cs = newTree('A', NULL, NULL);
 
-    CSTree cs = NULL;
-
-    f = fopen(file, "r"); // Ouverture du fichier en parametre
-    char word[100];
-
-    while (fgets(word, sizeof(word), f))
-    {
-        insertWordInTree(strtok(word, "\n"), &cs);
+    while (fgets(word, 255, fic) != NULL) {
+        strip(word);
+        insertWord(word, &cs);
     }
-    fclose(f); // fermeture du fichier
+
+    fclose(fic);
+
     return cs;
 }
 
 int main(int argc, char *argv[])
 {
-    CSTree t = exportIntoLex("DICO.txt");
-    printPrefix(t);
+    CSTree cs = exportIntoLex(argv[1]);
+    printPrefix(cs);
+    StaticTree st = exportStaticTree(cs);
 }
