@@ -2,11 +2,7 @@
 #include <string.h>
 #include <time.h>
 #include <stdlib.h>
-#include <limits.h>
 
-#define MAX 100000
-#define SIZE 100
-#define NUMS_TO_GENERATE 10
 #define MAX_NUMBERS 100
 
 typedef char Element;
@@ -16,7 +12,7 @@ typedef struct cellule{
 } Cellule;
 typedef Cellule* Liste;
 
-// Constructeur principal
+// Constructeur principal d'une liste
 Liste cons(Liste queue, Element elem){
     Liste l = malloc(sizeof(Cellule));
     l->elem = elem;
@@ -24,33 +20,23 @@ Liste cons(Liste queue, Element elem){
     return l;
 }
 
-
-void print(Liste l, int x) {
+// Permet d'afficher la liste en paramètre
+void print(Liste l) {
     if (l==NULL) {
         printf("\n");
     }
     else {
         printf("%c ", l->elem);
-        print(l->succ,x);
+        print(l->succ);
     }
 } 
 
+// permet de vérifier que le fichier en paramètre est bien un fichier texte
 int has_txt_extension(char const *name) {
     size_t len = strlen(name);
     if (len > 4 && strcmp(name + len - 4, ".txt") == 0)
         return 1;
     return 0;
-}
-
-void showGrid(int sizeX, int sizeY, char *tableau[]){
-    int i;
-    int j;
-
-    for (i = 0; i<sizeX; i++){
-        for (j = 0; j<sizeY; j++){
-            printf("%c ", tableau[i][j]);
-        } 
-    }
 }
 
 int main(int argc, char* argv[])
@@ -68,6 +54,9 @@ int main(int argc, char* argv[])
         return 253;
     }
 
+    
+
+
     //initialisation des variables
 
 
@@ -79,39 +68,46 @@ int main(int argc, char* argv[])
     int y = *sizeY - '0';
     int total = x*y;
 
-    int i;
     int number;
+    int maxRandom;
 
-    int numbers[MAX_NUMBERS];
+    int numberlist[MAX_NUMBERS];
     int numberCount = 0;
 
+    //liste de l'alphabet
     char lettres[] = {'A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'};
 
     FILE *file = fopen(fileName, "r");
 
     Liste l=NULL;
 
-    // liste temporaire
-
     char word[MAX_NUMBERS];
+
+    //permet de vérifier que les tailles en paramètres sont supérieurs à 0
+    if (x <= 0 || y <= 0){
+        printf("veuillez entrez des chiffres supérieur à 0\n");
+        return 252;
+    }
 
     while (fscanf(file, "%s %d", word, &number) == 2) {
 
-        // Store the number in the array
-        numbers[numberCount] = number;
+        // enregistre le nombre dans la liste
+        numberlist[numberCount] = number;
+        maxRandom = number + 1;
         numberCount++;
     }
     fclose(file);
 
-    
+    //construit le tableau
     srand(time(NULL));
     int num;
-    int var;
+    int freq;
     for (int j = 0; j < total; j++){
-        num = rand() % 79; 
-        for (int i = 0; i<26;i++){
-            var = numbers[i];
-            if (var >= num){
+        num = rand() % maxRandom;
+        // regarde parmis les 26 lettres de l'alphabet quelle est la lettre qui a la fréquence supérieur ou égale au numéro aléatoire
+        for (int i = 0; i<26;i++){ 
+            freq = numberlist[i];
+            if (freq >= num){
                 l=cons(l, lettres[i]);
                 break;
             }
@@ -119,6 +115,6 @@ int main(int argc, char* argv[])
     }
 
     printf("grille aléatoire :\n");
-    print(l,x);
+    print(l);
     return 0;
 }
