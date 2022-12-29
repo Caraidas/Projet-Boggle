@@ -8,6 +8,9 @@
 #define ROW 4
 #define COL 4
 
+// Valeur de retour par défaut (NULL ne fonctionne pas pour je ne sais quelle raison)
+int defaut[] = {-1};
+
 // prototype
 int *isSafe(int row, int col, char **grid, char word[], int r, int c);
 
@@ -26,13 +29,10 @@ char **make2dGrid(char *grid, int row, int col)
 }
 
 // Fonction pour rechercher le mot dans la grille
-void searchWord(char originalgrid[], char word[], int r, int c)
+int searchWord(char originalgrid[], char word[], int r, int c)
 {
-    // lst vide 
-    int *vide = malloc (sizeof (int) * 1);
-
     // Variable pour garder la trace des caractères trouvés dans la grille
-    int* found;
+    int* found = defaut;
     char **grid = make2dGrid(originalgrid, r, c);
 
     // Parcours de la grille
@@ -47,7 +47,7 @@ void searchWord(char originalgrid[], char word[], int r, int c)
                 found = isSafe(row, col, grid, word, r, c);
 
                 // Si le mot est trouvé, afficher le chemin
-                if (found != vide)
+                if (found != defaut)
                 {
                     // Afficher le chemin
                     for (int i = 0; i < strlen(word); i++)
@@ -60,11 +60,11 @@ void searchWord(char originalgrid[], char word[], int r, int c)
         }
     }
 
-    // Si le mot n'est pas trouvé, afficher 1
-    if (found == vide) {
-        printf("1\n");
+    // Si le mot n'est pas trouvé, return 1
+    if (found == defaut) {
+        return 1;
     } else {
-        printf("0\n");
+        return 0;
     }
     
 }
@@ -86,12 +86,11 @@ int* isSafe(int row, int col, char **grid, char word[], int r, int c)
     int *path = malloc (sizeof (int) * len);
     path[0] = convertTo1D(row, col, c);
 
-    // lst vide 
-    int *vide = malloc (sizeof (int) * 1);
+    // lst vide
 
     // Si la première lettre ne correspond pas à la grille, retourner faux
     if (grid[row][col] != word[0]) {
-        return vide;
+        return defaut;
     }
 
     // Parcours de la grille
@@ -138,7 +137,8 @@ int* isSafe(int row, int col, char **grid, char word[], int r, int c)
         }
            
     }
-    return vide;
+
+    return defaut;
 }
 
 // Fonction principale
@@ -151,7 +151,7 @@ int main(int argc, char *argv[])
 
     char* word = argv[1];
 
-    searchWord(grid, word, row, col);
+    return searchWord(grid, word, row, col);
 
     return 0;
 }
