@@ -32,7 +32,7 @@ char **make2dGrid(char *grid, int row, int col)
 int searchWord(char originalgrid[], char word[], int r, int c)
 {
     // Variable pour garder la trace des caractères trouvés dans la grille
-    int* found = defaut;
+    int *found = defaut;
     char **grid = make2dGrid(originalgrid, r, c);
 
     // Parcours de la grille
@@ -55,18 +55,17 @@ int searchWord(char originalgrid[], char word[], int r, int c)
                         printf("%d ", found[i]);
                     }
                     printf("\n");
+                    return 0;
                 }
             }
         }
     }
 
     // Si le mot n'est pas trouvé, return 1
-    if (found == defaut) {
+    if (found == defaut)
+    {
         return 1;
-    } else {
-        return 0;
     }
-    
 }
 
 // Convertit des coord 2d en 1d
@@ -76,20 +75,22 @@ int convertTo1D(int x, int y, int nbCol)
 }
 
 // Fonction pour tester si le mot est présent dans la grille
-int* isSafe(int row, int col, char **grid, char word[], int r, int c)
+int *isSafe(int row, int col, char **grid, char word[], int r, int c)
 {
-
     // Longueur du mot
     int len = strlen(word);
 
     // Path
-    int *path = malloc (sizeof (int) * len);
+    int *path = malloc(sizeof(int) * len);
     path[0] = convertTo1D(row, col, c);
-
-    // lst vide
+    
+    if (len == 1) {
+        return path;
+    }
 
     // Si la première lettre ne correspond pas à la grille, retourner faux
-    if (grid[row][col] != word[0]) {
+    if (grid[row][col] != word[0])
+    {
         return defaut;
     }
 
@@ -97,61 +98,78 @@ int* isSafe(int row, int col, char **grid, char word[], int r, int c)
     int rowNbr[] = {-1, -1, -1, 0, 0, 1, 1, 1};
     int colNbr[] = {-1, 0, 1, -1, 1, -1, 0, 1};
 
-    // Parcours des voisins pour chercher le mot
-    for (int k = 0; k < 8; k++)
+    
+    int index, compteur;
+    compteur = 1;
+    for (index = 1; index < len; index++)
     {
-        // Index pour parcourir le mot
-        int index;
-        for (index = 1; index < len;)
+        // Parcours des voisins pour chercher la lettre suivante
+        for (int k = 0; k < 8; k++)
         {
-
             // Les indices de la grille
             int rd = row + rowNbr[k];
             int cd = col + colNbr[k];
 
-            // Si les indices sont valides et le caractère correspond, continuer à chercher
-            if (rd >= 0 && rd < r && cd >= 0 && cd < c &&
-                grid[rd][cd] == word[index])
+            if (rd >= 0 && rd < r && cd >= 0 && cd < c && grid[rd][cd] == word[index])
             {
-
                 // Garder en mémoire la position
                 path[index] = convertTo1D(rd, cd, c);
 
-                // Augmenter l'index
-                index++;
+                // Augmenter le compteur
+                compteur++;
 
                 // Mettre à jour la position
                 row = rd;
                 col = cd;
-            }
-            else {
+                
+                // Si tous les caractères correspondent, retourner le chemin trouver
+                if (compteur == len) {
+                    return path;
+                }
+
                 break;
             }
 
-                
         }
-
-        // Si tous les caractères correspondent, retourner vrai
-        if (index == len) {
-            return path;
-        }
-           
     }
 
+    // Si on a rien, alors retouner la valeur par defaut
     return defaut;
 }
 
 // Fonction principale
 int main(int argc, char *argv[])
 {
+    // Vérifier que le nombre de paramètres est correct
+    if (argc < 5)
+    {
+        printf("Nombre de paramètres invalide\n");
+        return 2;
+    }
+
     int row, col;
+
+    char *word = argv[1];
     row = atoi(argv[2]);
     col = atoi(argv[3]);
-    char grid[] = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I'};
+    //char grid[] = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I'};
 
-    char* word = argv[1];
+    // Allouer un tableau de caractères
+    char *grid = malloc(argc * sizeof(char));
+    if (grid == NULL)
+    { // Erreur
+        printf("Erreur d'allocation mémoire\n");
+        return 3;
+    }
+
+    // On remplit le tableau
+    int i, index;
+    index = 0;
+    for (i = 4; i < argc; i++)
+    {
+        grid[index] = *argv[i];
+        index++;
+    }
 
     return searchWord(grid, word, row, col);
-
-    return 0;
 }
