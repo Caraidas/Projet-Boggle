@@ -152,14 +152,13 @@ int main(int argc, char *argv[])
     char *word = argv[1];
     row = atoi(argv[2]);
     col = atoi(argv[3]);
-    //char grid[] = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I'};
 
     // Allouer un tableau de caractères
     char *grid = malloc(argc * sizeof(char));
     if (grid == NULL)
     { // Erreur
         printf("Erreur d'allocation mémoire\n");
-        return 3;
+        return 254;
     }
 
     // On remplit le tableau
