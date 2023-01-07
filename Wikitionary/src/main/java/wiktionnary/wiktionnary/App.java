@@ -1,7 +1,8 @@
 package wiktionnary.wiktionnary;
-
+import java.text.Normalizer;
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -9,18 +10,25 @@ import org.json.JSONObject;
  
 import java.io.FileWriter;
 import java.io.PrintWriter;
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
+import java.nio.channels.FileChannel;
+import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
-public class App   
+public class App 
     {  
     	public static void main(String[] args)   
     		{
 	    		String path = "C:\\Users\\33768\\Documents\\GitHub\\Projet-Boggle\\Wikitionary\\src\\main\\java\\wiktionnary\\wiktionnary\\dico.txt";
-	   	
-	            try {
+	    		LinkedHashMap<String,TreeMap<String,Coord>> indexes = new LinkedHashMap<String,TreeMap<String,Coord>>(); //Correspond au couple mot normalisé et les mot qui suivent cette normalisation avec leurs coordonnée dans le json EXEMPLE: HashMap = ["CONGRES" : ['congrès' : [0,514] , 'congres' :! 41522147524 ], VERS:['vèrs':52352445, 'vers':412421542245]
+	            
+	    		try {
 	            	JSONObject meta = new JSONObject();//ajout des meta-données
 					meta.put("description", "definition file");
 					meta.put("created_on", "20221014T145610Z");
@@ -30,7 +38,7 @@ public class App
 		                out.write("\n");//écriture dans le fichier initialisé précédemment
 		                
 		                try  
-		        		{ 
+		        		{  
 		    	    		//constructor of File class having file as argument  
 		    	    		File file=new File("C:\\Users\\33768\\Downloads\\frwiktionary-20220620-pages-articles-multistream.xml");   
 		    	    		//creates a buffer reader input stream  
@@ -43,6 +51,7 @@ public class App
 		    	    		boolean titre = false;
 		    	    		boolean estFrancais = false;  
 		    	    		boolean estDefFrancais = false;
+		    	    		String motNormalise= "";
 		    	    		///////////////////Ecriture dans le JSON/////////////////////
 		    	    		String mot = "";
 		    	    		String genre="";//nom, adjectif, verbe , etc...
@@ -50,8 +59,7 @@ public class App
 		    	    		JSONObject elem = new JSONObject();//L'élément/mot
 		    	    		JSONObject definitions = new JSONObject();//l'objet correspondant à l'ensemble des def associées à un genre
 		    	    		JSONArray arrayDef =  new JSONArray();//le tableau des definitions (mot: [def1, def2, def3..]
-		    	    		
-		    	    		PrintWriter writer = new PrintWriter("C:\\Users\\33768\\Documents\\GitHub\\Projet-Boggle\\Wikitionary\\src\\main\\java\\wiktionnary\\wiktionnary\\index.txt");
+		    	    	
 		    	    		
 		    	    		int start = 0;
 		    	    		int end = 0;
@@ -62,6 +70,7 @@ public class App
 		    	    			if (r.contains("<title>")) {
 		    	    				mot = r.replace("    <title>", "");
 		    	    				mot = mot.replace("</title>", "");
+		    	    				motNormalise = Normalizer.normalize(mot, Normalizer.Form.NFD).replaceAll("[^\\p{ASCII}]", "").toUpperCase();
 		    	    				if (mot.length() < 17 && !(mot.contains(" ")) && (!containsUpperCaseLetter(mot)) && (!containsDigit(mot) && (!mot.contains("-")))) {
 		    	                        titre = true;
 		    	                    }
@@ -73,60 +82,16 @@ public class App
 		    	    			}  
 		    	    			
 		    	    			// la série de if permet de savoir quel est le genre du mot
-		    	    			if (estFrancais && r.contains("nom|fr}") || r.contains("nom|fr|")) {
-		    	    				arrayDef = new JSONArray();
-		    	    				genre = "nom";
-		    	    				estDefFrancais = true;
-		    	    			}
-		    	    			else if (estFrancais && r.contains("verbe|fr}") || r.contains("verbe|fr|")) {
-		    	    				arrayDef = new JSONArray();
-		    	    				genre = "verbe";
-		    	    				estDefFrancais = true;
-		    	    			}
-		    	    			else if (estFrancais && r.contains("article indéfini|fr}") || r.contains("article indéfini|fr|")) {
-		    	    				arrayDef = new JSONArray();
-		    	    				genre = "article indéfini";
-		    	    				estDefFrancais = true;
-		    	    			}
-		    	    			else if (estFrancais && r.contains("onomatopée|fr}") || r.contains("onomatopée|fr|")) {
-		    	    				arrayDef = new JSONArray();
-		    	    				genre = "onomatopée";
-		    	    				estDefFrancais = true;
-		    	    			}
-		    	    			else if (estFrancais && r.contains("adjectif|fr}") || r.contains("adjectif|fr|")) {
-		    	    				arrayDef = new JSONArray();
-		    	    				genre = "adjectif";
-		    	    				estDefFrancais = true;
-		    	    			}
-		    	    			else if (estFrancais && r.contains("symbole|fr}") || r.contains("symbole|fr|")) {
-		    	    				arrayDef = new JSONArray();
-		    	    				genre = "symbole";
-		    	    				estDefFrancais = true;
-		    	    			}
-		    	    			else if (estFrancais && r.contains("préposition|fr}") || r.contains("préposition|fr|")) {
-		    	    				arrayDef = new JSONArray();
-		    	    				genre = "préposition";
-		    	    				estDefFrancais = true;
-		    	    			}
-		    	    			else if (estFrancais && r.contains("pronom indéfini|fr}") || r.contains("pronom indéfini|fr|")) {
-		    	    				arrayDef = new JSONArray();
-		    	    				genre = "pronom indéfini";
-		    	    				estDefFrancais = true;
-		    	    			}
-		    	    			else if (estFrancais && r.contains("interjection|fr}") || r.contains("interjection|fr|")) {
-		    	    				arrayDef = new JSONArray();
-		    	    				genre = "interjection";
-		    	    				estDefFrancais = true;
-		    	    			} 
-		    					else if (estFrancais && r.contains("pronom personnel|fr}") || r.contains("pronom personnel|fr|")) {
-		    		    				arrayDef = new JSONArray();
-		    		    				genre = "pronom personnel";
-		    		    				estDefFrancais = true;
-		    		    		}
-		    					else if(r.startsWith("==")) {
-		    						estDefFrancais = false;
-		    						genre = "";
-		    	    			}
+                                if (estFrancais && r.contains("S|") &&( r.contains("|fr}") || r.contains("|fr|"))) {
+                                    arrayDef = new JSONArray();
+                                    genre = r.substring(r.indexOf("S|")+2);
+                                    genre = genre.substring(0,genre.indexOf("|fr"));
+                                    estDefFrancais = true;
+                                }
+                                else if(r.startsWith("==")) {
+                                    estDefFrancais = false;
+                                    genre = "";
+                                }
 		    	    			
 		    	    			//vérifie que le mot est français
 		    	    			if(r.contains("== {{langue|fr}} ==") && estMot) {
@@ -139,8 +104,6 @@ public class App
 		    	    				estFrancais = true;
 		    	    				System.out.println(mot);
 		    	    				elem.put("title",mot); 
-		    	    				writer.write(mot);
-		    	    				writer.write("\n");
 		    	    			}
 		    	    			
 		    	    			
@@ -164,21 +127,35 @@ public class App
 		    	    				elem.put("définitions",definitions); //On ajoute les définitons du dernier élément ajouté
 			    		    		out.write(elem.toString());
 			    		            out.write("\n");//écriture dans le fichier initialisé précédemment
+			    		            
+			    		            ByteBuffer bb = ByteBuffer.allocate(4);
+			    		            bb.order(ByteOrder.BIG_ENDIAN);
+			    		            bb.putLong(start);
+			    		            
 			    		            byte[] byteArray = elem.toString().getBytes("UTF-8");
-			    		            end = byteArray.length;
-			    		            writer.write(start);
-			    		            writer.write(end);
-			    		            start += end+1;
+			    		            end += byteArray.length; 
+			    		         
+
+		    	    				if (indexes.get(motNormalise) == null) {
+		    	    					TreeMap<String,Coord> tm = new TreeMap<String,Coord>();
+		    	    					tm.put(mot, new Coord(start, end));
+		    	    					indexes.put(motNormalise, tm);
+		    	    				}
+		    	    				indexes.get(motNormalise).put(mot, new Coord(start, end));
+		    	    				
+		    	    				//writer.write(start);
+			    		            //writer.write(end);
+			    		            start = end+1; 
+			    		            end = start;
 		    	    			}
 		    	    			
 		    	    			
 		    		    		// décomentez pour avoir le mot accueil et lire
-		    		    		if (compt1 == 5000)	
+		    		    		if (compt1 == 10000)	
 		    		    			break;
 		    		    		else
 		    		    			compt1++;		
 		    		    		}	
-		    	    		writer.close();
 		        		}  
 		        		catch(Exception e)  
 		        		{  
@@ -192,7 +169,13 @@ public class App
 				} catch (JSONException e1) {
 					e1.printStackTrace();
 				}
-	            
+	    		
+	    		System.out.println(indexes);
+	    		try {
+					writeIndex(indexes);
+				} catch (FileNotFoundException e) {
+					e.printStackTrace();
+				}
     		  
 
 		}
@@ -212,6 +195,27 @@ public class App
                 }
             }
             return false;
+        }
+        
+        public static void writeIndex(LinkedHashMap<String,TreeMap<String,Coord>> indexes) throws FileNotFoundException {
+        	PrintWriter writer = new PrintWriter("C:\\Users\\33768\\Documents\\GitHub\\Projet-Boggle\\Wikitionary\\src\\main\\java\\wiktionnary\\wiktionnary\\index.bin");
+        	//FileChannel channel = FileChannel.open("C:\\Users\\33768\\Documents\\GitHub\\Projet-Boggle\\Wikitionary\\src\\main\\java\\wiktionnary\\wiktionnary\\index.bin",StandardOpenOption.READ);
+        	String line = "";
+        	for(String motNormalise: indexes.keySet()) {
+        		for(String motNonNormalise : indexes.get(motNormalise).keySet()) {//on itère sur le TreeMap<String, Coord>
+        			line += indexes.get(motNormalise).get(motNonNormalise).debut() + " " + indexes.get(motNormalise).get(motNonNormalise).fin();
+        		}
+        		writer.write(line);
+        		writer.write("\n");
+        		line = "";
+        	}  
+        	
+        	 ByteBuffer bb = ByteBuffer.allocate(4);
+	            bb.order(ByteOrder.BIG_ENDIAN);
+	            bb.putLong(517);
+	            
+	            writer.write(bb);
+        	writer.close();
         }
 } 
 
