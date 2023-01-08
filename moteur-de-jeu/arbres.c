@@ -32,6 +32,7 @@ typedef struct
     unsigned int nNodes;
 } StaticTree;
 
+// Créer un arbre
 CSTree newTree(Element elem, CSTree firstChild, CSTree nextSibling)
 {
     CSTree t = malloc(sizeof(Node));
@@ -43,6 +44,18 @@ CSTree newTree(Element elem, CSTree firstChild, CSTree nextSibling)
     return t;
 }
 
+// Affiche un arbre statique
+void displayStaticTree(StaticTree *tree)
+{
+    int i;
+
+    for (i = 0; i < tree->nNodes; i++)
+    {
+        printf("Node %d: elem = %c, firstChild = %d, nSiblings = %d\n", i, tree->nodeArray[i].elem, tree->nodeArray[i].firstChild, tree->nodeArray[i].nSiblings);
+    }
+}
+
+// Affichage d'un arbre
 void printPrefix(CSTree t)
 {
     if (t == NULL)
@@ -69,6 +82,7 @@ void printPrefix(CSTree t)
     return b;
 }*/
 
+// Renvoie true si le niveau contient le char
 int siblingLayercontains(CSTree cs, char c)
 {
     if (cs == NULL)
@@ -90,6 +104,7 @@ int siblingLayercontains(CSTree cs, char c)
     }
 }
 
+// Ajoute un frère à l'arbre
 void appendSibling(CSTree *cs, char c)
 {
     if ((*cs) == NULL)
@@ -107,6 +122,7 @@ void appendSibling(CSTree *cs, char c)
     }
 }
 
+// Ajoute un enfant à l'arbre
 void appendChild(CSTree *cs, char c)
 {
     if ((*cs) == NULL)
@@ -124,6 +140,7 @@ void appendChild(CSTree *cs, char c)
     }
 }
 
+// Renvoie true si l'arbre contient le char
 int containsSibling(CSTree *cs, char c)
 {
     if ((*cs) == NULL)
@@ -140,6 +157,7 @@ int containsSibling(CSTree *cs, char c)
     }
 }
 
+// Renvoie le noeud contenant le char en param
 CSTree getCharInCS(char c, CSTree *cs)
 {
     if ((*cs) == NULL)
@@ -157,6 +175,7 @@ CSTree getCharInCS(char c, CSTree *cs)
     }
 }
 
+// Trouve un élement dans un arbre
 CSTree findElem(CSTree cs, Element elem, char *mode)
 {
     if (cs == NULL)
@@ -181,14 +200,7 @@ CSTree findElem(CSTree cs, Element elem, char *mode)
     }
 }
 
-void printStatic(StaticTree t)
-{
-    for (int i = 0; i < t.nNodes; i++)
-    {
-        printf("%c ", t.nodeArray[i].elem);
-    }
-}
-
+// Taille d'un arbre
 int size(CSTree t)
 {
     if (t == NULL)
@@ -201,6 +213,7 @@ int size(CSTree t)
     }
 }
 
+// Nombre de frères d'un arbre
 int nSibling(CSTree t)
 {
     if ((t == NULL) || (t->nextSibling == NULL))
@@ -213,9 +226,10 @@ int nSibling(CSTree t)
     }
 }
 
+// Nombre d'enfants d'un arbre
 int nChildren(CSTree t)
 {
-    if (t == NULL)
+    if (t == NULL || (t->firstChild == NULL))
     {
         return 0;
     }
@@ -236,40 +250,40 @@ ArrayCell cons(Element elem, int firstChild, int nSiblings)
     return a;
 }
 
-int filltab(ArrayCell *tab, int size, int index, CSTree t)
+int createArray(ArrayCell *arr, int size, int index, CSTree t)
 {
     if (t == NULL)
     {
         return size;
-    } // stockage du nombre d'enfant et de la taille du tableau à l'instant de l'appel
-    int enfant = nChildren(t);
+    }
+
+    int nchildren = nChildren(t); // On garde le nombre d'enfants
     int oldsize = size;
-    if (enfant == 0)
-    { // si il n'y à pas d'enfant on construit le tuple sans se poser de question
-        tab[index] = cons(t->elem, NONE, nSibling(t) - 1);
+
+    // si il n'y a pas d'enfants
+    if (nchildren == 0)
+    {
+        arr[index] = cons(t->elem, NONE, nSibling(t)); // On construit la cell
     }
-    else
-    { // si il y a des enfants on construit le tuple en présisant que le premier
-        // enfant se trouve au bout du tableau à l'instant de l'appel (donc à size)
-        tab[index] = cons(t->elem, size, nSibling(t) - 1);
+    else // si il y a des enfants
+    {
+        arr[index] = cons(t->elem, size + 1, nSibling(t)); // on construit la cell avec la position du premier enfant
         int oldsize = size;
-        // on stocke la taille à l'instant de l'appel pour pouvoir ensuite contruire les enfants au bon endroit
-        size += enfant; // on actualise la taille nécéssaire du tableau après l'appel de la fonction
+        size += nchildren;
     }
-    index += 1;
-    size = filltab(tab, size, index, t->nextSibling);  // on construit ensuite les frères
-    size = filltab(tab, size, oldsize, t->firstChild); // on construit ensuite les enfants (qui se trouve à oldsize au bout du tableau à l'instant de l'appel)
-    return size;                                       // on renvoit la taille du tableau afin d'actualiser la position pour les prochains appels récursif }
+    size = createArray(arr, size, index + 1, t->nextSibling);  // Les frères
+    size = createArray(arr, size, oldsize + 1, t->firstChild); // Les child
+    return size;
 }
 
-// transforme un CSTtree en StaticTree
+// COnvertit un tree en staticTree
 StaticTree exportStaticTree(CSTree t)
-{ // récupération de la taille de l'arbre
-    int sizeOfTree = size(t);
-    StaticTree r;
-    r.nNodes = sizeOfTree; // reservation mémoire du tableau et remplissage
-    ArrayCell *tab = malloc(sizeof(ArrayCell *) * sizeOfTree);
-    filltab(tab, nSibling(t), 0, t);
-    r.nodeArray = tab;
-    return r;
+{
+    int treeSize = size(t); // Taille de l'arbre
+    StaticTree st;
+    st.nNodes = treeSize;
+    ArrayCell *tab = malloc(sizeof(ArrayCell *) * treeSize);
+    createArray(tab, nSibling(t), 0, t);
+    st.nodeArray = tab;
+    return st;
 }
