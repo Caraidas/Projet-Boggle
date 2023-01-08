@@ -92,6 +92,6 @@ int main(int argc, char **argv)
 
     int result = searchWord(fp, argv[2]);
     fclose(fp);
-    // printf("%d", result);
+    printf("%d", result);
     return result;
 }
