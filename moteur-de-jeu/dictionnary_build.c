@@ -86,11 +86,11 @@ void saveIntoLex(StaticTree st,  char* file) {
     header.numCells = nLetters;
     header.cellSize = sizeof(ArrayCell);
 
-    fwrite(&header, 1, sizeof(header), fp); // On ecrit le header
+    fwrite(&header, sizeof(header), 1, fp); // On ecrit le header
 
     for (int i = 0; i < st.nNodes; i++) { // On ecrit toutes les cellules
         ArrayCell cell = st.nodeArray[i];
-        fwrite(&cell, 1, sizeof(ArrayCell), fp);
+        fwrite(&cell, sizeof(ArrayCell), 1,  fp);
     }
 
     fclose(fp);

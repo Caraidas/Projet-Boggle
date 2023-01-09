@@ -50,7 +50,7 @@ int main(int argc, char *argv[])
     // vérfication qu'il y est bien 3 arguments passé
     if (argc > 4 || argc < 3)
     {
-        printf("il faut 3 arguments pour executer le programme.\n");
+        printf("Il faut 3 arguments pour executer le programme.\n");
         return 254;
     }
 
@@ -58,7 +58,7 @@ int main(int argc, char *argv[])
     int is_TXT = has_txt_extension(argv[1]);
     if (is_TXT == 0)
     {
-        printf("vous devez mettre le fichier fréquences.txt en argument.\n");
+        printf("Vous devez mettre le fichier fréquences.txt en argument.\n");
         return 253;
     }
 
@@ -123,7 +123,7 @@ int main(int argc, char *argv[])
         }
     }
 
-    printf("grille aléatoire :\n");
+    // printf("grille aléatoire :\n");
     print(l);
     return 0;
 }
