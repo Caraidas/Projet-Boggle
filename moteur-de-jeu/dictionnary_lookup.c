@@ -26,7 +26,7 @@ int searchWordAux(FILE *fp, char *word, int letterIndex, Header header, int fcIn
     ArrayCell cell;
     fseek(fp, 0, SEEK_SET); // On se place au debut du fichier (juste au cas où)
     fseek(fp, header.headerSize + (fcIndex * header.cellSize), SEEK_SET); // On saute le header et le nombre de cellules spécifié en param pour lire la cellule et ses frère sans problèmes
-    fread(&cell, 1, header.cellSize, fp); // On lit la première cellule
+    fread(&cell, header.cellSize, 1, fp); // On lit la première cellule
     int len = cell.nSiblings; // On garde le nombre de frères dans une variable pour ne pas avoir de problèmes dans la boucle
 
     int i = 0;
