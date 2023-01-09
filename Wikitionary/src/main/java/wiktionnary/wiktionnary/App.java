@@ -177,8 +177,6 @@ public class App{
 			} catch (FileNotFoundException e) {
 				e.printStackTrace();
 			}
-		  
-    		search("Oui");
 	}
 	
 	public static boolean containsUpperCaseLetter(String s){
@@ -192,7 +190,7 @@ public class App{
 	
     public static boolean containsDigit(String s){
         for(int i=0;i<s.length();i++){
-            if(Character.isDigit(s.charAt(i))){
+            if(Character.isDigit(s.charAt(i))){  
                 return true;
             }
         }
@@ -201,43 +199,21 @@ public class App{
     
     public static void writeIndex(TreeMap<String,TreeMap<String,Coord>> indexes) throws IOException {
     	FileOutputStream writer = new FileOutputStream("C:\\Users\\33768\\Documents\\GitHub\\Projet-Boggle\\Wikitionary\\src\\main\\java\\wiktionnary\\wiktionnary\\index.bin");
-    	ByteBuffer buffer = ByteBuffer.allocate(4);
+    	ByteBuffer buffer = ByteBuffer.allocate(8);
     	buffer.order(ByteOrder.BIG_ENDIAN);
     	
     	for(String motNormalise: indexes.keySet()) {
     		for(String motNonNormalise : indexes.get(motNormalise).keySet()) {//on itère sur le TreeMap<String, Coord>
     			//debut
     			int debut = indexes.get(motNormalise).get(motNonNormalise).debut();
-    			buffer.putInt(debut);
-    			writer.write(buffer.array());  
-    			buffer.clear();
-    			    
-    			//fin
     			int fin = indexes.get(motNormalise).get(motNonNormalise).fin();
+    			buffer.putInt(debut);
     			buffer.putInt(fin);
-    			writer.write(buffer.array());
+    			writer.write(buffer.array());  
     			buffer.clear();
     		}
     	}  
     	writer.close();
-    }
-
-    public static String search(String word ) throws IOException {
-    	RandomAccessFile rafDico = new RandomAccessFile("C:\\Users\\33768\\Documents\\GitHub\\Projet-Boggle\\Wikitionary\\src\\main\\java\\wiktionnary\\wiktionnary\\dico.txt","r");
-    	RandomAccessFile rafIndex = new RandomAccessFile("C:\\Users\\33768\\Documents\\GitHub\\Projet-Boggle\\Wikitionary\\src\\main\\java\\wiktionnary\\wiktionnary\\dico.txt","r");
-    	
-    	long indexMed = (long) Math.floor(rafIndex.length() / 2);//récupérer l'index médian (arrondi)
-    	
-    	byte[] bytes = new byte[4] ;  
-    	ByteBuffer buffer = ByteBuffer.allocate(4);
-    	rafIndex.seek(0);
-    	rafIndex.read(bytes, 0, 4);
-    	//byte medianByte = rafIndex.readByte();
-    	int oui = ByteBuffer.wrap(bytes).getInt();
-    	rafIndex.close();
-    	System.out.println(oui);  
-    	  
-		return word;
     }
 } 
 
