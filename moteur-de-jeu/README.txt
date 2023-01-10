@@ -2,7 +2,7 @@
 Bonjour, bienvenu dans le README concernant le moteur du jeu.
 Vous trouverez dedans :
 - Qu'est ce qui a été réaliser
-- Comment toute la structure des programmes fonctionne
+- Commandes à copier coller dans le terminal
 - une description de chaques programmes effectuer 
 - les problèmes rencontré
 

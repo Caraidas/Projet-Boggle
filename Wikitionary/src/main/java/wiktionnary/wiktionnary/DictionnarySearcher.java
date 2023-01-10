@@ -8,9 +8,9 @@ import java.nio.charset.StandardCharsets;
 public class DictionnarySearcher {
 	public static void main(String[] args)  throws IOException{
 		
-		String word = "acceuil";
-    	RandomAccessFile rafDico = new RandomAccessFile("C:\\Users\\33768\\Documents\\GitHub\\Projet-Boggle\\Wikitionary\\src\\main\\java\\wiktionnary\\wiktionnary\\dico.txt","r");
-    	RandomAccessFile rafIndex = new RandomAccessFile("C:\\Users\\33768\\Documents\\GitHub\\Projet-Boggle\\Wikitionary\\src\\main\\java\\wiktionnary\\wiktionnary\\index.bin","r");
+		String word = "patate";
+    	RandomAccessFile rafDico = new RandomAccessFile("C:\\Users\\paul_\\OneDrive\\Documents\\Bureau\\BUT2\\C\\projet\\Projet-Boggle\\Wikitionary\\src\\main\\java\\wiktionnary\\wiktionnary\\dico.txt","r");
+    	RandomAccessFile rafIndex = new RandomAccessFile("C:\\Users\\paul_\\OneDrive\\Documents\\Bureau\\BUT2\\C\\projet\\Projet-Boggle\\Wikitionary\\src\\main\\java\\wiktionnary\\wiktionnary\\index.bin","r");
     	int entryNumber = (int) (rafIndex.length() / 8);//nombre de couple de position dans l'index
     	System.out.println("Nombre de couple de positions: " + entryNumber);
     	long indexMed = (long) Math.round(((float) entryNumber/2))*8;//récupérer l'index médian (arrondi)
@@ -32,11 +32,14 @@ public class DictionnarySearcher {
 	
 	public static void extractDefinition(long indexMed, RandomAccessFile rafDico, RandomAccessFile rafIndex, String word) throws IOException {
 		byte[] bytes = new byte[8];  
+		System.out.println("index Med" + indexMed);
 	    rafIndex.seek(indexMed);
 	    rafIndex.read(bytes, 0, 8);
 	    var bb = ByteBuffer.wrap(bytes);
 	    int indiceDeb = bb.getInt();
 	    int indiceFin = bb.getInt();
+	    System.out.println(indiceDeb);
+	    System.out.println(indiceFin);
 	    String foundWord = searchWord(rafDico,indiceDeb, indiceFin);
 	    if(indiceDeb == indiceFin) {
 	        if(foundWord.equals(word)) {
@@ -49,7 +52,7 @@ public class DictionnarySearcher {
 	    if(foundWord.compareTo(word) == -1) {
 	        extractDefinition(indexMed + (indexMed/2), rafDico, rafIndex,word);
 	    } else {
-	        extractDefinition(indexMed - (indexMed/2), rafDico, rafIndex,word);
+	        extractDefinition(indexMed/2, rafDico, rafIndex,word);
 	    }
 	}
 	

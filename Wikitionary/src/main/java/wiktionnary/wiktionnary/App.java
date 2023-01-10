@@ -27,8 +27,11 @@ import java.util.TreeMap;
 
 public class App{  
 	
+	
+	
 	public static void main(String[] args) throws IOException{
-    		String path = "C:\\Users\\33768\\Documents\\GitHub\\Projet-Boggle\\Wikitionary\\src\\main\\java\\wiktionnary\\wiktionnary\\dico.txt";
+    		String path = "C:\\Users\\paul_\\OneDrive\\Documents\\Bureau\\BUT2\\C\\projet\\Projet-Boggle\\Wikitionary\\src\\main\\java\\wiktionnary\\wiktionnary\\dico.txt";
+    		TreeMap<Character,Integer> frequence = new TreeMap<Character,Integer>();
     		TreeMap<String,TreeMap<String,Coord>> indexes = new TreeMap<String,TreeMap<String,Coord>>(); //Correspond au couple mot normalisé et les mot qui suivent cette normalisation avec leurs coordonnée dans le json EXEMPLE: HashMap = ["CONGRES" : ['congrès' : [0,514] , 'congres' :! 41522147524 ], VERS:['vèrs':52352445, 'vers':412421542245]
             
     		try {
@@ -44,7 +47,7 @@ public class App{
 	                try  
 	        		{  
 	    	    		//constructor of File class having file as argument  
-	    	    		File file=new File("C:\\Users\\33768\\Downloads\\frwiktionary-20220620-pages-articles-multistream.xml");   
+	    	    		File file=new File("C:\\Users\\paul_\\OneDrive\\Documents\\Bureau\\BUT2\\C\\frwiktionary-20220601-pages-articles-multistream.xml");   
 	    	    		//creates a buffer reader input stream  
 	    	    		@SuppressWarnings("resource")
 	    				BufferedReader br=new BufferedReader(new FileReader(file));  
@@ -72,18 +75,19 @@ public class App{
 	    	    			
 	    	    			//remplacez le mot dans la balise title pour chercher ce mot
 	    	    			if (r.contains("<title>")) {
+	    	    				estMot = false;
 	    	    				mot = r.replace("    <title>", "");
 	    	    				mot = mot.replace("</title>", "");
 	    	    				motNormalise = Normalizer.normalize(mot, Normalizer.Form.NFD).replaceAll("[^\\p{ASCII}]", "").toUpperCase();
-	    	    				if (mot.length() < 17 && !(mot.contains(" ")) && (!containsUpperCaseLetter(mot)) && (!containsDigit(mot) && (!mot.contains("-")))) {
-	    	                        titre = true;
-	    	                    }
+    	                        titre = (mot.length() < 17 && wordCondition(mot));
+
 	    	    			} // 
 	    	    			
 	    	    			//la balise <ns> suivis de 0 signifie que ce contient title est un mot
 	    	    			if(r.contains("<ns>0") && titre) {
 	    	    				estMot = true;
-	    	    			}  
+	    	    			}
+	    	    			
 	    	    			
 	    	    			// la série de if permet de savoir quel est le genre du mot
                             if (estFrancais && r.contains("S|") &&( r.contains("|fr}") || r.contains("|fr|"))) {
@@ -107,6 +111,19 @@ public class App{
 	    	    				definitions = new JSONObject();
 	    	    				estFrancais = true;
 	    	    				System.out.println(mot);
+	    	    				for(int i=0;i<motNormalise.length();i++){
+	    	    					if (motNormalise.charAt(i) == 'Q' && i < motNormalise.length()-1) {
+	    	    						if (motNormalise.charAt(i+1) == 'U') {
+	    	    							int nb = frequence.getOrDefault('&', 0);
+			    	    					frequence.put('&', nb + 1);
+	    	    						}
+	    	    					}
+	    	    					else {
+	    	    						int nb = frequence.getOrDefault(motNormalise.charAt(i), 0);
+		    	    					frequence.put(motNormalise.charAt(i), nb + 1);
+	    	    					}
+	    	    					
+	    	    		        }
 	    	    				elem.put("title",mot); 
 	    	    			}
 	    	    			
@@ -152,11 +169,12 @@ public class App{
 	    	    			
 	    	    			
 	    		    		//décomentez pour avoir le mot accueil et lire
-	    		    		if (compt1 == 1200)	
+	    		    		/*if (compt1 == 100000)
 	    		    			break;
 	    		    		else
-	    		    			compt1++;	
-	    		    		}	
+	    		    			compt1++;*/
+	    		    		}
+	    	    		
 	        		}  
 	        		catch(Exception e)  
 	        		{  
@@ -170,13 +188,24 @@ public class App{
 			} catch (JSONException e1) {
 				e1.printStackTrace();
 			}
+    		System.out.println(frequence);
     		
-    		System.out.println(indexes);
+    		//System.out.println(indexes);
     		try {
 				writeIndex(indexes);
 			} catch (FileNotFoundException e) {
 				e.printStackTrace();
 			}
+	}
+	
+	
+	public static boolean wordCondition(String w) {
+		;
+		for (int i = 0; w.length()>i;i++) {
+			if (!Character.isAlphabetic(w.charAt(i)) || Character.isSpaceChar(w.charAt(i)) || Character.isUpperCase(w.charAt(i)))
+				return false;
+		}
+		return true;
 	}
 	
 	public static boolean containsUpperCaseLetter(String s){
@@ -198,7 +227,7 @@ public class App{
     }
     
     public static void writeIndex(TreeMap<String,TreeMap<String,Coord>> indexes) throws IOException {
-    	FileOutputStream writer = new FileOutputStream("C:\\Users\\33768\\Documents\\GitHub\\Projet-Boggle\\Wikitionary\\src\\main\\java\\wiktionnary\\wiktionnary\\index.bin");
+    	FileOutputStream writer = new FileOutputStream("C:\\Users\\paul_\\OneDrive\\Documents\\Bureau\\BUT2\\C\\projet\\Projet-Boggle\\Wikitionary\\src\\main\\java\\wiktionnary\\wiktionnary\\index.bin");
     	ByteBuffer buffer = ByteBuffer.allocate(8);
     	buffer.order(ByteOrder.BIG_ENDIAN);
     	
