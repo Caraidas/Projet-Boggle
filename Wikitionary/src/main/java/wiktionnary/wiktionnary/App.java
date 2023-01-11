@@ -12,17 +12,8 @@ import org.json.JSONObject;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
-import java.nio.channels.FileChannel;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.StandardOpenOption;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;  
 import java.util.TreeMap;
 
 public class App{  
@@ -54,7 +45,7 @@ public class App{
 	    	    		System.out.println("file content: ");  
 	    	    		String r;  
 	    	    		boolean estMot = false;
-	    	    		int compt1 = 0; // a décommenté pour avoir les 500 1ers lignes
+	    	    		//int compt1 = 0; // a décommenté pour avoir les 500 1ers lignes
 	    	    		boolean titre = false;
 	    	    		boolean estFrancais = false;  
 	    	    		boolean estDefFrancais = false;
@@ -116,6 +107,7 @@ public class App{
 	    	    						if (motNormalise.charAt(i+1) == 'U') {
 	    	    							int nb = frequence.getOrDefault('&', 0);
 			    	    					frequence.put('&', nb + 1);
+			    	    					i++;
 	    	    						}
 	    	    					}
 	    	    					else {
@@ -183,7 +175,9 @@ public class App{
 	                out.close();
 	            } catch (Exception e) {
 	                e.printStackTrace();
-	            }
+	            } 
+	            writeFrequence(frequence);
+	            
 	            
 			} catch (JSONException e1) {
 				e1.printStackTrace();
@@ -200,9 +194,8 @@ public class App{
 	
 	
 	public static boolean wordCondition(String w) {
-		;
 		for (int i = 0; w.length()>i;i++) {
-			if (!Character.isAlphabetic(w.charAt(i)) || Character.isSpaceChar(w.charAt(i)) || Character.isUpperCase(w.charAt(i)))
+			if (!Character.isAlphabetic(w.charAt(i)) || Character.isSpaceChar(w.charAt(i)))
 				return false;
 		}
 		return true;
@@ -243,6 +236,22 @@ public class App{
     		}
     	}  
     	writer.close();
+    }
+    
+    public static void writeFrequence(TreeMap<Character,Integer> freq) throws IOException {
+    	String path = "C:\\Users\\paul_\\OneDrive\\Documents\\Bureau\\BUT2\\C\\projet\\Projet-Boggle\\Wikitionary\\src\\main\\java\\wiktionnary\\wiktionnary\\frequences.txt";
+    	try (PrintWriter out = new PrintWriter(new FileWriter(path))) {
+    		int lastAmount = 0;
+        	for (Character c : freq.keySet()) {
+        		lastAmount += freq.get(c);
+        		out.write(c + " " + lastAmount);
+        		if(c!='Z')
+        			out.write("\n");
+    	}
+        out.close();
+    	}catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 } 
 
