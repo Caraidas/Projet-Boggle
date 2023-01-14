@@ -10,7 +10,7 @@ import java.util.ArrayList;
 public class DictionnarySearcher {
 	public static void main(String[] args)  throws IOException{
 		
-		String word = "oui";
+		String word = "OUI";
 		String wordNormalise = Normalizer.normalize(word, Normalizer.Form.NFD).replaceAll("[^\\p{ASCII}]", "").toUpperCase();
 		wordNormalise.replace("Æ", "AE");
 		wordNormalise.replace("Œ", "OE");
@@ -100,7 +100,7 @@ public class DictionnarySearcher {
 	    		}
 	    	}
 	    	StringBuilder s = new StringBuilder();
-	    	for(String defMot:arraySearch) {
+	    	for(String defMot:result) {
 	    		s.append(defMot);
 	    		s.append("\n");
 	    	}
