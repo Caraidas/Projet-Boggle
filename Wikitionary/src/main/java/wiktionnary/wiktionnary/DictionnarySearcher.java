@@ -10,7 +10,7 @@ import java.util.ArrayList;
 public class DictionnarySearcher {
 	public static void main(String[] args)  throws IOException{
 		
-		String word = "CONGRES";
+		String word = "oui";
 		String wordNormalise = Normalizer.normalize(word, Normalizer.Form.NFD).replaceAll("[^\\p{ASCII}]", "").toUpperCase();
 		wordNormalise.replace("Æ", "AE");
 		wordNormalise.replace("Œ", "OE");
@@ -58,6 +58,7 @@ public class DictionnarySearcher {
 	    if(foundWord.compareTo(wordNormalise) == 0) {
 	    	System.out.println("Trouvé mot ++");
 	    	arraySearch.addAll(checkSides(entryNumber, debut, rafIndex, before, rafDico, wordNormalise));
+	    	System.out.println("total result"+arraySearch);
             return arraySearch;
 	    }
 	    
@@ -82,7 +83,7 @@ public class DictionnarySearcher {
 	    //System.out.println(indiceFin);
 	    ArrayList<String> arraySearch = searchWord(rafDico, indiceDeb, indiceFin);
 	    String foundWord = Normalizer.normalize(arraySearch.get(0), Normalizer.Form.NFD).replaceAll("[^\\p{ASCII}]", "").toUpperCase();
-	    foundWord.replace("Æ", "AE");
+	    foundWord.replace("Æ", "AE"); 
 	    foundWord.replace("Œ", "OE");
 	    if(foundWord.compareTo(wordNormalise) == 0) {
 	    	ArrayList<String> result = new ArrayList<String>();
@@ -92,9 +93,10 @@ public class DictionnarySearcher {
 	    	result.addAll(checkSides(entryNumber, debut, rafIndex, true, rafDico, wordNormalise));
 	    	System.out.println(result);
 	    	if(!isNormalized) {
-	    		for(int i = 0; i<arraySearch.size();i += 2) {
-	    			 if (arraySearch.get(i).compareTo(foundWord) == 0)
-	    				 return arraySearch.get(i+1);
+	    		for(int i = 0; i<result.size();i += 2) {
+	    			System.out.println("resultats totaux "+result.get(i));
+	    			 if (result.get(i).compareTo(word) == 0)
+	    				 return result.get(i+1);
 	    		}
 	    	}
 	    	StringBuilder s = new StringBuilder();
