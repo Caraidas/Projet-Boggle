@@ -10,7 +10,7 @@ import java.util.ArrayList;
 public class DictionnarySearcher {
 	public static void main(String[] args)  throws IOException{
 		
-		String word = "OUI";
+		String word = "remplacer<";
 		String wordNormalise = Normalizer.normalize(word, Normalizer.Form.NFD).replaceAll("[^\\p{ASCII}]", "").toUpperCase();
 		wordNormalise.replace("Æ", "AE");
 		wordNormalise.replace("Œ", "OE");
@@ -24,7 +24,6 @@ public class DictionnarySearcher {
     	RandomAccessFile rafDico = new RandomAccessFile("C:\\Users\\paul_\\OneDrive\\Documents\\Bureau\\BUT2\\C\\projet\\Projet-Boggle\\Wikitionary\\src\\main\\java\\wiktionnary\\wiktionnary\\dico.txt","r");
     	RandomAccessFile rafIndex = new RandomAccessFile("C:\\Users\\paul_\\OneDrive\\Documents\\Bureau\\BUT2\\C\\projet\\Projet-Boggle\\Wikitionary\\src\\main\\java\\wiktionnary\\wiktionnary\\index.bin","r");
     	int entryNumber = (int) (rafIndex.length() / 8);//nombre de couple de position dans l'index
-    	System.out.println("Nombre de couple de positions: " + entryNumber);
     	
     	System.out.println(extractDefinition(rafDico, rafIndex, wordNormalise,0,rafIndex.length(), entryNumber, isNormalized,word));
     	//System.out.println(searchWord(rafDico,indiceDeb, indiceFin));
@@ -41,9 +40,7 @@ public class DictionnarySearcher {
 		long indexMed = (entryNumber/2)*8 + debut;
 		if (indexMed < 0 || indexMed > rafIndex.length())
 			return t;
-		byte[] bytes = new byte[8];  
-		System.out.println("index Med" + indexMed);
-		System.out.println(before);
+		byte[] bytes = new byte[8];
 		
 		
 		rafIndex.seek(indexMed);
@@ -56,24 +53,19 @@ public class DictionnarySearcher {
 	    foundWord.replace("Æ", "AE");
 	    foundWord.replace("Œ", "OE");
 	    if(foundWord.compareTo(wordNormalise) == 0) {
-	    	System.out.println("Trouvé mot ++");
 	    	arraySearch.addAll(checkSides(entryNumber, debut, rafIndex, before, rafDico, wordNormalise));
-	    	System.out.println("total result"+arraySearch);
             return arraySearch;
 	    }
 	    
 		return t;
 	}
 	public static String extractDefinition(RandomAccessFile rafDico, RandomAccessFile rafIndex, String wordNormalise, long debut, long fin, long entryNumber, boolean isNormalized, String word) throws IOException {
-		System.out.println("Nombre d'entrée: " +entryNumber);
 		if(entryNumber == 0) {
 			return "Mot non trouvé (nombre d'entrée à 0";
 		}
 		long indexMed = (entryNumber/2)*8 + debut;//récupérer l'index médian (arrondi)
-    	System.out.println("Index médian dans le fichier: " + indexMed);
     	
 		byte[] bytes = new byte[8];
-		System.out.println("index Med" + indexMed);
 	    rafIndex.seek(indexMed);
 	    rafIndex.read(bytes, 0, 8);
 	    var bb = ByteBuffer.wrap(bytes);
@@ -88,25 +80,23 @@ public class DictionnarySearcher {
 	    if(foundWord.compareTo(wordNormalise) == 0) {
 	    	ArrayList<String> result = new ArrayList<String>();
 	    	result.addAll(arraySearch);
-	    	System.out.println("Trouvé");
 	    	result.addAll(checkSides(entryNumber, debut, rafIndex, false, rafDico, wordNormalise));
 	    	result.addAll(checkSides(entryNumber, debut, rafIndex, true, rafDico, wordNormalise));
-	    	System.out.println(result);
 	    	if(!isNormalized) {
 	    		for(int i = 0; i<result.size();i += 2) {
-	    			System.out.println("resultats totaux "+result.get(i));
 	    			 if (result.get(i).compareTo(word) == 0)
 	    				 return result.get(i+1);
 	    		}
 	    	}
 	    	StringBuilder s = new StringBuilder();
 	    	for(String defMot:result) {
-	    		s.append(defMot);
-	    		s.append("\n");
+	    		if (defMot != "\n") {
+	    			s.append(defMot);
+		    		s.append("\n");
+	    		}
 	    	}
             return s.toString();
 	    }
-	    System.out.println("Compare to: " + foundWord.compareTo(wordNormalise));
 	    if(foundWord.compareTo(wordNormalise) <= -1) {
 	        return extractDefinition(rafDico, rafIndex,wordNormalise, indexMed + 8, fin, (fin - (indexMed)) / 8,isNormalized,word);
 	    } else if(foundWord.compareTo(wordNormalise) >= 1){
@@ -131,7 +121,6 @@ public class DictionnarySearcher {
 		String wordNormalise = s.substring(start+8);
 		wordNormalise = wordNormalise.trim();//supprimer les espaces en debut et fin de ligne
 		wordNormalise = wordNormalise.replace("\"", "");//supprimer les guillemets
-		System.out.println(wordNormalise);
 		returnVars.add(wordNormalise);
 		returnVars.add(s);
 		return returnVars;
