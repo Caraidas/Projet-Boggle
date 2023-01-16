@@ -10,7 +10,7 @@ import java.util.ArrayList;
 public class DictionnarySearcher {
 	public static void main(String[] args)  throws IOException{
 		
-		String word = "remplacer<";
+		String word = args[0];
 		String wordNormalise = Normalizer.normalize(word, Normalizer.Form.NFD).replaceAll("[^\\p{ASCII}]", "").toUpperCase();
 		wordNormalise.replace("Æ", "AE");
 		wordNormalise.replace("Œ", "OE");
@@ -89,10 +89,9 @@ public class DictionnarySearcher {
 	    		}
 	    	}
 	    	StringBuilder s = new StringBuilder();
-	    	for(String defMot:result) {
-	    		if (defMot != "\n") {
-	    			s.append(defMot);
-		    		s.append("\n");
+	    	for(int i = 0; i<result.size();i ++) {
+	    		if (i % 2 == 1) {
+	    			s.append(result.get(i));
 	    		}
 	    	}
             return s.toString();
