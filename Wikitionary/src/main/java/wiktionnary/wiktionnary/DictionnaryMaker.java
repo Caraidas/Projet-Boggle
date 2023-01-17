@@ -19,8 +19,8 @@ import org.json.JSONObject;
 
 public class DictionnaryMaker {
 	public static void main(String[] args) throws IOException{
-		String path = "C:\\Users\\33768\\Documents\\GitHub\\Projet-Boggle\\Wikitionary\\src\\main\\java\\wiktionnary\\wiktionnary\\dico.txt";
-		FileOutputStream writer = new FileOutputStream("C:\\\\Users\\\\33768\\\\Documents\\\\GitHub\\\\Projet-Boggle\\\\Wikitionary\\\\src\\\\main\\\\java\\\\wiktionnary\\\\wiktionnary\\\\index.bin");
+		String path = "C:\\Users\\paul_\\OneDrive\\Documents\\Bureau\\BUT2\\C\\projet\\Projet-Boggle\\Wikitionary\\src\\main\\java\\wiktionnary\\wiktionnary\\dico.txt";
+		FileOutputStream writer = new FileOutputStream("C:\\Users\\paul_\\OneDrive\\Documents\\Bureau\\BUT2\\C\\projet\\Projet-Boggle\\Wikitionary\\src\\main\\java\\wiktionnary\\wiktionnary\\index.bin");
 		TreeMap<Character,Integer> frequence = new TreeMap<Character,Integer>();
 		TreeMap<String,TreeMap<String,Coord>> indexes = new TreeMap<String,TreeMap<String,Coord>>();
 		 //Correspond au couple mot normalisé et les mot qui suivent cette normalisation avec leurs coordonnée dans le json EXEMPLE: HashMap = ["CONGRES" : ['congrès' : [0,514] , 'congres' :! 41522147524 ], VERS:['vèrs':52352445, 'vers':412421542245]
@@ -38,7 +38,7 @@ public class DictionnaryMaker {
 	            try  
 	    		{  
 		    		//constructor of File class having file as argument  
-		    		File file=new File("C:\\\\Users\\\\33768\\\\Downloads\\\\frwiktionary-20220620-pages-articles-multistream.xml");   
+		    		File file=new File("C:\\Users\\paul_\\OneDrive\\Documents\\Bureau\\BUT2\\C\\frwiktionary-20220601-pages-articles-multistream.xml");   
 		    		//creates a buffer reader input stream  
 		    		@SuppressWarnings("resource")
 					BufferedReader br=new BufferedReader(new FileReader(file));  
@@ -129,6 +129,26 @@ public class DictionnaryMaker {
 		    				r=r.replace("### ", "");
 		    				r=r.replace("<\\/text>", "");
 		    				arrayDef.put(r);
+		    				String defNormalize = Normalizer.normalize(r, Normalizer.Form.NFD).replaceAll("[^\\p{ASCII}]", "").toUpperCase();
+		    				defNormalize.replace("Æ", "AE");
+		    				defNormalize.replace("Œ", "OE");
+		    				for(int i=0;i<defNormalize.length();i++){
+		    					if(Character.isAlphabetic(defNormalize.charAt(i))) {
+		    						if (defNormalize.charAt(i) == 'Q' && i < defNormalize.length()-1) {
+			    						if (defNormalize.charAt(i+1) == 'U') {
+			    							int nb = frequence.getOrDefault('&', 0);
+			    	    					frequence.put('&', nb + 1);
+			    	    					i++;
+			    						}
+			    					}
+			    					else {
+			    						int nb = frequence.getOrDefault(defNormalize.charAt(i), 0);
+		    	    					frequence.put(defNormalize.charAt(i), nb + 1);
+			    					}
+		    					}
+		    					
+		    					
+		    		        }
 		    				definitions.put(genre, arrayDef);//le put va ajouter à la clé genre la définition
 		    				//System.out.println(r);
 		    				//break;  
@@ -178,7 +198,7 @@ public class DictionnaryMaker {
 	        } catch (Exception e) {
 	            e.printStackTrace();
 	        } 
-	        writeFrequence(frequence,"C:\\Users\\33768\\Documents\\GitHub\\Projet-Boggle\\Wikitionary\\src\\main\\java\\wiktionnary\\wiktionnary\\frequences.txt");
+	        writeFrequence(frequence,"C:\\Users\\paul_\\OneDrive\\Documents\\Bureau\\BUT2\\C\\projet\\Projet-Boggle\\Wikitionary\\src\\main\\java\\wiktionnary\\wiktionnary\\frequences.txt");
 	        
 	        
 		} catch (JSONException e1) {
