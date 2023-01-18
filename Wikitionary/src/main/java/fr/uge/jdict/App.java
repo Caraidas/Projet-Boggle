@@ -1,4 +1,4 @@
-package wiktionnary.wiktionnary;
+package fr.uge.jdict;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -17,7 +17,7 @@ import com.fasterxml.jackson.dataformat.yaml.YAMLMapper;
 
 public class App{  
 	public static void main(String[] args) throws IOException{
-		File file=new File("C:\\Users\\33768\\Documents\\GitHub\\Projet-Boggle\\Wikitionary\\src\\main\\java\\wiktionnary\\wiktionnary\\frequences.txt"); 
+		File file=new File("C:\\Users\\33768\\Documents\\GitHub\\Projet-Boggle\\Wikitionary\\src\\main\\java\\fr\\uge\\jdict\\frequences.txt"); 
 		try(FileInputStream fis = new FileInputStream(file);
 	        InputStreamReader isr = new InputStreamReader(fis, StandardCharsets.UTF_8);
 	        BufferedReader reader = new BufferedReader(isr)

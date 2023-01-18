@@ -1,4 +1,4 @@
-package wiktionnary.wiktionnary;
+package fr.uge.jdict;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
@@ -21,8 +21,8 @@ public class DictionnarySearcher {
 				break;
 			}
 		}
-    	RandomAccessFile rafDico = new RandomAccessFile("C:\\Users\\paul_\\OneDrive\\Documents\\Bureau\\BUT2\\C\\projet\\Projet-Boggle\\Wikitionary\\src\\main\\java\\wiktionnary\\wiktionnary\\dico.txt","r");
-    	RandomAccessFile rafIndex = new RandomAccessFile("C:\\Users\\paul_\\OneDrive\\Documents\\Bureau\\BUT2\\C\\projet\\Projet-Boggle\\Wikitionary\\src\\main\\java\\wiktionnary\\wiktionnary\\index.bin","r");
+    	RandomAccessFile rafDico = new RandomAccessFile("C:\\\\Users\\\\33768\\\\Documents\\\\GitHub\\\\Projet-Boggle\\\\Wikitionary\\\\dico.txt","r");
+    	RandomAccessFile rafIndex = new RandomAccessFile("C:\\Users\\33768\\Documents\\GitHub\\Projet-Boggle\\Wikitionary\\index.bin","r");
     	int entryNumber = (int) (rafIndex.length() / 8);//nombre de couple de position dans l'index
     	
     	System.out.println(extractDefinition(rafDico, rafIndex, wordNormalise,0,rafIndex.length(), entryNumber, isNormalized,word));
