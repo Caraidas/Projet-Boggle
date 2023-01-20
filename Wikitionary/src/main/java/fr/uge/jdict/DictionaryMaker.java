@@ -19,6 +19,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.text.Normalizer;
+import java.util.Scanner;
 import java.util.TreeMap;
 
 import org.apache.commons.compress.compressors.bzip2.BZip2CompressorInputStream;
@@ -26,7 +27,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class DictionnaryMaker {
+public class DictionaryMaker {
 	public static void main(String[] args) throws IOException{
 		String path = args[0]+".txt";//path dico
 		FileOutputStream writer = new FileOutputStream(args[0]+".index");//path index
@@ -40,7 +41,7 @@ public class DictionnaryMaker {
 			meta.put("created_on", "20221014T145610Z");
 	        meta.put("language", "fr");
 	        
-	        try (PrintWriter out = new PrintWriter(new FileWriter(path))) {
+	        try (PrintWriter out = new PrintWriter(new OutputStreamWriter(new FileOutputStream(path), StandardCharsets.UTF_8))) {
 	            out.write(meta.toString());
 	            out.write("\n");//écriture dans le fichier initialisé précédemment
 	            
@@ -51,18 +52,12 @@ public class DictionnaryMaker {
 		            byte[] buffer = new byte[1024];
 		            int len;
 		            while ((len = bzIn.read(buffer)) != -1) {
-		            	
-		                fileOutputStream.write(new String(buffer, StandardCharsets.UTF_8).getBytes());
+		                fileOutputStream.write(new String(buffer).getBytes());
 		            }
 		            fileOutputStream.close();
 		            bzIn.close();
-		    		//constructor of File class having file as argument  
-	            	//InputStream inputStream = System.in;
-		    		//File file=new File("C:\\\\Users\\\\33768\\\\Documents\\\\GitHub\\\\Projet-Boggle\\\\Wikitionary\\\\frwiktionary.xml");   
-		    		//Files.copy(inputStream, file.toPath(), StandardCopyOption.REPLACE_EXISTING);
-		    		//creates a buffer reader input stream  
-		    		@SuppressWarnings("resource")
-					BufferedReader br=new BufferedReader(new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_8));
+		   
+		    		Scanner scanner = new Scanner(new FileInputStream("fichier.xml"), StandardCharsets.UTF_8.name());
 		    		System.out.println("file content: ");  
 		    		String r;  
 		    		boolean estMot = false;
@@ -83,8 +78,8 @@ public class DictionnaryMaker {
 		    		int start = 0;
 		    		int end = 0;
 		    		
-		    		while((r = br.readLine()) != null){  
-		    			
+		    		while(scanner.hasNextLine()){  
+		    			 r = scanner.nextLine();
 		    			//remplacez le mot dans la balise title pour chercher ce mot
 		    			if (r.contains("<title>")) {
 		    				estMot = false;

@@ -7,10 +7,19 @@ import java.nio.charset.StandardCharsets;
 import java.text.Normalizer;
 import java.util.ArrayList;
 
-public class DictionnarySearcher {
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.dataformat.yaml.YAMLMapper;
+
+public class DictionarySearcher {
 	public static void main(String[] args)  throws IOException{
-		
-		String word = args[0];
+		boolean hasYaml= false;
+		String word = args[1];
+		if(word.contains("yaml:")) {
+			word = word.substring(word.indexOf("yaml:")+5);
+			hasYaml = true;
+		}
 		String wordNormalise = Normalizer.normalize(word, Normalizer.Form.NFD).replaceAll("[^\\p{ASCII}]", "").toUpperCase();
 		wordNormalise.replace("Æ", "AE");
 		wordNormalise.replace("Œ", "OE");
@@ -21,12 +30,14 @@ public class DictionnarySearcher {
 				break;
 			}
 		}
-    	RandomAccessFile rafDico = new RandomAccessFile("C:\\\\Users\\\\33768\\\\Documents\\\\GitHub\\\\Projet-Boggle\\\\Wikitionary\\\\dico.txt","r");
-    	RandomAccessFile rafIndex = new RandomAccessFile("C:\\Users\\33768\\Documents\\GitHub\\Projet-Boggle\\Wikitionary\\index.bin","r");
+    	RandomAccessFile rafDico = new RandomAccessFile(args[0]+".txt","r");
+    	RandomAccessFile rafIndex = new RandomAccessFile("definitions.index","r");
     	int entryNumber = (int) (rafIndex.length() / 8);//nombre de couple de position dans l'index
+    	if(hasYaml) {
+    		System.out.println(asYaml(extractDefinition(rafDico, rafIndex, wordNormalise,0,rafIndex.length(), entryNumber, isNormalized,word)));
+    	}
+    	else System.out.println(extractDefinition(rafDico, rafIndex, wordNormalise,0,rafIndex.length(), entryNumber, isNormalized,word));
     	
-    	System.out.println(extractDefinition(rafDico, rafIndex, wordNormalise,0,rafIndex.length(), entryNumber, isNormalized,word));
-    	//System.out.println(searchWord(rafDico,indiceDeb, indiceFin));
     	rafIndex.close();
 	}
 	  
@@ -59,6 +70,7 @@ public class DictionnarySearcher {
 	    
 		return t;
 	}
+	
 	public static String extractDefinition(RandomAccessFile rafDico, RandomAccessFile rafIndex, String wordNormalise, long debut, long fin, long entryNumber, boolean isNormalized, String word) throws IOException {
 		if(entryNumber == 0) {
 			return "Mot non trouvé (nombre d'entrée à 0";
@@ -124,5 +136,13 @@ public class DictionnarySearcher {
 		returnVars.add(s);
 		return returnVars;
 	}
+	
+	public static String asYaml(String jsonString) throws JsonProcessingException, IOException {
+        // parse JSON
+        JsonNode jsonNodeTree = new ObjectMapper().readTree(jsonString);
+        // save it as YAML
+        String jsonAsYaml = new YAMLMapper().writeValueAsString(jsonNodeTree);
+        return jsonAsYaml;
+    }
 } 
 
