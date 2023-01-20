@@ -2,25 +2,34 @@ package fr.uge.jdict;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 import java.text.Normalizer;
 import java.util.TreeMap;
 
+import org.apache.commons.compress.compressors.bzip2.BZip2CompressorInputStream;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 public class DictionnaryMaker {
 	public static void main(String[] args) throws IOException{
-		String path = "C:\\Users\\33768\\Documents\\GitHub\\Projet-Boggle\\Wikitionary\\dico.txt";
-		FileOutputStream writer = new FileOutputStream("C:\\Users\\33768\\Documents\\GitHub\\Projet-Boggle\\Wikitionary\\index.bin");
+		String path = args[0]+".txt";//path dico
+		FileOutputStream writer = new FileOutputStream(args[0]+".index");//path index
 		TreeMap<Character,Integer> frequence = new TreeMap<Character,Integer>();
 		TreeMap<String,TreeMap<String,Coord>> indexes = new TreeMap<String,TreeMap<String,Coord>>();
 		 //Correspond au couple mot normalisé et les mot qui suivent cette normalisation avec leurs coordonnée dans le json EXEMPLE: HashMap = ["CONGRES" : ['congrès' : [0,514] , 'congres' :! 41522147524 ], VERS:['vèrs':52352445, 'vers':412421542245]
@@ -36,16 +45,28 @@ public class DictionnaryMaker {
 	            out.write("\n");//écriture dans le fichier initialisé précédemment
 	            
 	            try  
-	    		{  
+	    		{   File file = new File("fichier.xml");
+	    			BZip2CompressorInputStream bzIn = new BZip2CompressorInputStream(System.in);
+		            FileOutputStream fileOutputStream = new FileOutputStream(file);
+		            byte[] buffer = new byte[1024];
+		            int len;
+		            while ((len = bzIn.read(buffer)) != -1) {
+		            	
+		                fileOutputStream.write(new String(buffer, StandardCharsets.UTF_8).getBytes());
+		            }
+		            fileOutputStream.close();
+		            bzIn.close();
 		    		//constructor of File class having file as argument  
-		    		File file=new File("C:\\Users\\33768\\Downloads\\frwiktionary-20220620-pages-articles-multistream.xml");   
+	            	//InputStream inputStream = System.in;
+		    		//File file=new File("C:\\\\Users\\\\33768\\\\Documents\\\\GitHub\\\\Projet-Boggle\\\\Wikitionary\\\\frwiktionary.xml");   
+		    		//Files.copy(inputStream, file.toPath(), StandardCopyOption.REPLACE_EXISTING);
 		    		//creates a buffer reader input stream  
 		    		@SuppressWarnings("resource")
-					BufferedReader br=new BufferedReader(new FileReader(file));  
+					BufferedReader br=new BufferedReader(new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_8));
 		    		System.out.println("file content: ");  
 		    		String r;  
 		    		boolean estMot = false;
-		    		//int compt1 = 0; // a décommenté pour avoir les 500 1ers lignes
+		    		int compt1 = 0; // a décommenté pour avoir les 500 1ers lignes
 		    		boolean titre = false;
 		    		boolean estFrancais = false;  
 		    		boolean estDefFrancais = false;
@@ -128,6 +149,7 @@ public class DictionnaryMaker {
 		    				r=r.replace("## ", "");
 		    				r=r.replace("### ", "");
 		    				r=r.replace("<\\/text>", "");
+		    				System.out.println("DEFINITION: " +r);
 		    				arrayDef.put(r);
 		    				String defNormalize = Normalizer.normalize(r, Normalizer.Form.NFD).replaceAll("[^\\p{ASCII}]", "").toUpperCase();
 		    				defNormalize.replace("Æ", "AE");
@@ -165,6 +187,8 @@ public class DictionnaryMaker {
 	    		            
 	    		            
 	    		            byte[] byteArray = elem.toString().getBytes("UTF-8");
+	    		            //String s = new String(byteArray);
+	    		            //System.out.println(s);
 	    		            end += byteArray.length; 
 	    		         
 	
@@ -183,10 +207,10 @@ public class DictionnaryMaker {
 		    			
 		    			
 			    		//décomentez pour avoir le mot accueil et lire
-			    		/*if (compt1 == 100000)
+			    		if (compt1 == 5000)
 			    			break;
 			    		else
-			    			compt1++;*/
+			    			compt1++;
 			    		}
 		    		
 	    		}  
@@ -260,7 +284,8 @@ public class DictionnaryMaker {
 		}
 		
 		public static void writeFrequence(TreeMap<Character,Integer> freq, String path) throws IOException {
-		try (PrintWriter out = new PrintWriter(new FileWriter(path))) {
+		 OutputStreamWriter outputStreamWriter = new OutputStreamWriter(new FileOutputStream(path), Charset.forName("UTF-8"));
+		try (PrintWriter out = new PrintWriter(outputStreamWriter)) {
 			int lastAmount = 0;
 			for (Character c : freq.keySet()) {
 				lastAmount += freq.get(c);
