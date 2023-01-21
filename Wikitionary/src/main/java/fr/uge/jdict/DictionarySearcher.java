@@ -33,8 +33,13 @@ public class DictionarySearcher {
     	RandomAccessFile rafDico = new RandomAccessFile(args[0]+".txt","r");
     	RandomAccessFile rafIndex = new RandomAccessFile("definitions.index","r");
     	int entryNumber = (int) (rafIndex.length() / 8);//nombre de couple de position dans l'index
+    	String extract = extractDefinition(rafDico, rafIndex, wordNormalise,0,rafIndex.length(), entryNumber, isNormalized,word);
     	if(hasYaml) {
-    		System.out.println(asYaml(extractDefinition(rafDico, rafIndex, wordNormalise,0,rafIndex.length(), entryNumber, isNormalized,word)));
+    		if(extract.charAt(0) != '{') {
+    			System.out.println(extract);
+    		}else{
+    			System.out.println(asYaml(extractDefinition(rafDico, rafIndex, wordNormalise,0,rafIndex.length(), entryNumber, isNormalized,word)));
+    		}
     	}
     	else System.out.println(extractDefinition(rafDico, rafIndex, wordNormalise,0,rafIndex.length(), entryNumber, isNormalized,word));
     	
@@ -73,7 +78,7 @@ public class DictionarySearcher {
 	
 	public static String extractDefinition(RandomAccessFile rafDico, RandomAccessFile rafIndex, String wordNormalise, long debut, long fin, long entryNumber, boolean isNormalized, String word) throws IOException {
 		if(entryNumber == 0) {
-			return "Mot non trouvé (nombre d'entrée à 0";
+			return "Mot non trouvé (nombre d'entrée à 0)";
 		}
 		long indexMed = (entryNumber/2)*8 + debut;//récupérer l'index médian (arrondi)
     	
@@ -83,8 +88,6 @@ public class DictionarySearcher {
 	    var bb = ByteBuffer.wrap(bytes);
 	    int indiceDeb = bb.getInt();
 	    int indiceFin = bb.getInt();
-	    //System.out.println(indiceDeb);
-	    //System.out.println(indiceFin);
 	    ArrayList<String> arraySearch = searchWord(rafDico, indiceDeb, indiceFin);
 	    String foundWord = Normalizer.normalize(arraySearch.get(0), Normalizer.Form.NFD).replaceAll("[^\\p{ASCII}]", "").toUpperCase();
 	    foundWord.replace("Æ", "AE"); 
@@ -119,7 +122,7 @@ public class DictionarySearcher {
 	
 	public static ArrayList<String> searchWord(RandomAccessFile raf, int posDeb, int posFin) throws IOException {
 		ArrayList<String> returnVars = new ArrayList<>();
-		byte[] meta = ("{\"created_on\":\"20221014T145610Z\",\"description\":\"definition file\",\"language\":\"fr\"}").getBytes("IBM01140");
+		byte[] meta = ("{\"created_on\":\"20221014T145610Z\",\"description\":\"definition file\",\"language\":\"fr\"}\n").getBytes("IBM01140");
 		int metaLenght = meta.length;//les metadonnées au debut prennent de la place
 		
 		int taille = (posFin-posDeb);
@@ -132,6 +135,9 @@ public class DictionarySearcher {
 		String wordNormalise = s.substring(start+8);
 		wordNormalise = wordNormalise.trim();//supprimer les espaces en debut et fin de ligne
 		wordNormalise = wordNormalise.replace("\"", "");//supprimer les guillemets
+		if(wordNormalise.contains("}")) {
+			wordNormalise =wordNormalise.replace("}", "");
+		}
 		returnVars.add(wordNormalise);
 		returnVars.add(s);
 		return returnVars;

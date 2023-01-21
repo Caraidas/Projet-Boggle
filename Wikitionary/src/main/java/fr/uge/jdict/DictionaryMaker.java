@@ -1,27 +1,18 @@
 package fr.uge.jdict;
 
-import java.io.BufferedReader;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.StandardCopyOption;
-import java.text.Normalizer;
 import java.util.Scanner;
 import java.util.TreeMap;
-
 import org.apache.commons.compress.compressors.bzip2.BZip2CompressorInputStream;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -31,7 +22,6 @@ public class DictionaryMaker {
 	public static void main(String[] args) throws IOException{
 		String path = args[0]+".txt";//path dico
 		FileOutputStream writer = new FileOutputStream(args[0]+".index");//path index
-		TreeMap<Character,Integer> frequence = new TreeMap<Character,Integer>();
 		TreeMap<String,TreeMap<String,Coord>> indexes = new TreeMap<String,TreeMap<String,Coord>>();
 		 //Correspond au couple mot normalisé et les mot qui suivent cette normalisation avec leurs coordonnée dans le json EXEMPLE: HashMap = ["CONGRES" : ['congrès' : [0,514] , 'congres' :! 41522147524 ], VERS:['vèrs':52352445, 'vers':412421542245]
 	    
@@ -46,18 +36,37 @@ public class DictionaryMaker {
 	            out.write("\n");//écriture dans le fichier initialisé précédemment
 	            
 	            try  
-	    		{   File file = new File("fichier.xml");
-	    			BZip2CompressorInputStream bzIn = new BZip2CompressorInputStream(System.in);
-		            FileOutputStream fileOutputStream = new FileOutputStream(file);
-		            byte[] buffer = new byte[1024];
-		            int len;
-		            while ((len = bzIn.read(buffer)) != -1) {
-		                fileOutputStream.write(new String(buffer).getBytes());
-		            }
-		            fileOutputStream.close();
-		            bzIn.close();
+		    		{   
+	            	/*StringBuilder sb = new StringBuilder();
+		    		for (int ch; (ch = (System.in).read()) != -1; ) {
+		    		    sb.append((char) ch);
+		    		}
+		    		String argument = sb.toString();
+	      
+	            	System.out.println(argument);*/
+	            	File file;
+	            	Scanner scanner;
+	            	/*if("a".equals(".bz2")){*/
+	            		System.out.println("yay");
+	            		file = new File("fichier.xml");
+		    			BZip2CompressorInputStream bzIn = new BZip2CompressorInputStream(System.in);
+			            FileOutputStream fileOutputStream = new FileOutputStream(file);
+			            byte[] buffer = new byte[1024];
+			            int len;
+			            while ((len = bzIn.read(buffer)) != -1) {
+			                fileOutputStream.write(new String(buffer).getBytes());
+			            }
+			            fileOutputStream.close();
+			            bzIn.close();
+			            scanner = new Scanner(new FileInputStream("fichier.xml"), StandardCharsets.UTF_8.name());
+	            	/*}else {
+	            		System.out.println("YAY");
+	            		file = new File(argument);
+	            		scanner = new Scanner(new FileInputStream(argument), StandardCharsets.UTF_8.name());
+	            	}*/
+	            	
 		   
-		    		Scanner scanner = new Scanner(new FileInputStream("fichier.xml"), StandardCharsets.UTF_8.name());
+		    		
 		    		System.out.println("file content: ");  
 		    		String r;  
 		    		boolean estMot = false;
@@ -85,9 +94,6 @@ public class DictionaryMaker {
 		    				estMot = false;
 		    				mot = r.replace("    <title>", "");
 		    				mot = mot.replace("</title>", "");
-		    				motNormalise = Normalizer.normalize(mot, Normalizer.Form.NFD).replaceAll("[^\\p{ASCII}]", "").toUpperCase();
-		    				motNormalise.replace("Æ", "AE");
-		    				motNormalise.replace("Œ", "OE");
 		    				titre = (mot.length() < 17 && wordCondition(mot));
 	
 		    			} // 
@@ -120,20 +126,6 @@ public class DictionaryMaker {
 		    				definitions = new JSONObject();
 		    				estFrancais = true;
 		    				System.out.println(mot);
-		    				for(int i=0;i<motNormalise.length();i++){
-		    					if (motNormalise.charAt(i) == 'Q' && i < motNormalise.length()-1) {
-		    						if (motNormalise.charAt(i+1) == 'U') {
-		    							int nb = frequence.getOrDefault('&', 0);
-		    	    					frequence.put('&', nb + 1);
-		    	    					i++;
-		    						}
-		    					}
-		    					else {
-		    						int nb = frequence.getOrDefault(motNormalise.charAt(i), 0);
-	    	    					frequence.put(motNormalise.charAt(i), nb + 1);
-		    					}
-		    					
-		    		        }
 		    				elem.put("title",mot); 
 		    			}
 		    			
@@ -146,26 +138,6 @@ public class DictionaryMaker {
 		    				r=r.replace("<\\/text>", "");
 		    				System.out.println("DEFINITION: " +r);
 		    				arrayDef.put(r);
-		    				String defNormalize = Normalizer.normalize(r, Normalizer.Form.NFD).replaceAll("[^\\p{ASCII}]", "").toUpperCase();
-		    				defNormalize.replace("Æ", "AE");
-		    				defNormalize.replace("Œ", "OE");
-		    				for(int i=0;i<defNormalize.length();i++){
-		    					if(Character.isAlphabetic(defNormalize.charAt(i))) {
-		    						if (defNormalize.charAt(i) == 'Q' && i < defNormalize.length()-1) {
-			    						if (defNormalize.charAt(i+1) == 'U') {
-			    							int nb = frequence.getOrDefault('&', 0);
-			    	    					frequence.put('&', nb + 1);
-			    	    					i++;
-			    						}
-			    					}
-			    					else {
-			    						int nb = frequence.getOrDefault(defNormalize.charAt(i), 0);
-		    	    					frequence.put(defNormalize.charAt(i), nb + 1);
-			    					}
-		    					}
-		    					
-		    					
-		    		        }
 		    				definitions.put(genre, arrayDef);//le put va ajouter à la clé genre la définition
 		    				//System.out.println(r);
 		    				//break;  
@@ -185,7 +157,7 @@ public class DictionaryMaker {
 	    		            //String s = new String(byteArray);
 	    		            //System.out.println(s);
 	    		            end += byteArray.length; 
-	    		         
+	    		            
 	
 		    				if (indexes.get(motNormalise) == null) {
 		    					TreeMap<String,Coord> tm = new TreeMap<String,Coord>();
@@ -196,6 +168,7 @@ public class DictionaryMaker {
 		    				
 		    				//writer.write(start);
 	    		            //writer.write(end);
+		    				
 	    		            start = end+1; 
 	    		            end = start;
 		    			}
@@ -216,16 +189,11 @@ public class DictionaryMaker {
 	            out.close();
 	        } catch (Exception e) {
 	            e.printStackTrace();
-	        } 
-	        writeFrequence(frequence,"C:\\Users\\33768\\Documents\\GitHub\\Projet-Boggle\\Wikitionary\\frequences.txt");
-	        
+	        }  
 	        
 		} catch (JSONException e1) {
 			e1.printStackTrace();
 		}
-		System.out.println(frequence);
-		
-		//System.out.println(indexes);
 		try {
 			writeIndex(indexes,writer);
 		} catch (FileNotFoundException e) {
@@ -277,20 +245,4 @@ public class DictionaryMaker {
 		}  
 		writer.close();
 		}
-		
-		public static void writeFrequence(TreeMap<Character,Integer> freq, String path) throws IOException {
-		 OutputStreamWriter outputStreamWriter = new OutputStreamWriter(new FileOutputStream(path), Charset.forName("UTF-8"));
-		try (PrintWriter out = new PrintWriter(outputStreamWriter)) {
-			int lastAmount = 0;
-			for (Character c : freq.keySet()) {
-				lastAmount += freq.get(c);
-				out.write(c + " " + lastAmount);
-				if(c!='Z')
-					out.write("\n");
-		}
-		out.close();
-		}catch (Exception e) {
-		    e.printStackTrace();
-		}
-	}
 }

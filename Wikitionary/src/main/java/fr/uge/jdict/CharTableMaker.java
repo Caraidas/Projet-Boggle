@@ -14,19 +14,14 @@ import java.util.stream.Collectors;
 
 public class CharTableMaker {
 	
-	public static void writeFrequence(TreeMap<Character,Integer> freq, String path) throws IOException {
-		try (PrintWriter out = new PrintWriter(new FileWriter(path))) {
-			int lastAmount = 0;
-			for (Character c : freq.keySet()) {
-				lastAmount += freq.get(c);
-				out.write(c + " " + lastAmount);
-				if(c!='Z')
-					out.write("\n");
+	public static void writeFrequence(TreeMap<Character,Integer> freq) throws IOException {
+		
+		int lastAmount = 0;
+		for (Character c : freq.keySet()) {
+			lastAmount += freq.get(c);
+			System.out.println(c + " " + lastAmount);
 		}
-		out.close();
-		}catch (Exception e) {
-		    e.printStackTrace();
-		}
+		
 	}
 	
 	public static void main(String[] args) throws IOException{
@@ -40,7 +35,7 @@ public class CharTableMaker {
 		List<String> distinctElements  = list.stream().distinct().collect(Collectors.toList());
 		boolean containGender = false;
 		
-		Reader r = new FileReader("C:\\Users\\paul_\\OneDrive\\Documents\\Bureau\\BUT2\\C\\projet\\Projet-Boggle\\Wikitionary\\src\\main\\java\\fr\\uge\\jdict\\dico.txt");
+		Reader r = new FileReader(args[0]+".txt");
 		BufferedReader br = new BufferedReader(r);
 		String line = null;
 		
@@ -76,7 +71,6 @@ public class CharTableMaker {
         }
         br.close();
 	
-        writeFrequence(frequence,"C:\\Users\\paul_\\OneDrive\\Documents\\Bureau\\BUT2\\C\\projet\\Projet-Boggle\\Wikitionary\\src\\main\\java\\fr\\uge\\jdict\\frequences.txt");
-        System.out.println(frequence);
+        writeFrequence(frequence);
 	}
 }

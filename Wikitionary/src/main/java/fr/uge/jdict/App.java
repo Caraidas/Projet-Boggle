@@ -17,9 +17,9 @@ import com.fasterxml.jackson.dataformat.yaml.YAMLMapper;
 
 public class App{  
 	public static void main(String[] args) throws IOException{
-		File file=new File("C:\\Users\\33768\\Documents\\GitHub\\Projet-Boggle\\Wikitionary\\src\\main\\java\\fr\\uge\\jdict\\frequences.txt"); 
+		File file=new File("C:\\Users\\33768\\Documents\\GitHub\\Projet-Boggle\\definitions.txt"); 
 		try(FileInputStream fis = new FileInputStream(file);
-	        InputStreamReader isr = new InputStreamReader(fis, StandardCharsets.UTF_8);
+	        InputStreamReader isr = new InputStreamReader(fis);
 	        BufferedReader reader = new BufferedReader(isr)
 		){
 			String line;

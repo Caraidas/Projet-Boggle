@@ -17,21 +17,24 @@ public class NormalizedExtractor {
 	
 	public static void main(String[] args) throws IOException{
 		
-		List<String> mots = new ArrayList<String>();
 		List<String> list = new ArrayList<String>();
 		/*
 		 * code avec arguments prenant seulement les genre que l'on souhaite passé en paramètre
 		 */
+		if(args.length == 2) {
+			String[] genre = args[1].split(",");
+			for(String s : genre) {
+				list.add(s);
+			}
+		}
 		//list.add("adverbe");
 		List<String> distinctElements  = list.stream().distinct().collect(Collectors.toList());
 		boolean containGender = false;
 		
-		Reader r = new FileReader("C:\\Users\\paul_\\OneDrive\\Documents\\Bureau\\BUT2\\C\\projet\\Projet-Boggle\\Wikitionary\\src\\main\\java\\fr\\uge\\jdict\\dico.txt");
+		Reader r = new FileReader(args[0]+".txt");
 		BufferedReader br = new BufferedReader(r);
 		String line = null;
-		
-		try (PrintWriter out = new PrintWriter(new FileWriter("C:\\Users\\paul_\\OneDrive\\Documents\\Bureau\\BUT2\\C\\projet\\Projet-Boggle\\Wikitionary\\src\\main\\java\\fr\\uge\\jdict\\listeMots.txt"))){
-
+		br.readLine();
 			while((line = br.readLine())!= null) {
 	            for(String s:distinctElements) {
 	            	if (line.contains('"'+s+'"')) {
@@ -47,22 +50,11 @@ public class NormalizedExtractor {
 		            line = Normalizer.normalize(line, Normalizer.Form.NFD).replaceAll("[^\\p{ASCII}]", "").toUpperCase();
 		            line.replace("Æ", "AE");
 		            line.replace("Œ", "OE");
-		            if(!mots.contains(line)) {
-		            	mots.add(line);
-		            	System.out.println(line);
-		            	out.write(line + "\n");
-		            }
-		            	
-	            }
-	            
-		            
+		            containGender = false;
+	            	System.out.println(line);        	
+	            }        
 	        }
-			out.close();
+
 	        br.close();
-		}catch (Exception e) {
-		    e.printStackTrace();
-		}
-		
-        System.out.println(mots);
 	}
 }
