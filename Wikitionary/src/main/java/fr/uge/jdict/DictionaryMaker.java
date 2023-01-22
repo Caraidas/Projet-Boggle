@@ -1,25 +1,32 @@
 package fr.uge.jdict;
 
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 import java.util.Scanner;
 import java.util.TreeMap;
 import org.apache.commons.compress.compressors.bzip2.BZip2CompressorInputStream;
+import org.apache.commons.io.IOUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 public class DictionaryMaker {
 	public static void main(String[] args) throws IOException{
+
 		String path = args[0]+".txt";//path dico
 		FileOutputStream writer = new FileOutputStream(args[0]+".index");//path index
 		TreeMap<String,TreeMap<String,Coord>> indexes = new TreeMap<String,TreeMap<String,Coord>>();
@@ -30,44 +37,32 @@ public class DictionaryMaker {
 			meta.put("description", "definition file");
 			meta.put("created_on", "20221014T145610Z");
 	        meta.put("language", "fr");
-	        
+
 	        try (PrintWriter out = new PrintWriter(new OutputStreamWriter(new FileOutputStream(path), StandardCharsets.UTF_8))) {
 	            out.write(meta.toString());
 	            out.write("\n");//écriture dans le fichier initialisé précédemment
 	            
 	            try  
 		    		{   
-	            	/*StringBuilder sb = new StringBuilder();
-		    		for (int ch; (ch = (System.in).read()) != -1; ) {
-		    		    sb.append((char) ch);
-		    		}
-		    		String argument = sb.toString();
-	      
-	            	System.out.println(argument);*/
-	            	File file;
-	            	Scanner scanner;
-	            	/*if("a".equals(".bz2")){*/
-	            		System.out.println("yay");
-	            		file = new File("fichier.xml");
-		    			BZip2CompressorInputStream bzIn = new BZip2CompressorInputStream(System.in);
-			            FileOutputStream fileOutputStream = new FileOutputStream(file);
-			            byte[] buffer = new byte[1024];
-			            int len;
-			            while ((len = bzIn.read(buffer)) != -1) {
-			                fileOutputStream.write(new String(buffer).getBytes());
-			            }
-			            fileOutputStream.close();
-			            bzIn.close();
-			            scanner = new Scanner(new FileInputStream("fichier.xml"), StandardCharsets.UTF_8.name());
-	            	/*}else {
-	            		System.out.println("YAY");
-	            		file = new File(argument);
-	            		scanner = new Scanner(new FileInputStream(argument), StandardCharsets.UTF_8.name());
-	            	}*/
+	            	/*File file = new File("fichier.xml");
+	    			BZip2CompressorInputStream bzIn = new BZip2CompressorInputStream(System.in);
+		            FileOutputStream fileOutputStream = new FileOutputStream(file);
+		            byte[] buffer = new byte[1024];
+		            int len;
+		            while ((len = bzIn.read(buffer)) != -1) {
+		            	
+		                fileOutputStream.write(new String(buffer, StandardCharsets.UTF_8).getBytes());
+		            }
+		            fileOutputStream.close();
+		            bzIn.close();
 	            	
-		   
-		    		
-		    		System.out.println("file content: ");  
+
+	            	InputStream inputStream = System.in;
+	            	String result = IOUtils.toString(inputStream, StandardCharsets.UTF_8);
+	            	System.out.println(result);
+	            	File file = new File(result);*/
+	            	
+		            BufferedReader br = new BufferedReader(new InputStreamReader(System.in, StandardCharsets.UTF_8));
 		    		String r;  
 		    		boolean estMot = false;
 		    		int compt1 = 0; // a décommenté pour avoir les 500 1ers lignes
@@ -87,8 +82,8 @@ public class DictionaryMaker {
 		    		int start = 0;
 		    		int end = 0;
 		    		
-		    		while(scanner.hasNextLine()){  
-		    			 r = scanner.nextLine();
+		    		while((r = br.readLine()) != null){  
+
 		    			//remplacez le mot dans la balise title pour chercher ce mot
 		    			if (r.contains("<title>")) {
 		    				estMot = false;
@@ -136,7 +131,6 @@ public class DictionaryMaker {
 		    				r=r.replace("## ", "");
 		    				r=r.replace("### ", "");
 		    				r=r.replace("<\\/text>", "");
-		    				System.out.println("DEFINITION: " +r);
 		    				arrayDef.put(r);
 		    				definitions.put(genre, arrayDef);//le put va ajouter à la clé genre la définition
 		    				//System.out.println(r);
@@ -175,10 +169,10 @@ public class DictionaryMaker {
 		    			
 		    			
 			    		//décomentez pour avoir le mot accueil et lire
-			    		if (compt1 == 5000)
+			    		/*if (compt1 == 100000)
 			    			break;
 			    		else
-			    			compt1++;
+			    			compt1++;*/
 			    		}
 		    		
 	    		}  
