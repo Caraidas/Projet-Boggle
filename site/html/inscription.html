@@ -1,31 +1,80 @@
 <!DOCTYPE html>
-<html lang="en">
 <head>
-    <meta charset="UTF-8">
+
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+<script type="text/javascript"> 
+$(document).ready(function() 
+{ 
+$('#password').keyup(function() 
+{ 
+$('#affichageMessage').html(checkStrength($('#password').val())) 
+}) 
+function checkStrength(password) 
+{ 
+var strength = 0 
+if (password.length < 6) { 
+$('#affichageMessage').removeClass() 
+$('#affichageMessage').addClass('short') 
+return "<font color='red' size='3'>Trop court</font>" 
+} 
+
+if (password.length > 7) strength += 1 
+if (password.match(/([a-z].*[A-Z])|([A-Z].*[a-z])/)) strength += 1 
+if (password.match(/([a-zA-Z])/) && password.match(/([0-9])/)) strength += 1 
+if (password.match(/([!,%,&,@,#,$,^,*,?,_,~])/)) strength += 1 
+if (password.match(/(.*[!,%,&,@,#,$,^,*,?,_,~].*[!,%,&,@,#,$,^,*,?,_,~])/)) strength += 1 
+if (strength < 2) 
+{ 
+$('#affichageMessage').removeClass() 
+$('#affichageMessage').addClass('weak') 
+return "<font color='red' size='3'>Faible</font>" 
+} 
+else if (strength == 2) 
+{ 
+$('#affichageMessage').removeClass() 
+$('#affichageMessage').addClass('good') 
+return "<font color='orange' size='3'>Bien</font>" 
+} 
+else 
+{ 
+$('#affichageMessage').removeClass() 
+$('#affichageMessage').addClass('strong') 
+return "<font color='green' size='3'>Fort</font>" 
+} 
+} 
+}); 
+</script> 
+<meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Froggle - Inscription</title>
 </head>
 <body>
-    <h1>Froggle - inscription</h1>
-    <form action="../php/script-inscription.php" method="POST">
 
-        <div>
-            <label for="pseudo">pseudo</label>
-            <input type="text" name="pseudo" id="pseudo">
-        </div>
 
-        <div>
-            <label for="email">email</label>
-            <input type="text" name="email" id="email">
-        </div>
+<h1>Froggle - inscription</h1>
+<form action="../php/script-inscription.php" method="POST">
 
-        <div>
-            <label for="password">mdp</label>
-            <input type="password" name="password" id="password">
-        </div>
+    <div>
+        <label for="pseudo">pseudo</label>
+        <input type="text" name="pseudo" id="pseudo">
+    </div>
 
-        <input type="submit" value="OK">
-    </form>
+    <div>
+        <label for="email">email</label>
+        <input type="text" name="email" id="email">
+    </div>
+
+    <div>
+            <form id="fiabiliteMotdePasse"> 
+            <label>Mot de passe : </label> 
+            <input name="password" id="password" type="password"/> 
+            <span id="affichageMessage"></span> 
+            </form><br/> 
+    </div>
+
+    <input type="submit" value="OK">
+</form>
 </body>
+
 </html>
