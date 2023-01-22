@@ -37,15 +37,8 @@ public class DictionarySearcher {
     	RandomAccessFile rafDico = new RandomAccessFile(args[0]+".txt","r");
     	RandomAccessFile rafIndex = new RandomAccessFile("definitions.index","r");
     	int entryNumber = (int) (rafIndex.length() / 8);//nombre de couple de position dans l'index
-    	String extract = extractDefinition(rafDico, rafIndex, wordNormalise,0,rafIndex.length(), entryNumber, isNormalized,word);
-    	if(hasYaml) {
-    		if(extract.charAt(0) != '{') {
-    			System.out.println(extract);
-    		}else{
-    			System.out.println(asYaml(extractDefinition(rafDico, rafIndex, wordNormalise,0,rafIndex.length(), entryNumber, isNormalized,word)));
-    		}
-    	}
-    	else System.out.println(extractDefinition(rafDico, rafIndex, wordNormalise,0,rafIndex.length(), entryNumber, isNormalized,word));
+    
+    	System.out.println(extractDefinition(rafDico, rafIndex, wordNormalise,0,rafIndex.length(), entryNumber, isNormalized,word,hasYaml));
     	
     	rafIndex.close();
 	}
@@ -64,7 +57,7 @@ public class DictionarySearcher {
 	 * @return
 	 * @throws IOException
 	 */
-	public static String extractDefinition(RandomAccessFile rafDico, RandomAccessFile rafIndex, String wordNormalise, long debut, long fin, long entryNumber, boolean isNormalized, String word) throws IOException {
+	public static String extractDefinition(RandomAccessFile rafDico, RandomAccessFile rafIndex, String wordNormalise, long debut, long fin, long entryNumber, boolean isNormalized, String word,boolean hasYaml) throws IOException {
 		if(entryNumber == 0) {
 			return "Mot non trouvé (nombre d'entrée à 0)";
 		}
@@ -94,23 +87,32 @@ public class DictionarySearcher {
 	    	result.addAll(checkSides(entryNumber, debut, rafIndex, true, rafDico, wordNormalise));
 	    	if(!isNormalized) {// si le mot d'origine n'est pas normalisé compare les mots non normalisé au mot non normalisé d'origine
 	    		for(int i = 0; i<result.size();i += 2) {
+	    			
 	    			 if (result.get(i).compareTo(word) == 0)
-	    				 return result.get(i+1);//retourne la définition du mot voulu
+	    				 if(hasYaml) {
+	    					 return asYaml(result.get(i+1));
+	    				 }else return result.get(i+1);//retourne la définition du mot voulu 
 	    		}
+	    	}else if(isNormalized) {
+	    		StringBuilder s = new StringBuilder();//stringBuilder contenant les définitions de tout les mots trouvé
+		    	for(int i = 0; i<result.size();i ++) {
+		    		if (i % 2 == 1) {
+		    			if(hasYaml) {
+		    				s.append(asYaml(result.get(i)));
+			    			s.append("\n");
+		    			}else {
+		    				s.append(result.get(i));
+		    				s.append("\n");
+		    			}
+		    		}
+		    	}
+	            return s.toString();
 	    	}
-	    	
-	    	StringBuilder s = new StringBuilder();//stringBuilder contenant les définitions de tout les mots trouvé
-	    	for(int i = 0; i<result.size();i ++) {
-	    		if (i % 2 == 1) {
-	    			s.append(result.get(i));
-	    		}
-	    	}
-            return s.toString();
 	    }
 	    if(foundWord.compareTo(wordNormalise) <= -1) {
-	        return extractDefinition(rafDico, rafIndex,wordNormalise, indexMed + 8, fin, (fin - (indexMed)) / 8,isNormalized,word);
+	        return extractDefinition(rafDico, rafIndex,wordNormalise, indexMed + 8, fin, (fin - (indexMed)) / 8,isNormalized,word,hasYaml);
 	    } else if(foundWord.compareTo(wordNormalise) >= 1){
-	        return extractDefinition(rafDico, rafIndex,wordNormalise, debut, indexMed, ((indexMed) - debut) / 8,isNormalized,word);    
+	        return extractDefinition(rafDico, rafIndex,wordNormalise, debut, indexMed, ((indexMed) - debut) / 8,isNormalized,word,hasYaml);    
 	    }
 	    
 		return "Mot non trouvé";
@@ -128,13 +130,11 @@ public class DictionarySearcher {
 		ArrayList<String> returnVars = new ArrayList<>();
 		byte[] meta = ("{\"created_on\":\"20221014T145610Z\",\"description\":\"definition file\",\"language\":\"fr\"}\n").getBytes("IBM01140");
 		int metaLenght = meta.length;//les metadonnées au debut prennent de la place
-		
 		int taille = (posFin-posDeb);
 		byte[] buffer = new byte[taille]; 
 		raf.seek(posDeb+metaLenght);
 		raf.read(buffer, 0, taille);
 		String s = new String(buffer, StandardCharsets.UTF_8);
-		
 		int start = s.indexOf("title");
 		String wordNormalise = s.substring(start+8);
 		wordNormalise = wordNormalise.trim();//supprimer les espaces en debut et fin de ligne

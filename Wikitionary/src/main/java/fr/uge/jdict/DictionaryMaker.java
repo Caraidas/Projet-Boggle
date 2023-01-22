@@ -16,6 +16,7 @@ import java.nio.ByteOrder;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
+import java.text.Normalizer;
 import java.util.Scanner;
 import java.util.TreeMap;
 import org.apache.commons.compress.compressors.bzip2.BZip2CompressorInputStream;
@@ -27,8 +28,8 @@ import org.json.JSONObject;
 public class DictionaryMaker {
 	public static void main(String[] args) throws IOException{
 
-		String path = args[0]+".txt";//path dico
-		FileOutputStream writer = new FileOutputStream(args[0]+".index");//path index
+		String path = args[1]+".txt";//path dico
+		FileOutputStream writer = new FileOutputStream(args[1]+".index");//path index
 		TreeMap<String,TreeMap<String,Coord>> indexes = new TreeMap<String,TreeMap<String,Coord>>();
 		 //Correspond au couple mot normalisé et les mot qui suivent cette normalisation avec leurs coordonnée dans le json EXEMPLE: HashMap = ["CONGRES" : ['congrès' : [0,514] , 'congres' :! 41522147524 ], VERS:['vèrs':52352445, 'vers':412421542245]
 	    
@@ -89,6 +90,9 @@ public class DictionaryMaker {
 		    				estMot = false;
 		    				mot = r.replace("    <title>", "");
 		    				mot = mot.replace("</title>", "");
+		    				motNormalise = Normalizer.normalize(mot, Normalizer.Form.NFD).replaceAll("[^\\p{ASCII}]", "").toUpperCase();
+		    				motNormalise.replace("Æ", "AE");
+		    				motNormalise.replace("Œ", "OE");
 		    				titre = (mot.length() < 17 && wordCondition(mot));
 	
 		    			} // 
@@ -100,9 +104,9 @@ public class DictionaryMaker {
 		    			
 		    			
 		    			// la série de if permet de savoir quel est le genre du mot
-	                    if (estFrancais && r.contains("S|") &&( r.contains("|fr}") || r.contains("|fr|"))) {
+	                    if (estFrancais && r.contains("S|") &&( r.contains("|"+args[0]+"}") || r.contains("|"+args[0]+"|"))) {
 	                        arrayDef = new JSONArray();
-	                        genre = r.substring(0,r.indexOf("|fr"));
+	                        genre = r.substring(0,r.indexOf("|"+args[0]));
 	                        genre = genre.substring(genre.indexOf("S|")+2);
 	                        estDefFrancais = true;
 	                    }
@@ -112,7 +116,7 @@ public class DictionaryMaker {
 	                    }
 		    			
 		    			//vérifie que le mot est français
-		    			if(r.contains("== {{langue|fr}} ==") && estMot) {
+		    			if(r.contains("== {{langue|"+args[0]+"}} ==") && estMot) {
 		    				elem.put("définitions",definitions);
 		    				mots.put(elem);
 		    				
