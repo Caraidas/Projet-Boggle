@@ -6,11 +6,13 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
+import java.io.Reader;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.charset.StandardCharsets;
@@ -45,25 +47,28 @@ public class DictionaryMaker {
 	            
 	            try  
 		    		{   
-	            	/*File file = new File("fichier.xml");
-	    			BZip2CompressorInputStream bzIn = new BZip2CompressorInputStream(System.in);
-		            FileOutputStream fileOutputStream = new FileOutputStream(file);
-		            byte[] buffer = new byte[1024];
-		            int len;
-		            while ((len = bzIn.read(buffer)) != -1) {
-		            	
-		                fileOutputStream.write(new String(buffer, StandardCharsets.UTF_8).getBytes());
-		            }
-		            fileOutputStream.close();
-		            bzIn.close();
+	            	if(args[2].equals("bz2")) {
+	            		File file = new File("fichier.xml");
+		    			BZip2CompressorInputStream bzIn = new BZip2CompressorInputStream(System.in);
+			            FileOutputStream fileOutputStream = new FileOutputStream(file);
+			            byte[] buffer = new byte[1024];
+			            int len;
+			            while ((len = bzIn.read(buffer)) != -1) {
+			                fileOutputStream.write(new String(buffer, StandardCharsets.UTF_8).getBytes());
+			            }
+			            fileOutputStream.close();
+			            bzIn.close();
+	            	}
+	            	
 	            	
 
-	            	InputStream inputStream = System.in;
-	            	String result = IOUtils.toString(inputStream, StandardCharsets.UTF_8);
-	            	System.out.println(result);
-	            	File file = new File(result);*/
+	            	
 	            	
 		            BufferedReader br = new BufferedReader(new InputStreamReader(System.in, StandardCharsets.UTF_8));
+		            if(args[2].equals("bz2")) {
+		            	Reader read = new FileReader("fichier.xml");
+		            	br = new BufferedReader(read);
+		            }
 		    		String r;  
 		    		boolean estMot = false;
 		    		int compt1 = 0; // a décommenté pour avoir les 500 1ers lignes
@@ -84,7 +89,6 @@ public class DictionaryMaker {
 		    		int end = 0;
 		    		
 		    		while((r = br.readLine()) != null){  
-
 		    			//remplacez le mot dans la balise title pour chercher ce mot
 		    			if (r.contains("<title>")) {
 		    				estMot = false;
