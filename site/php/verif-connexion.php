@@ -1,4 +1,5 @@
 <?php
+    session_start();
     require_once('Cnx.php');
     $cnx = new Cnx(); // Connexion.
 
@@ -20,11 +21,12 @@
         echo "Login failed. Please check your email and password.";
 
         //Redirect to login page
-        //header("Location: ../html/connexion.html");
+        header("Location: ../html/connexion.html");
     }
     else {
         //Login successful
         echo "Login successful!";
+        $_SESSION["connecte"] = "oui";
 
         //Redirect to menu page
         header("Location: ../index.php");

@@ -7,7 +7,6 @@
 #define NONE -1
 #define true 1
 #define false 0
-typedef unsigned int index;
 typedef char Element;
 
 typedef struct node
@@ -166,7 +165,7 @@ CSTree getCharInCS(char c, CSTree *cs)
     }
     if ((*cs)->elem == c)
     {
-        printf("%c", (*cs)->elem);
+        //printf("%c", (*cs)->elem);
         return (*cs);
     }
     else

@@ -1,7 +1,6 @@
 #define NONE -1
 #define true 1
 #define false 0
-typedef unsigned int index;
 typedef char Element;
 
 typedef struct node
