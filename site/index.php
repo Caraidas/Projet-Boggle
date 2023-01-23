@@ -1,6 +1,15 @@
 <?php
-    // Lancement de grid build
-    exec("../moteur-de-jeu/test.exe 4", $out);
+session_start();
+
+if (!isset($_SESSION["connecte"])) { // Si pas connecté alors on redirige vers la page de connexion
+    header("Location: html/connexion.html");
+}
+
+
+if (isset($_SESSION["grid"])) {
+    unset($_SESSION['grid']);
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -15,88 +24,6 @@
 </head>
 
 <body>
-    <section class="board">
-        <div class="columns">
-            <diqv class="row">
-                <div class="cell">
-                    <p>A</p>
-                </div>
-
-                <div class="cell">
-                    <p>A</p>
-                </div>
-
-                <div class="cell">
-                    <p>A</p>
-                </div>
-
-                <div class="cell">
-                    <p>A</p>
-                </div>
-            </diqv>
-
-            <div class="row">
-                <div class="cell">
-                    <p>A</p>
-                </div>
-
-                <div class="cell">
-                    <p>A</p>
-                </div>
-
-                <div class="cell">
-                    <p>A</p>
-                </div>
-
-                <div class="cell">
-                    <p>A</p>
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="cell">
-                    <p>A</p>
-                </div>
-
-                <div class="cell">
-                    <p>A</p>
-                </div>
-
-                <div class="cell">
-                    <p>A</p>
-                </div>
-
-                <div class="cell">
-                    <p>A</p>
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="cell">
-                    <p>A</p>
-                </div>
-
-                <div class="cell">
-                    <p>A</p>
-                </div>
-
-                <div class="cell">
-                    <p>A</p>
-                </div>
-
-                <div class="cell">
-                    <p>A</p>
-                </div>
-            </div>
-            <form>
-                <?php
-                    print_r($out);
-                ?>
-                <input type="text" class="word-input">
-                <input type="submit" value="">
-            </form>
-        </div>
-    </section>
+    <a href="game.php">Jouer</a>
 </body>
-
 </html>

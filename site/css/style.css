@@ -36,10 +36,10 @@
     aspect-ratio: 1;
     margin: 5px;
     border-radius: 10%;
+    font-size: 4rem;
 }
 
 .cell > p {
-    font-size: 4rem;
     -webkit-user-select: none; /* Safari */        
     -moz-user-select: none; /* Firefox */
     -ms-user-select: none; /* IE10+/Edge */
@@ -63,6 +63,10 @@
     padding: 0px 20px;
     font-size: 1.5rem;
     text-transform: uppercase;
+}
+
+.QU {
+    font-size: 3rem;
 }
 
 .word-input:focus {
