@@ -50,7 +50,7 @@ public class CharTableMaker {
     					i++;
 					}
 				}
-				else if(Character.isAlphabetic(line.charAt(i))){
+				if(Character.isAlphabetic(line.charAt(i))){
 					int nb = frequence.getOrDefault(line.charAt(i), 0);
 					frequence.put(line.charAt(i), nb + 1);
 				}
