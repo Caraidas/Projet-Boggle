@@ -1,0 +1,114 @@
+:root{
+  --primary: #20B544
+}
+
+body{
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+h1,h2,h3{
+    color: rgb(255, 255, 255)
+}
+
+.wrapper {
+    display: grid;
+    grid-template-rows: 0.2fr 1fr 0.2fr; /* 80px pour le header, 1fr pour le contenu, 80px pour le footer */
+    grid-template-columns: 100%; /* toute la largeur de la page */
+    margin: 0 auto; /* pour centrer horizontalement le wrapper */
+}
+
+/* Positionnement des éléments dans la grille */
+.header {
+    grid-row: 1 / 2; /* première ligne */
+}
+
+.content {
+    grid-row: 2 / 3; /* deuxième ligne */
+}
+
+.footer {
+    grid-row: 3 / 4; /* troisième ligne */
+}
+
+.search-container{
+    display: flex; /* use flexbox */
+    justify-content: center; /* center elements horizontally */
+    align-items: center; /* center elements vertically */
+    margin-top: 3vh;
+}
+
+.search-bar {
+    margin:2%;
+    width:30%;
+    height:50px;
+    border-radius: 50px; /* arrondir les angles */
+    padding: 10px 15px; /* ajouter de l'espacement à l'intérieur */
+    border-right: 3px solid rgb(0, 0, 0);
+    border-bottom: 5px solid rgb(0, 0, 0); /* ajouter un bord en bas */
+    user-select: none; /* empêche la sélection de texte */
+}
+
+/* Spécifier les styles pour les états :active et :focus */
+.search-bar:active, .search-bar:focus {
+    border-color: rgb(0, 0, 0); /* la couleur de bordure reste inchangée */
+    outline: none;
+}
+
+.btn-submit{
+    border-radius: 50px; /* arrondir les angles */
+    padding: 10px 15px; /* ajouter de l'espacement à l'intérieur */
+    border-right: 3px solid rgb(0, 0, 0);
+    border-bottom: 5px solid rgb(0, 0, 0); /* ajouter un bord en bas */
+    background-color: var(--primary);
+    color: white;
+    font-weight: bold
+}
+
+.card-container{
+    display:flex;
+    flex-direction: column;
+    width:80%;
+    margin:1rem auto;
+    gap: 5vh;
+}
+
+.card {
+    background-color: #bdeec0; /* couleur de fond */
+    padding: 20px; /* espacement intérieur */
+    border-radius:10px;
+    border-bottom:  5px solid black;
+    border-right:  5px solid black;
+    box-shadow: 2px 2px 5px rgb(0, 0, 0); /* ajouter un léger relief */
+  }
+  
+.card h3 {
+    font-size: 30px; /* taille de police du titre */
+    margin-bottom: 10px; /* espacement en dessous du titre */
+}
+  
+.card h4 {
+    font-size: 18px; /* taille de police des sous-titres */
+    margin-bottom: 5px; /* espacement en dessous des sous-titres */
+}
+
+.card ul {
+
+    margin-bottom: 10px; /* espacement en dessous des listes */
+    }
+
+.card li {
+    margin-bottom: 5px; /* espacement en dessous des éléments de la liste */
+}
+
+/* Media Queries pour adapter la grille en fonction de la résolution d'écran */
+@media (max-width: 600px) {
+    .header, .footer {
+        font-size: 0.8em; /* réduire la taille de police */
+    }
+}
+
+@media (max-width: 400px) {
+    .search-bar{
+        width: 50%;
+    }
+}
