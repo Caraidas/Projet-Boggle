@@ -3,9 +3,7 @@
     require_once('Cnx.php');
     $cnx = new Cnx(); // Connexion.
 
-    if (!(isset($_POST['email'])) or !(isset($_POST['password']))) {
-        header("Location: index.php");
-    } else {
+    if (isset($_POST['email']) and isset($_POST['password'])) {
         $email = $_POST['email'];
         $password = $_POST['password'];
     }
@@ -26,7 +24,7 @@
     else {
         //Login successful
         echo "Login successful!";
-        $_SESSION["connecte"] = "oui";
+        $_SESSION["id_joueur"] = $result[0]->id_joueur;
 
         //Redirect to menu page
         header("Location: ../index.php");
