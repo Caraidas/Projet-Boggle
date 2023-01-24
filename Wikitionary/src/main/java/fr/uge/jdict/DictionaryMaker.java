@@ -6,11 +6,13 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
+import java.io.Reader;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.charset.StandardCharsets;
@@ -29,8 +31,8 @@ public class DictionaryMaker {
 	public static void main(String[] args) throws IOException{
 
 		String path = args[1]+".txt";//path dico
-		FileOutputStream writer = new FileOutputStream(args[1]+".index");//path index
 		TreeMap<String,TreeMap<String,Coord>> indexes = new TreeMap<String,TreeMap<String,Coord>>();
+		FileOutputStream writer = new FileOutputStream(args[1]+".index");//path index
 		 //Correspond au couple mot normalisé et les mot qui suivent cette normalisation avec leurs coordonnée dans le json EXEMPLE: HashMap = ["CONGRES" : ['congrès' : [0,514] , 'congres' :! 41522147524 ], VERS:['vèrs':52352445, 'vers':412421542245]
 	    
 		try {
@@ -45,28 +47,31 @@ public class DictionaryMaker {
 	            
 	            try  
 		    		{   
-	            	/*File file = new File("fichier.xml");
-	    			BZip2CompressorInputStream bzIn = new BZip2CompressorInputStream(System.in);
-		            FileOutputStream fileOutputStream = new FileOutputStream(file);
-		            byte[] buffer = new byte[1024];
-		            int len;
-		            while ((len = bzIn.read(buffer)) != -1) {
-		            	
-		                fileOutputStream.write(new String(buffer, StandardCharsets.UTF_8).getBytes());
-		            }
-		            fileOutputStream.close();
-		            bzIn.close();
+	            	if(args[2].equals("bz2")) {
+	            		File file = new File("fichier.xml");
+		    			BZip2CompressorInputStream bzIn = new BZip2CompressorInputStream(System.in);
+			            FileOutputStream fileOutputStream = new FileOutputStream(file);
+			            byte[] buffer = new byte[1024];
+			            int len;
+			            while ((len = bzIn.read(buffer)) != -1) {
+			                fileOutputStream.write(new String(buffer, StandardCharsets.UTF_8).getBytes());
+			            }
+			            fileOutputStream.close();
+			            bzIn.close();
+	            	}
+	            	
 	            	
 
-	            	InputStream inputStream = System.in;
-	            	String result = IOUtils.toString(inputStream, StandardCharsets.UTF_8);
-	            	System.out.println(result);
-	            	File file = new File(result);*/
+	            	
 	            	
 		            BufferedReader br = new BufferedReader(new InputStreamReader(System.in, StandardCharsets.UTF_8));
+		            if(args[2].equals("bz2")) {
+		            	Reader read = new FileReader("fichier.xml");
+		            	br = new BufferedReader(read);
+		            }
 		    		String r;  
 		    		boolean estMot = false;
-		    		int compt1 = 0; // a décommenté pour avoir les 500 1ers lignes
+		    		//int compt1 = 0; // a décommenté pour avoir les 500 1ers lignes
 		    		boolean titre = false;
 		    		boolean estFrancais = false;  
 		    		boolean estDefFrancais = false;
@@ -80,11 +85,10 @@ public class DictionaryMaker {
 		    		JSONArray arrayDef =  new JSONArray();//le tableau des definitions (mot: [def1, def2, def3..]
 		    	
 		    		
-		    		int start = 0;
+		    		int start = 0; // start et end utile pour les coordonnées des mots du dans le TreeMap
 		    		int end = 0;
 		    		
 		    		while((r = br.readLine()) != null){  
-
 		    			//remplacez le mot dans la balise title pour chercher ce mot
 		    			if (r.contains("<title>")) {
 		    				estMot = false;
@@ -157,7 +161,7 @@ public class DictionaryMaker {
 	    		            end += byteArray.length; 
 	    		            
 	
-		    				if (indexes.get(motNormalise) == null) {
+		    				if (indexes.get(motNormalise) == null) { //insertion des mots suivis de leurs coordonnées respective
 		    					TreeMap<String,Coord> tm = new TreeMap<String,Coord>();
 		    					tm.put(mot, new Coord(start, end));
 		    					indexes.put(motNormalise, tm);
@@ -199,48 +203,41 @@ public class DictionaryMaker {
 		}
 	}
 	
+		
+	/**
+	 * vérifie si le mot passé en paramètre n'a pas d'espace est que chaques caractères est dans l'alphabet
+	 * @param word est un mot passé en paramètre
+	 * @return fasle s'il ne respecte pas les conditions true sinon
+	 */
+	public static boolean wordCondition(String word) {
+	for (int i = 0; word.length()>i;i++) {
+		if (!Character.isAlphabetic(word.charAt(i)) || Character.isSpaceChar(word.charAt(i)))
+			return false;
+	}
+	return true;
+	}
 	
-		public static boolean wordCondition(String w) {
-		for (int i = 0; w.length()>i;i++) {
-			if (!Character.isAlphabetic(w.charAt(i)) || Character.isSpaceChar(w.charAt(i)))
-				return false;
+	/**
+	 * permet d'insérer les éléments pour constituer le Treemap indexes
+	 * @param indexes TreeMap ayant pour String un mot les mots Normalisé et un TreeMap avec les mots nonNormalisé ainsi que leurs coordonnées
+	 * @param writer fichier dans lequel nous écrivons les données
+	 * @throws IOException
+	 */
+	public static void writeIndex(TreeMap<String,TreeMap<String,Coord>> indexes,FileOutputStream writer) throws IOException {
+	ByteBuffer buffer = ByteBuffer.allocate(8);
+	buffer.order(ByteOrder.BIG_ENDIAN);
+	
+	for(String motNormalise: indexes.keySet()) {
+		for(String motNonNormalise : indexes.get(motNormalise).keySet()) {//on itère sur le TreeMap<String, Coord>
+			//debut
+			int debut = indexes.get(motNormalise).get(motNonNormalise).debut();
+			int fin = indexes.get(motNormalise).get(motNonNormalise).fin();
+			buffer.putInt(debut);
+			buffer.putInt(fin);
+			writer.write(buffer.array());  
+			buffer.clear();
 		}
-		return true;
-		}
-		
-		public static boolean containsUpperCaseLetter(String s){
-		for(int i=0;i<s.length();i++){
-		    if(Character.isUpperCase(s.charAt(i))){
-		        return true;
-		    }
-		}
-		return false;
-		}
-		
-		public static boolean containsDigit(String s){
-		for(int i=0;i<s.length();i++){
-		    if(Character.isDigit(s.charAt(i))){  
-		        return true;
-		    }
-		}
-		return false;
-		}
-		
-		public static void writeIndex(TreeMap<String,TreeMap<String,Coord>> indexes,FileOutputStream writer) throws IOException {
-		ByteBuffer buffer = ByteBuffer.allocate(8);
-		buffer.order(ByteOrder.BIG_ENDIAN);
-		
-		for(String motNormalise: indexes.keySet()) {
-			for(String motNonNormalise : indexes.get(motNormalise).keySet()) {//on itère sur le TreeMap<String, Coord>
-				//debut
-				int debut = indexes.get(motNormalise).get(motNonNormalise).debut();
-				int fin = indexes.get(motNormalise).get(motNonNormalise).fin();
-				buffer.putInt(debut);
-				buffer.putInt(fin);
-				writer.write(buffer.array());  
-				buffer.clear();
-			}
-		}  
-		writer.close();
-		}
+	}  
+	writer.close();
+	}
 }

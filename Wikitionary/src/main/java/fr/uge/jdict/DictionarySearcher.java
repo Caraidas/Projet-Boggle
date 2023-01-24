@@ -16,7 +16,7 @@ public class DictionarySearcher {
 	public static void main(String[] args)  throws IOException{
 		boolean hasYaml= false;
 		String word = args[1];
-		if(word.contains("yaml:")) {
+		if(word.contains("yaml:")) { //si l'utilisateur à entrer son mot précédé de yaml:
 			word = word.substring(word.indexOf("yaml:")+5);
 			hasYaml = true;
 		}
@@ -34,8 +34,8 @@ public class DictionarySearcher {
 				break;
 			}
 		}
-    	RandomAccessFile rafDico = new RandomAccessFile(args[0]+".txt","r");
-    	RandomAccessFile rafIndex = new RandomAccessFile("definitions.index","r");
+    	RandomAccessFile rafDico = new RandomAccessFile(args[0]+".txt","r"); // lecture du dictionnaire
+    	RandomAccessFile rafIndex = new RandomAccessFile("definitions.index","r"); //lecture du fichier definitions.index 
     	int entryNumber = (int) (rafIndex.length() / 8);//nombre de couple de position dans l'index
     
     	System.out.println(extractDefinition(rafDico, rafIndex, wordNormalise,0,rafIndex.length(), entryNumber, isNormalized,word,hasYaml));
@@ -96,7 +96,7 @@ public class DictionarySearcher {
 	    	}else if(isNormalized) {
 	    		StringBuilder s = new StringBuilder();//stringBuilder contenant les définitions de tout les mots trouvé
 		    	for(int i = 0; i<result.size();i ++) {
-		    		if (i % 2 == 1) {
+		    		if (i % 2 == 1) { //toute les définitions de chaques mots trouvé se trouvent sur les positions impaire de result
 		    			if(hasYaml) {
 		    				s.append(asYaml(result.get(i)));
 			    			s.append("\n");
@@ -109,9 +109,9 @@ public class DictionarySearcher {
 	            return s.toString();
 	    	}
 	    }
-	    if(foundWord.compareTo(wordNormalise) <= -1) {
+	    if(foundWord.compareTo(wordNormalise) <= -1) {//si le mot trouvé se situe après le mot d'origine
 	        return extractDefinition(rafDico, rafIndex,wordNormalise, indexMed + 8, fin, (fin - (indexMed)) / 8,isNormalized,word,hasYaml);
-	    } else if(foundWord.compareTo(wordNormalise) >= 1){
+	    } else if(foundWord.compareTo(wordNormalise) >= 1){ //si le mot trouvé se situe avant le mot d'origine	
 	        return extractDefinition(rafDico, rafIndex,wordNormalise, debut, indexMed, ((indexMed) - debut) / 8,isNormalized,word,hasYaml);    
 	    }
 	    

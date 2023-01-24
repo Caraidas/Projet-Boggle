@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WEBSOCKET</title>
+</head>
+<body>
+    <script src="../socket.io/socket.io.js"></script>
+    <script>
+        var socket = io();
+
+        var send =  function () {
+            var text = document.getElementById("m").value;
+            socket.emit('chat message', text);
+        }
+
+        var receive = function(msg) {
+            var li = document.createElement('li');
+            li.innerText =  msg;
+            document.getElementById('messages').appendChild(li);
+        }
+
+        socket.on('chat message', receive);
+    </script>
+    <div>
+        <ul id="messages">
+            <div class="zone_saisie">
+                <input id="m"/><button onclick="send()">Envoyer</button>
+            </div>
+        </ul>
+    </div>
+</body>
+</html>
