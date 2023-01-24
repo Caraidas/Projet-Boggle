@@ -90,9 +90,9 @@ public class DictionaryMaker {
 		    		
 		    		while((r = br.readLine()) != null){  
 		    			//remplacez le mot dans la balise title pour chercher ce mot
-		    			if (line.contains("<title>")) {
+		    			if (r.contains("<title>")) {
 		    				estMot = false;
-		    				mot = line.replace("    <title>", "");
+		    				mot = r.replace("    <title>", "");
 		    				mot = mot.replace("</title>", "");
 		    				motNormalise = Normalizer.normalize(mot, Normalizer.Form.NFD).replaceAll("[^\\p{ASCII}]", "").toUpperCase();
 		    				motNormalise.replace("Æ", "AE");
@@ -102,25 +102,25 @@ public class DictionaryMaker {
 		    			} // 
 		    			
 		    			//la balise <ns> suivis de 0 signifie que ce contient title est un mot
-		    			if(line.contains("<ns>0") && titre) {
+		    			if(r.contains("<ns>0") && titre) {
 		    				estMot = true;
 		    			}
 		    			
 		    			
 		    			// la série de if permet de savoir quel est le genre du mot
-	                    if (estFrancais && line.contains("S|") &&( line.contains("|"+args[0]+"}") || line.contains("|"+args[0]+"|"))) {
+	                    if (estFrancais && r.contains("S|") &&( r.contains("|"+args[0]+"}") || r.contains("|"+args[0]+"|"))) {
 	                        arrayDef = new JSONArray();
-	                        genre = line.substring(0,line.indexOf("|"+args[0]));
+	                        genre = r.substring(0,r.indexOf("|"+args[0]));
 	                        genre = genre.substring(genre.indexOf("S|")+2);
 	                        estDefFrancais = true;
 	                    }
-	                    else if(line.startsWith("==")) {
+	                    else if(r.startsWith("==")) {
 	                        estDefFrancais = false;
 	                        genre = "";
 	                    }
 		    			
 		    			//vérifie que le mot est français
-		    			if(line.contains("== {{langue|"+args[0]+"}} ==") && estMot) {
+		    			if(r.contains("== {{langue|"+args[0]+"}} ==") && estMot) {
 		    				elem.put("définitions",definitions);
 		    				mots.put(elem);
 		    				
@@ -134,19 +134,19 @@ public class DictionaryMaker {
 		    			
 		    			
 		    			//permet d'avoir les définitions du mot rechercher
-		    			if(estFrancais && line.startsWith("#") && !(line.startsWith("#*")) && !(line.startsWith("##*")) && !(line.startsWith("###*")) && estDefFrancais) {
-		    				line=line.replace("# ", "");
-		    				line=line.replace("## ", "");
-		    				line=line.replace("### ", "");
-		    				line=line.replace("<\\/text>", "");
-		    				arrayDef.put(line);
+		    			if(estFrancais && r.startsWith("#") && !(r.startsWith("#*")) && !(r.startsWith("##*")) && !(r.startsWith("###*")) && estDefFrancais) {
+		    				r=r.replace("# ", "");
+		    				r=r.replace("## ", "");
+		    				r=r.replace("### ", "");
+		    				r=r.replace("<\\/text>", "");
+		    				arrayDef.put(r);
 		    				definitions.put(genre, arrayDef);//le put va ajouter à la clé genre la définition
 		    				//System.out.println(r);
 		    				//break;  
 		    			}
 		    			
 		    			//une fois la lecture des définitions du mot terminée reset les varaibles
-		    			if(line.startsWith("  </page>") && estFrancais) {
+		    			if(r.startsWith("  </page>") && estFrancais) {
 		    				estMot = false;
 		    				titre = false;
 		    				estFrancais = false;
