@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
+import java.nio.charset.StandardCharsets;
 import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.List;
@@ -29,7 +30,7 @@ public class NormalizedExtractor {
 		List<String> distinctElements  = list.stream().distinct().collect(Collectors.toList()); // permet d'éviter les duplicata parmis les genres passés en paramètre
 		boolean containGender = false;
 		
-		Reader r = new FileReader(args[0]+".txt");
+		Reader r = new FileReader(args[0]+".txt", StandardCharsets.UTF_8);
 		BufferedReader br = new BufferedReader(r);
 		String line = null;
 		br.readLine();
@@ -52,7 +53,6 @@ public class NormalizedExtractor {
             	// extraction du mot de la ligne
 	            line = line.substring(line.indexOf("\"title\":\"")+9);
 	            line = line.substring(0,line.indexOf("\"}"));
-	            
 	            // normalisation du mot
 	            line = Normalizer.normalize(line, Normalizer.Form.NFD).replaceAll("[^\\p{ASCII}]", "").toUpperCase();
 	            line.replace("Æ", "AE");
