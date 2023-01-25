@@ -20,11 +20,14 @@
 
     // Récupération de la liste des amis
     $id_liste_amis = $cnx->q("SELECT * FROM B_LISTE WHERE id_joueur = $id_joueur");
-    $id_liste_amis = $id_liste_amis[0]->id_liste;
-    //echo($id_liste_amis);
-
-    $id_amis = $cnx->q("SELECT id_joueur FROM B_appartient WHERE id_liste = $id_liste_amis;");
-    //print_r($id_amis);
+    if ($id_liste_amis == null) { // Si pas d'amis
+        $id_amis = array();
+    } else {
+        $id_liste_amis = $id_liste_amis[0]->id_liste;
+        //echo($id_liste_amis);
+        $id_amis = $cnx->q("SELECT id_joueur FROM B_appartient WHERE id_liste = $id_liste_amis;");
+        //print_r($id_amis);
+    }
 ?>
 
 <!DOCTYPE html>

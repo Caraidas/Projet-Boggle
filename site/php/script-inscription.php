@@ -11,7 +11,7 @@
     if ($result > 0) {
         header("Location: ../html/inscription.html");
     } else {
-        $result = $cnx->q("INSERT INTO B_JOUEUR (pseudo, mail, mdp, xp_actuel, photo_de_profil, compte_prive) VALUES('$pseudo', '$mail', '$password', 0, null, 0);");
+        $result = $cnx->q("INSERT INTO B_JOUEUR (pseudo, mail, mdp, xp_actuel, photo_de_profil, compte_prive, date_creation) VALUES('$pseudo', '$mail', '$password', 0, null, 0, NOW());");
         if (count($result) == 0) {
             header("Location: ../html/inscription.html");
         } else {

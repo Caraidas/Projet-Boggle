@@ -76,3 +76,10 @@
 .word-input:focus {
     outline: none;
 }
+
+.menu {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    margin: 20px 0px;
+}
