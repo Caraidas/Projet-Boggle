@@ -24,7 +24,15 @@
     else {
         //Login successful
         echo "Login successful!";
-        $_SESSION["id_joueur"] = $result[0]->id_joueur;
+        $_SESSION["id_joueur"] = $id_joueur = $result[0]->id_joueur;
+
+        $result = $cnx->q("SELECT * FROM B_JOUEUR WHERE id_joueur = '$id_joueur';");
+        //print_r($result);
+        $_SESSION["pseudo"] = $pseudo = $result[0]->pseudo;
+        $_SESSION["xp_actuel"] = $result[0]->xp_actuel;
+        $_SESSION["photo_de_profil"] = $result[0]->photo_de_profil;
+        $_SESSION["date_creation"] = $result[0]->date_creation;
+        $_SESSION["email"] = $result[0]->mail;
 
         //Redirect to menu page
         header("Location: ../index.php");

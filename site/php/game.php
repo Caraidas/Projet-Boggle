@@ -69,7 +69,6 @@
                 echo "$g";
             ?>
         </div>
-        <a href="deconnexion.php">deconnexion fdp</a>
         <a href="quitter_game.php">Quitter la partie</a>
     </section>
 </body>

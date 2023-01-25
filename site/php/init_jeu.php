@@ -7,7 +7,6 @@ if (!isset($_SESSION['grid'])) {
     //print_r($out);
     $array_mots = explode(" ", $out[0]);
 
-    //$_SESSION["grid"] = $array_mots;
-    $_SESSION["grid"] = explode(" ", "Q U A I N N S N M 9 E S S D Q R");
+    $_SESSION["grid"] = $array_mots;
 }
 
