@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../../css/definitions-style.css">
+    <link rel="stylesheet" href="definitions-style.css">
     <title>Document</title>
 </head>
 <body>
@@ -18,10 +18,11 @@
         </div>
         <div class="content">
             <?php
+
                 if(isset($_GET['word'])){
                     $word = $_GET['word'];
-                }
-
+                }else $word = "";
+                
                 exec("java -Dfile.encoding=UTF-8 -cp dictionnary.jar fr.uge.jdict.DictionarySearcher definitions ".$word, $output);
                 $output = str_replace("\u2019", "'", $output);
                 $output = str_replace("[[","", $output);
@@ -40,6 +41,9 @@
                     array_pop($output);
                 }
                 echo "<div class='card-container'>";
+                if(empty($output)){
+                    $output[] = "";
+                }
                 if($output[0] != null){
 
                     foreach ($output as $word){
