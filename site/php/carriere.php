@@ -67,19 +67,20 @@
     <br><br>
     <div class="history-card-container">
         <?php
-
-            while($row = $qry->fetch()){
-                $id_partie = $row->id_partie;
-                $grid = $row->grille;
-                $nb_joueur = $row->nb_joueur;
-                $score = $row->score;
-                $victory = $row->a_gagne;
+            for ($i = 0; $i < count($history); $i++) {
+                $id_partie = $history[$i]->id_partie;
+                $grid = $history[$i]->grille;
+                $nb_joueur = $history[$i]->nb_joueur;
+                $score = $history[$i]->score;
+                $victory = $history[$i]->a_gagne;
                 $status = "";
-                $color="";
-                if($victory == 1){
+                $color= "";
+                if ($victory == 1) {
                     $status = "VICTOIRE";
                     $color = "green";
-                }else $color = "red"; $status = "DEFAITE";
+                } else {
+                    $color = "red"; $status = "DEFAITE";
+                }
 
                 echo "<div class='history-card'>
                         <h2>Partie N°".$id_partie."</h2>

@@ -33,7 +33,7 @@ $pseudo = $pseudo[0]->pseudo;
         <a href="php/game.php">Jouer(WIP)</a>
         <a href="php/carriere.php">Carrière</a>
         <a href="php/social.php">Social</a>
-        <a href="php/definitions.php">Définitions</a>
+        <a href="php/recherche_def/definitions.php">Définitions</a>
     </section>
     <a href="php/deconnexion.php">deconnexion</a>
 </body>
