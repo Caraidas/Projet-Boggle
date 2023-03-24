@@ -1,14 +1,15 @@
 import React from 'react'
 import { MainPageContainer, MainNav, MainLink, MainLinks, Profile, ProfilePicture, UserName, Logo } from './MainPageElements' 
 
-const MainPage = () => {
+
+const MainPage = ({ img, text, logo }) => {
   return (
     <MainPageContainer>
         <MainNav>
-            <Logo />
+            <Logo src={logo}/>
             <Profile>
-                <ProfilePicture />
-                <UserName>BeraM</UserName>
+                <ProfilePicture src={img}/>
+                <UserName text={text}>{text}</UserName>
             </Profile>
         </MainNav>
         <MainLinks>
