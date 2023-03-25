@@ -3,11 +3,11 @@ import { MainPageContainer, MainNav, MainLink, MainLinks, Profile, ProfilePictur
 import click from "../../sound/click.mp3";
 
 
-const MainPage = ({ img, text, logo }) => {
+const MainPage = ({ img, text, logo, soundVolume }) => {
 
   function play() {
     let audio = new Audio(click);
-    audio.volume = 0.25;
+    audio.volume = soundVolume / 100;
     audio.play();
   }
 

@@ -12,9 +12,9 @@ function getRandomInt(min, max) {
 let r = getRandomInt(0, 4);
 let logo = require('../images/logo-' + r + '.png');
 
-const Home = ({ toggleSound }) => {
+const Home = ({ toggleSound, soundVolume }) => {
   return (
-    <MainPage toggleSound={toggleSound} text={"BeraM"} img={img} logo={logo}/>
+    <MainPage soundVolume={soundVolume}  toggleSound={toggleSound} text={"BeraM"} img={img} logo={logo}/>
   )
 }
 
