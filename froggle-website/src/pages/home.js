@@ -10,7 +10,7 @@ function getRandomInt(min, max) {
 }
 
 let r = getRandomInt(0, 4);
-let logo = require('../images/logo-' + r + '.svg');
+let logo = require('../images/logo-' + r + '.png');
 
 const Home = ({ toggleSound }) => {
   return (
