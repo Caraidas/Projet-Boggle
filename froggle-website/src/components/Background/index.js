@@ -3,9 +3,9 @@ import { Bg } from './BackgroundElements';
 
 const bg = require("../../images/background.svg").default;
 
-const Background = () => {
+const Background = ({ toggleSound }) => {
   return (
-    <Bg src={bg} />
+    <Bg onclick={toggleSound} src={bg} />
   )
 }
 
