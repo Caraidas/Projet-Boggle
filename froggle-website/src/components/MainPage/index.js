@@ -5,7 +5,7 @@ import click from "../../sound/click.mp3";
 
 const MainPage = ({ img, text, logo, soundVolume }) => {
 
-  function play() {
+  function playSound() {
     let audio = new Audio(click);
     audio.volume = soundVolume / 100;
     audio.play();
@@ -17,14 +17,14 @@ const MainPage = ({ img, text, logo, soundVolume }) => {
             <Logo src={logo}/>
             <Profile>
                 <ProfilePicture src={img}/>
-                <UserName text={text} onMouseEnter={play}>{text}</UserName>
+                <UserName text={text} onMouseEnter={playSound}>{text}</UserName>
             </Profile>
         </MainNav>
         <MainLinks>
-            <MainLink onMouseEnter={play}>Jouer</MainLink>
-            <MainLink onMouseEnter={play}>Carrière</MainLink>
-            <MainLink onMouseEnter={play}>Social</MainLink>
-            <MainLink onMouseEnter={play}>Définitions</MainLink>
+            <MainLink onMouseEnter={playSound}>Jouer</MainLink>
+            <MainLink onMouseEnter={playSound}>Carrière</MainLink>
+            <MainLink onMouseEnter={playSound}>Social</MainLink>
+            <MainLink onMouseEnter={playSound}>Définitions</MainLink>
         </MainLinks>
     </MainPageContainer>
   )

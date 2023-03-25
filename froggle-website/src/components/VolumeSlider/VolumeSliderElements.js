@@ -23,6 +23,10 @@ export const SliderToggle = styled.img`
         transition: 0.1s ease-out;
         transform: scale(0.9);
     }
+
+    @media screen and (max-width: 400px) {
+        width: 50px;
+    }
 `
 
 export const SliderSection = styled.div`

@@ -11,6 +11,7 @@ export const MainPageContainer = styled.div`
 
 export const MainNav = styled.nav`
     width: 90%;
+    max-width: 1700px;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -33,6 +34,10 @@ const appearAnim = keyframes`
 export const Logo = styled.img`
     width: 200px;
     animation: ${appearAnim} 0.5s cubic-bezier(.85,1.76,.75,.81) forwards;
+
+    @media screen and (max-width: 400px) {
+        width: 120px;
+    }
 `
 
 export const Profile = styled.div`
@@ -49,6 +54,10 @@ export const ProfilePicture = styled.img`
     box-shadow: 0px 3px 0px #000;
     object-fit: cover;
     animation: ${appearAnim} 0.5s cubic-bezier(.85,1.76,.75,.81) forwards;
+
+    @media screen and (max-width: 400px) {
+        width: 50px;
+    }
 `
 
 export const UserName = styled(LinkR)`
@@ -69,6 +78,7 @@ export const MainLinks = styled.div`
     display: flex;
     flex-direction: column;
     width: 90%;
+    max-width: 1700px;
     gap: 10px;
     height: 100%;
     justify-content: center;
@@ -88,5 +98,30 @@ export const MainLink = styled(LinkR)`
 
     &:hover {
         text-shadow: 0px 7px 0px #000;
+    }
+
+    @media screen and (max-height: 600px) {
+        font-size: 4rem;
+        -webkit-text-stroke: 2px #000;
+        text-shadow: 0px 4px 0px #000;
+    }
+
+    @media screen and (max-height: 600px) {
+
+        &:hover {
+            text-shadow: 0px 5px 0px #000;
+        }
+    }
+
+    @media screen and (max-width: 400px) {
+        font-size: 3.5rem;
+        -webkit-text-stroke: 2px #000;
+        text-shadow: 0px 4px 0px #000;
+    }
+
+    @media screen and (max-width: 400px):hover {
+        &:hover {
+            text-shadow: 0px 5px 0px #000;
+        }
     }
 `
