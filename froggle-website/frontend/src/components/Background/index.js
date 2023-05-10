@@ -1,11 +1,14 @@
 import React from 'react'
-import { Bg } from './BackgroundElements'; 
+import { Bg, BgCont } from './BackgroundElements'; 
 
 const bg = require("../../images/background.svg").default;
 
 const Background = ({ toggleSound }) => {
+
   return (
-    <Bg onclick={toggleSound} src={bg} />
+    <BgCont>
+      <Bg onclick={toggleSound} src={bg} />
+    </BgCont>
   )
 }
 

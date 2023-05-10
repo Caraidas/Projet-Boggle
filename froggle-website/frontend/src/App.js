@@ -6,6 +6,8 @@ import VolumeSlider from './components/VolumeSlider';
 import Home from './pages/home';
 import Login from './pages/login';
 import Register from './pages/register';
+import Header from './components/Header';
+import Carriere from './pages/carriere';
 
 function App() {
   // pour ouvrir et fermer le slider
@@ -36,6 +38,7 @@ function App() {
       <Background />
       <Routes>
         <Route path='/home' element={<Home soundVolume={soundVolume}/>} exact/>
+        <Route path='/carriere' element={<Carriere />} exact/>
         <Route path='/login' element={<Login />} exact/>
         <Route path='/register' element={<Register />} exact/>
       </Routes>
