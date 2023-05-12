@@ -6,6 +6,7 @@ import VolumeSlider from './components/VolumeSlider';
 import Home from './pages/home';
 import Login from './pages/login';
 import Register from './pages/register';
+import Definitions from './pages/definitions';
 import Carriere from './pages/carriere';
 import menuMusic from "./sound/daisy.mp3";
 
@@ -53,6 +54,7 @@ function App() {
         <Route path='/carriere' element={<Carriere />} exact/>
         <Route path='/login' element={<Login />} exact/>
         <Route path='/register' element={<Register />} exact/>
+        <Route path='/definitions' element={<Definitions />} exact/>
       </Routes>
       <VolumeSlider isSoundOpen={isSoundOpen} toggleSound={toggleSound} changeSoundVolume={changeSoundVolume} changeMusicVolume={changeMusicVolume} />
     </Router>
