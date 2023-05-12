@@ -6,6 +6,7 @@ import VolumeSlider from './components/VolumeSlider';
 import Home from './pages/home';
 import Login from './pages/login';
 import Register from './pages/register';
+import Definitions from './pages/definitions';
 
 function App() {
   // pour ouvrir et fermer le slider
@@ -38,6 +39,7 @@ function App() {
         <Route path='/home' element={<Home soundVolume={soundVolume}/>} exact/>
         <Route path='/login' element={<Login />} exact/>
         <Route path='/register' element={<Register />} exact/>
+        <Route path='/definitions' element={<Definitions />} exact/>
       </Routes>
       <VolumeSlider isSoundOpen={isSoundOpen} toggleSound={toggleSound} changeSoundVolume={changeSoundVolume} changeMusicVolume={changeMusicVolume} />
     </Router>

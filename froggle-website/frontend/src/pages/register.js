@@ -13,7 +13,7 @@ let logo = require('../images/logo-' + r + '.png');
 const Register = () => {
 
   return (
-    <LoginPage logo={logo} submitText={"S'identifier"} errorMessage={"🐸 L'identifiant ou le mot de passe est incorrect 🐸"}/>
+    <LoginPage logo={logo} submitText={"S'identifier"}/>
   )
 }
 

@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { useNavigate  } from 'react-router-dom';
+import { useNavigate, Link  } from 'react-router-dom';
 import {LoginContainer, LoginPageContainer,Logo, ErrorContainer, LoginInput, Submit} from './LoginElements' //Importer les composants de LoginElements
 import axios from 'axios'
 
@@ -16,7 +16,6 @@ const LoginPage = ({logo, submitText, errorMessage}) => {
         .then((response) => {
             console.log(response.data.status);
             if (response.data.status === "success") {
-              // Rediriger l'utilisateur vers la page d'accueil
               navigate('/home');
             } else if(response.data.status === "error") {
                 console.log("Authentification échouée");
@@ -34,6 +33,7 @@ const LoginPage = ({logo, submitText, errorMessage}) => {
               <LoginInput type="email" placeholder="Saisissez votre adresse E-mail" onChange={(e) => setEmail(e.target.value)} />
               <LoginInput type="password" placeholder="Saisissez votre mot de passe" onChange={(e) => setPassword(e.target.value)} />
               <Submit>{submitText}</Submit>
+              <p>Vous n'avez pas encore de compte ? <Link to="/register">Inscrivez-vous.</Link></p>
           </LoginContainer>
       </LoginPageContainer>
     )
