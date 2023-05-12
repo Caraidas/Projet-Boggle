@@ -9,14 +9,25 @@ const rotation = keyframes`
     }
 `
 
+export const BgCont = styled.div`
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: 0.5;
+    z-index:-1000;
+    overflow: hidden;
+    height: 100vh;
+    width: 100%;
+`
+
 export const Bg = styled.img`
-    object-fit: cover;
     height: 200vw;
     transform-origin: center;
     animation: ${rotation} 100s linear infinite;
+    object-fit: cover;
     position: absolute;
     top: 50%;
     left: 50%;
-    opacity: 0.5;
-    z-index:-1000;
+    transform: translate(-50%, -50%);
+    user-select: none;
 `
