@@ -1,5 +1,16 @@
 import styled, { keyframes } from "styled-components";
 
+
+const appearAnim = keyframes`
+    from {
+        transform: scale(0);
+    }
+
+    to {
+        transform: scale(1);
+    }
+`
+
 export const CardContainer = styled.div`
     position: relative;
     background: #fff;
@@ -9,6 +20,7 @@ export const CardContainer = styled.div`
     width: 90%;
     max-width: 700px;
     height: 125px;
+    animation: ${appearAnim} 0.5s cubic-bezier(.85,1.76,.75,.81) forwards;
 `
 
 export const CarriereCardPictures = styled.div`

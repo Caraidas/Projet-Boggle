@@ -44,11 +44,13 @@
     border-radius: 50%;
     border: 7px solid #000;
     box-shadow: 0px 10px 0px #000;
+    animation: appearAnim 0.4s cubic-bezier(.85,1.76,.75,.81) forwards;
 }
 
 .heroName {
     font-size: 2rem;
     font-weight: bold;
+    animation: appearAnim 0.4s cubic-bezier(.85,1.76,.75,.81) forwards;
 }
 
 .heroLevel {
@@ -63,11 +65,15 @@
     color: #fff;
     -webkit-text-stroke: 3px #000;
     text-shadow: 0px 3px 0px #000;
+    width: fit-content;
+    animation: appearAnim 0.4s cubic-bezier(.85,1.76,.75,.81) forwards;
 }
 
 .exp {
     margin-top: 10px;
     font-size: 1.25rem;
+    width: fit-content;
+    animation: appearAnim 0.4s cubic-bezier(.85,1.76,.75,.81) forwards;
 }
 
 .gamesBgCont {
@@ -101,6 +107,7 @@
     margin: 0 auto;
     margin-bottom: 30px;
     text-align: center;
+    animation: appearAnim 0.4s cubic-bezier(.85,1.76,.75,.81) forwards;
 }
 
 .mediumTitle {
@@ -108,6 +115,8 @@
     font-weight: bold;
     color: #000;
     margin-bottom: 10px;
+    width: fit-content;
+    animation: appearAnim 0.4s cubic-bezier(.85,1.76,.75,.81) forwards;
 }
 
 .statCont1 {
@@ -129,11 +138,13 @@
     color: #fff;
     -webkit-text-stroke: 2px #000;
     text-shadow: 0px 3px 0px #000;
+    animation: appearAnim 0.4s cubic-bezier(.85,1.76,.75,.81) forwards;
 }
 
 .statName {
     font-size: 2rem;
     font-weight: bold;
+    animation: appearAnim 0.4s cubic-bezier(.85,1.76,.75,.81) forwards;
 }
 
 .statCont2 {
@@ -158,11 +169,13 @@
     
     transform: rotate(-10deg);
     width: 25px;
+    animation: appearAnim 0.4s cubic-bezier(.85,1.76,.75,.81) forwards;
 }
 
 .place > p {
     font-weight: bold;
     font-size: 1.5rem;
+    animation: appearAnim 0.4s cubic-bezier(.85,1.76,.75,.81) forwards;
 }
 
 .historique {
@@ -171,4 +184,50 @@
     gap: 50px;
     width: 100%;
     margin-top: 40px;
+}
+
+@keyframes appearAnim {
+    from {
+        transform: scale(0) rotate(0deg);
+    }
+}
+
+@media screen and (max-width: 900px) {
+
+    .heroProfile {
+        width: 90%;
+        align-items: center;
+    }
+
+    .heroPicture {
+        width: 200px;
+        border: 5px solid #000;
+        box-shadow: 0px 7px 0px #000;
+    }
+
+    .heroLevel {
+        width: 90%;
+    }
+
+    .heroData {
+        flex-direction: column;
+    }
+
+    .bigTitle {
+        font-size: 3rem;
+        -webkit-text-stroke: 2px #000;
+    }
+
+    .gamesCont {
+        width: 95%;
+        padding: 40px 40px;
+    }
+
+    .statNumber {
+        font-size: 3rem;
+    }
+
+    .statName {
+        font-size: 1.5rem;
+    }
 }

@@ -7,7 +7,7 @@ import Home from './pages/home';
 import Login from './pages/login';
 import Register from './pages/register';
 import Carriere from './pages/carriere';
-import menuMusic from "./sound/test.mp3";
+import menuMusic from "./sound/daisy.mp3";
 
 function App() {
   // Variable de la musique actuellement en background
