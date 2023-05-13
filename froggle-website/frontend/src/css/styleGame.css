@@ -46,6 +46,6 @@
 
 .board {
     display: grid;
-    grid-template-columns: repeat(4, 85px);
+    grid-template-columns: repeat(4, 90px);
     grid-gap: 10px;
 }
