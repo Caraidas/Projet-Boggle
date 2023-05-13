@@ -1,23 +1,22 @@
 import React from 'react'
-import { MainPageContainer, MainNav, MainLink, MainLinks, Profile, ProfilePicture, UserName, Logo } from './MainPageElements' 
-import click from "../../sound/click.mp3";
+import { MainPageContainer, MainNav, MainLink, MainLinks, Profile, ProfilePicture, UserName, Logo } from './MainPageElements';
+let click = require("../../sound/click.mp3");
 
-
-const MainPage = ({ img, text, logo, soundVolume }) => {
+const MainPage = (props : MainPageProps) => {
 
   function playSound() {
     let audio = new Audio(click);
-    audio.volume = soundVolume / 100;
+    audio.volume = props.soundVolume / 100;
     audio.play();
   }
 
   return (
     <MainPageContainer>
         <MainNav>
-            <Logo src={logo}/>
+            <Logo src={props.logo}/>
             <Profile>
-                <ProfilePicture src={img}/>
-                <UserName text={text} onMouseEnter={playSound}>{text}</UserName>
+                <ProfilePicture src={props.img}/>
+                <UserName text={props.text} onMouseEnter={playSound}>{props.text}</UserName>
             </Profile>
         </MainNav>
         <MainLinks>
@@ -28,6 +27,13 @@ const MainPage = ({ img, text, logo, soundVolume }) => {
         </MainLinks>
     </MainPageContainer>
   )
+}
+
+export interface MainPageProps {
+  img : string
+  text : string
+  logo : string
+  soundVolume : number
 }
 
 export default MainPage
