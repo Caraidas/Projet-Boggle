@@ -10,6 +10,7 @@ import Definitions from './pages/definitions';
 import Carriere from './pages/carriere';
 import Game from './pages/game';
 import menuMusic from "./sound/daisy.mp3";
+import ChatGame from './pages/chatGame';
 
 function App() {
   // Variable de la musique actuellement en background
@@ -60,6 +61,7 @@ function App() {
         <Route path='/register' element={<Register />} exact/>
         <Route path='/definitions' element={<Definitions />} exact/>
         <Route path='/game' element={<Game soundVolume={soundVolume} grid={grid} />} exact/>
+        <Route path='/test' element={<ChatGame/>} exact/>
       </Routes>
       <VolumeSlider isSoundOpen={isSoundOpen} toggleSound={toggleSound} changeSoundVolume={changeSoundVolume} changeMusicVolume={changeMusicVolume} />
     </Router>

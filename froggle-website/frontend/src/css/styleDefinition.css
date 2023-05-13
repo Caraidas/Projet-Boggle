@@ -1,7 +1,6 @@
 
 .container{
     display: flex;
-    flex-direction: column;
     width: 90%;
     height:auto;
     margin: auto
@@ -11,13 +10,22 @@
     margin-top:1rem;
     display: flex;
     flex-direction: column;
-    width: 130vmin;
-    height:auto;
+    width: 70%;
+    height:80vmin;
     background-color:rgba(255, 255, 255, 0.393);
     border: 5px solid #000;
     border-radius: 10px;
     box-shadow: 0px 5px 0px #000;
     padding:1rem;
+    overflow-y: auto;
+}
+
+.sideContainer{
+    display: flex;
+    flex-direction: column;
+    width: 30%;
+    align-items: center;
+    justify-content:center;
 }
 
 .search{
@@ -26,7 +34,7 @@
 }
 
 .definitionInput{
-    width: 100vmin;
+    width: 80%;
     border-radius:40px;
     height:70px;
     margin:0 1rem 1rem 0;
@@ -52,4 +60,37 @@
     border-radius: 20px;
     font-size: 24px;
     font-weight: bold;
+}
+
+.frog{
+    max-width:100%;
+}
+
+
+
+.bubble {
+    position: relative;
+    font-family: sans-serif;
+    font-size: 18px;
+    line-height: 24px;
+    max-width: 100%;
+    background: #fff;
+    border-radius: 20px;
+    padding: 24px;
+    text-align: center;
+    color: #000;
+    margin:1rem
+}
+  
+.bubble:before {
+    content: "";
+    width: 0px;
+    height: 0px;
+    position: absolute;
+    border-right: 24px solid #fff;
+    border-left: 12px solid transparent;
+    border-top: 12px solid #fff;
+    border-bottom: 20px solid transparent;
+    left: 32px;
+    bottom: -24px;
 }

@@ -1,8 +1,8 @@
 import styled, { keyframes } from "styled-components";
 
 export const DefinitionBox =  styled.div`
-    width:100vmin;
-    height:250px;
+    width:80%;
+    min-height:250px;
     overflow-y:scroll;
     overflow-x:hidden;
     background-color:#F1E368;
