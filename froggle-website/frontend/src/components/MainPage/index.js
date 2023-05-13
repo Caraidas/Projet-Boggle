@@ -24,7 +24,7 @@ const MainPage = ({ img, text, logo, soundVolume }) => {
             <MainLink onMouseEnter={playSound}>Jouer</MainLink>
             <MainLink onMouseEnter={playSound} to={"/carriere"}>Carrière</MainLink>
             <MainLink onMouseEnter={playSound}>Social</MainLink>
-            <MainLink onMouseEnter={playSound}>Définitions</MainLink>
+            <MainLink onMouseEnter={playSound} to={"/definitions"}>Définitions</MainLink>
         </MainLinks>
     </MainPageContainer>
   )
