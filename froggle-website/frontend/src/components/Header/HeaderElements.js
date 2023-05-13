@@ -24,6 +24,10 @@ export const Logo = styled.img`
     object-fit: cover;
     cursor: pointer;
     animation: ${appearAnim} 0.5s cubic-bezier(.85,1.76,.75,.81) forwards;
+
+    @media screen and (max-width: 550px) {
+        height: 75%;
+    }
 `
 
 export const Text = styled.p`
@@ -33,4 +37,10 @@ export const Text = styled.p`
     -webkit-text-stroke: 2px #000;
     text-shadow: 0px 4px 0px #000;
     animation: ${appearAnim} 0.5s cubic-bezier(.85,1.76,.75,.81) forwards;
+
+    @media screen and (max-width: 550px) {
+        font-size: 2rem;
+        -webkit-text-stroke: 1.5px #000;
+        text-shadow: 0px 3px 0px #000;
+    }
 `

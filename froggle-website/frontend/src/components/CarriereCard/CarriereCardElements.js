@@ -1,6 +1,5 @@
 import styled, { keyframes } from "styled-components";
 
-
 const appearAnim = keyframes`
     from {
         transform: scale(0);
@@ -21,6 +20,14 @@ export const CardContainer = styled.div`
     max-width: 700px;
     height: 125px;
     animation: ${appearAnim} 0.5s cubic-bezier(.85,1.76,.75,.81) forwards;
+
+    @media screen and (max-width: 700px) {
+        width: 100%;
+    }
+
+    @media screen and (max-width: 450px) {
+        height: 175px;
+    }
 `
 
 export const CarriereCardPictures = styled.div`
@@ -30,6 +37,16 @@ export const CarriereCardPictures = styled.div`
     top: 0;
     left: 0;
     transform: translate(10%, -50%);
+
+    @media screen and (max-width: 700px) {
+        gap: 5px;
+    }
+
+    @media screen and (max-width: 450px) {
+        width: 100%;
+        justify-content: center;
+        transform: translate(0%, -50%);
+    }
 `
 
 export const CarriereCardPicture = styled.img`
@@ -39,6 +56,12 @@ export const CarriereCardPicture = styled.img`
     box-shadow: 0px 3px 0px #000;
     border-radius: 50%;
     object-fit: cover;
+
+    @media screen and (max-width: 700px) {
+        width: 40px;
+        border: 2px solid #000;
+        box-shadow: 0px 2px 0px #000;
+    }
 `
 
 export const WinDataCont = styled.div`
@@ -49,6 +72,12 @@ export const WinDataCont = styled.div`
     position: absolute;
     top: 10px;
     right: 15px;
+
+    @media screen and (max-width: 450px) {
+        right: auto;
+        left: 15px;
+        top: 30px;
+    }
 `
 
 export const Num = styled.p`
@@ -59,12 +88,20 @@ export const Num = styled.p`
     text-shadow: 0px 3px 0px #000;
     
     transform: rotate(-10deg);
+
+    @media screen and (max-width: 700px) {
+        font-size: 2.25rem;
+    }
 `
 
 export const Win = styled.p`
     font-size: 1.75rem;
     color: #000; 
     font-weight: bold;
+
+    @media screen and (max-width: 700px) {
+        font-size: 1.25rem;
+    }
 `
 
 export const GameData = styled.div`
@@ -77,6 +114,15 @@ export const GameData = styled.div`
     left: 20px;
     font-size: 1.25rem;
     font-weight: bold;
+
+    @media screen and (max-width: 700px) {
+        font-size: 1rem;
+    }
+
+    @media screen and (max-width: 450px) {
+        bottom: auto;
+        top: 80px;
+    }
 `
 export const CarriereCardDate = styled.p`
     position: absolute;
@@ -84,4 +130,13 @@ export const CarriereCardDate = styled.p`
     right: 15px;
     font-size: 1.5rem;
     color: #000;
+
+    @media screen and (max-width: 700px) {
+        font-size: 1rem;
+    }
+
+    @media screen and (max-width: 450px) {
+        right: auto;
+        left: 15px;
+    }
 `

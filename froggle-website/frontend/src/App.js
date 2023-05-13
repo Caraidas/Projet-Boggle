@@ -47,10 +47,10 @@ function App() {
 
   return (
     <Router>
-      <audio id="music" src={bgMusic} autoplay loop></audio>
+      <audio id="music" src={bgMusic} autoPlay loop></audio>
       <Background />
       <Routes>
-        <Route path='/home' element={<Home soundVolume={soundVolume}/>} exact/>
+        <Route path='/' element={<Home soundVolume={soundVolume}/>} exact/>
         <Route path='/carriere' element={<Carriere />} exact/>
         <Route path='/login' element={<Login />} exact/>
         <Route path='/register' element={<Register />} exact/>
