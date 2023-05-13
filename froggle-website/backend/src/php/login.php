@@ -29,8 +29,6 @@ session_start();
 
 // Vérifie si l'utilisateur est déjà authentifié
 if (isset($_SESSION['user_id'])) {
-  // L'utilisateur est déjà authentifié, redirige-le vers la page d'accueil
-  header("Location: /accueil.php");
   exit();
 }
 
@@ -43,7 +41,7 @@ if ($data['email'] && $data['password']) {
   $password = $data['password'];
 
   // Établir la connexion à la base de données via PDO
-  $pdo = new PDO('mysql:host=localhost;dbname=boggle;charset=utf8', 'root', 'pass');
+  $pdo = new PDO('mysql:host=localhost;dbname=boggle;charset=utf8', 'username', 'password');
 
   // Prépare la requête de sélection de l'utilisateur
   $statement = $pdo->prepare('SELECT * FROM user WHERE email = :email');
@@ -58,7 +56,7 @@ if ($data['email'] && $data['password']) {
   $user = $statement->fetch(PDO::FETCH_ASSOC);
 
   // Vérifie si l'utilisateur a été trouvé et si le mot de passe est correct
-  if ($user && ($password === $user['password'])) {
+  if ($user && (hash('sha256', $password) === $user['password'])) {
     // Authentification réussie, stocke les informations d'utilisateur dans la session
     $_SESSION['user_id'] = $user['id'];
     $_SESSION['email'] = $user['email'];
