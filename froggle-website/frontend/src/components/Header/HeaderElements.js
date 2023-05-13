@@ -15,8 +15,10 @@ export const HeaderContainer = styled.div`
     align-items: center;
     width: 90%;
     max-width: 1250px;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
     padding: 0px 0px 0px 0px;
-    margin: 0 auto;
     height: 75px;
 `
 
