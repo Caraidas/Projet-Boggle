@@ -12,7 +12,7 @@ const LoginPage = ({logo, submitText, errorMessage}) => {
 
     function handleSubmit(event) {
         event.preventDefault();
-        axios.post("http://localhost/boggle/php/server.php", {email, password})
+        axios.post("http://localhost/boggle/php/login.php", {email, password})
         .then((response) => {
             console.log(response.data.status);
             if (response.data.status === "success") {
