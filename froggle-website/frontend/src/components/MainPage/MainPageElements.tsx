@@ -82,7 +82,6 @@ export const MainLinks = styled.div`
     gap: 10px;
     height: 100%;
     justify-content: center;
-    // border: 1px solid blue;
 `
 
 export const MainLink = styled(LinkR)`

@@ -8,6 +8,7 @@ import Login from './pages/login';
 import Register from './pages/register';
 import Definitions from './pages/definitions';
 import Carriere from './pages/carriere';
+import Game from './pages/game';
 import menuMusic from "./sound/daisy.mp3";
 
 function App() {
@@ -43,6 +44,9 @@ function App() {
     let music = document.getElementById("music");
     music.play();
   });
+
+  // Grille
+  let grid = "A E I U R F H K N C F V K O QU Y";
   
 
   return (
@@ -55,6 +59,7 @@ function App() {
         <Route path='/login' element={<Login />} exact/>
         <Route path='/register' element={<Register />} exact/>
         <Route path='/definitions' element={<Definitions />} exact/>
+        <Route path='/game' element={<Game soundVolume={soundVolume} grid={grid} />} exact/>
       </Routes>
       <VolumeSlider isSoundOpen={isSoundOpen} toggleSound={toggleSound} changeSoundVolume={changeSoundVolume} changeMusicVolume={changeMusicVolume} />
     </Router>

@@ -20,7 +20,7 @@ const MainPage = (props : MainPageProps) => {
             </Profile>
         </MainNav>
         <MainLinks>
-            <MainLink onMouseEnter={playSound}>Jouer</MainLink>
+            <MainLink onMouseEnter={playSound} to={"/game"}>Jouer</MainLink>
             <MainLink onMouseEnter={playSound} to={"/carriere"}>Carrière</MainLink>
             <MainLink onMouseEnter={playSound}>Social</MainLink>
             <MainLink onMouseEnter={playSound} to={"/definitions"}>Définitions</MainLink>

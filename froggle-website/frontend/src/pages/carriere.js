@@ -18,8 +18,8 @@ const Carriere = () => {
     // </div>
 
     <> 
+      <Header text="Carrière" />
       <div className='hero'>
-        <Header text="Carrière" />
         <div className='heroData'>
           <div className='heroProfile'>
             <img src={pic1} alt="photo de profil" className='heroPicture'/>
