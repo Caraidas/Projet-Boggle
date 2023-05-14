@@ -1,6 +1,8 @@
 import React from 'react';
 import Cell from '../components/Cell';
 import "../css/styleGame.css";
+import GameCard from '../components/GameCard';
+import picture from "../images/pfp.jpg"
 
 const Game = ({ soundVolume, grid }) => {
   return (
@@ -13,6 +15,12 @@ const Game = ({ soundVolume, grid }) => {
                         <Cell letter={letter} soundVolume={soundVolume} />
                     ))}
                 </div>
+            </div>
+            <div className='players'>
+                <GameCard picture={picture} name="xX_Nidal_Xx" words="15/32" points={2034} place={1} />
+                <GameCard picture={picture} name="Thonin77" words="15/32" points={34} place={4} />
+                <GameCard picture={picture} name="Eloody" words="15/32" points={0} place={3} />
+                <GameCard picture={picture} name="Bera77" words="15/32" points={390} place={2} />
             </div>
         </div>
     </>

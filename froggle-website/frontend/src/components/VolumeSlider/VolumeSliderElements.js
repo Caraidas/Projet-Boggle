@@ -4,9 +4,12 @@ export const SliderContainer = styled.div`
     display: flex;
     flex-direction: column;
     position: fixed;
-    bottom: 40px;
     right: 5%;
     gap: 10px;
+    transition: all 0.1s linear;
+    bottom: 20px;
+
+    ${({ isSoundOpen }) => (isSoundOpen ? 'border: 3.5px solid #000;box-shadow: 0px 2px 0px #000;padding: 10px 20px;border-radius: 10px;background: #67C870;' : '')}
 `
 
 export const SliderToggle = styled.img`

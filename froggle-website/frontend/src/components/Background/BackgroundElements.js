@@ -17,6 +17,7 @@ export const BgCont = styled.div`
     overflow: hidden;
     height: 100vh;
     width: 100%;
+    outline: 5px solid #000;
 `
 
 // Code pour trouver la taille la plus grande entre la hauteur et la largeur de l'ecran
