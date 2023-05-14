@@ -31,7 +31,7 @@ if (height > width) {
 }
 
 export const Bg = styled.img`
-    height: 200${{size}};
+    height: 200${size};
     transform-origin: center;
     animation: ${rotation} 100s linear infinite;
     object-fit: cover;
