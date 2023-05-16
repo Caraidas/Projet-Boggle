@@ -13,6 +13,8 @@ let r = getRandomInt(0, 4);
 let logo = require('../images/logo-' + r + '.png');
 
 const Home = (props : HomeProps) => {
+
+  props.setMusic(props.music);
   return (
     <MainPage soundVolume={props.soundVolume} text={"BeraM"} img={img} logo={logo}/>
   )
@@ -21,6 +23,8 @@ const Home = (props : HomeProps) => {
 export interface HomeProps {
   toggleSound : () => void,
   soundVolume : number,
+  setMusic : (any) => void,
+  music : any,
 }
 
 export default Home

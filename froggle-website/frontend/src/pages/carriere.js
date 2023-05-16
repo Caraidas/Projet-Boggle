@@ -11,19 +11,13 @@ const Carriere = () => {
   let pics = [pic1, pic1, pic1];
 
   return (
-    // <div className='carriere-cont'>
-    //     <Header text="Carrière" />
-    //     <ProgressBar width="500" total={4} current={1} />
-    //     <CarriereCard pictures={pics}></CarriereCard>
-    // </div>
-
     <> 
       <Header text="Carrière" />
       <div className='hero'>
         <div className='heroData'>
           <div className='heroProfile'>
             <img src={pic1} alt="photo de profil" className='heroPicture'/>
-            <p className='heroName'>xX_KypoTv_Xx</p>
+            <p className='heroName' title="xX_KypoTv_Xx chrjf vhefjvkfel vjchefkvlrfv ghefjdkscled">xX_KypoTv_Xx chrjf vhefjvkfel vjchefkvlrfv ghefjdkscled</p>
           </div>
 
           <div className='heroLevel'>

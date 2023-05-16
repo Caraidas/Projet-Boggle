@@ -44,13 +44,18 @@
     border-radius: 50%;
     border: 7px solid #000;
     box-shadow: 0px 10px 0px #000;
-    animation: appearAnim 0.4s cubic-bezier(.85, 1.76, .75, .81) forwards;
+    animation: appearAnim 0.4s cubic-bezier(.85, 1.76, .75, .81) forwards;text-overflow: ellipsis;
 }
 
 .heroName {
     font-size: 2rem;
     font-weight: bold;
     animation: appearAnim 0.4s cubic-bezier(.85, 1.76, .75, .81) forwards;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    width: 250px;
+    cursor: pointer;
 }
 
 .heroLevel {

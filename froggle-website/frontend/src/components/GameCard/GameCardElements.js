@@ -64,4 +64,9 @@ export const Name = styled.p`
     right: 15px;
     font-size: 1.35rem;
     font-weight: bold; 
+    max-width: 130px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    cursor: pointer;
 `

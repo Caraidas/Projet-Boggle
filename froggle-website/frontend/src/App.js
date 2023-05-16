@@ -14,7 +14,7 @@ import ChatGame from './pages/chatGame';
 
 function App() {
   // Variable de la musique actuellement en background
-  let bgMusic = menuMusic;
+  const [bgMusic, setMusic] = useState(menuMusic);
 
   // pour ouvrir et fermer le slider
   const [isSoundOpen, setIsOpen] = useState(false);
@@ -49,18 +49,17 @@ function App() {
   // Grille
   let grid = "A E I U R F H K N C F V K O QU Y";
   
-
   return (
     <Router>
       <audio id="music" src={bgMusic} autoPlay loop></audio>
       <Background />
       <Routes>
-        <Route path='/' element={<Home soundVolume={soundVolume}/>} exact/>
+        <Route path='/' element={<Home setMusic={setMusic} music={menuMusic} soundVolume={soundVolume}/>} exact/>
         <Route path='/carriere' element={<Carriere />} exact/>
         <Route path='/login' element={<Login />} exact/>
         <Route path='/register' element={<Register />} exact/>
         <Route path='/definitions' element={<Definitions />} exact/>
-        <Route path='/game' element={<Game soundVolume={soundVolume} grid={grid} />} exact/>
+        <Route path='/game' element={<Game soundVolume={soundVolume} setMusic={setMusic} grid={grid} />} exact/>
         <Route path='/test' element={<ChatGame/>} exact/>
       </Routes>
       <VolumeSlider isSoundOpen={isSoundOpen} toggleSound={toggleSound} changeSoundVolume={changeSoundVolume} changeMusicVolume={changeMusicVolume} />
