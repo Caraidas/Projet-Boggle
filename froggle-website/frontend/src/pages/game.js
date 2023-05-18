@@ -18,6 +18,9 @@ const Game = ({ soundVolume, grid, setMusic }) => {
                         <Cell letter={letter} soundVolume={soundVolume} />
                     ))}
                 </div>
+                <form onSubmit={console.log("salut")}>
+                    <input className='gameInput' type='text'/>
+                </form>
             </div>
             <div className='players'>
                 <GameCard picture={picture} name="Nidal le mec louche sa mère" words="15/32" points={2034} place={1} />

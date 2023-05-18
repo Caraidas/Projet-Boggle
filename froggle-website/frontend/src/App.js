@@ -15,13 +15,24 @@ import Login2 from './pages/login2';
 import Signup from "./pages/signup"
 
 function App() {
+
+  // Logo 
+  function getRandomInt(min, max) {
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+  }
+  
+  let r = getRandomInt(0, 4);
+  let logo = require('./images/logo-' + r + '.png');
+
   // Variable de la musique actuellement en background
   const [bgMusic, setMusic] = useState(menuMusic);
 
   // pour ouvrir et fermer le slider
   const [isSoundOpen, setIsOpen] = useState(false);
   // pour le volume du son
-  const [soundVolume, setVolume] = useState(100);
+  const [soundVolume, setVolume] = useState(localStorage.getItem('soundVolume') ? localStorage.getItem('soundVolume') : 100);
 
   // ---------------------------------
   const toggleSound = () => {
@@ -38,6 +49,9 @@ function App() {
   }
   // ------------------------------------
 
+  // Grille
+  let grid = "A E I U R F H K N C F V K O QU Y";
+
   if (isSoundOpen) {
     setTimeout(function() {toggleSound();}, 5000);
   }
@@ -45,21 +59,9 @@ function App() {
   // detecter le click pour lancer la musique
   document.addEventListener('click', function(event) {
     let music = document.getElementById("music");
+    changeMusicVolume(localStorage.getItem('musicVolume') ? localStorage.getItem('musicVolume') : 100)
     music.play();
   });
-
-  // Logo 
-  function getRandomInt(min, max) {
-    min = Math.ceil(min);
-    max = Math.floor(max);
-    return Math.floor(Math.random() * (max - min + 1)) + min;
-  }
-  
-  let r = getRandomInt(0, 4);
-  let logo = require('./images/logo-' + r + '.png');
-
-  // Grille
-  let grid = "A E I U R F H K N C F V K O QU Y";
   
   return (
     <Router>
