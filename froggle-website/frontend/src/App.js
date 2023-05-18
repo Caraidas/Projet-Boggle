@@ -11,6 +11,8 @@ import Carriere from './pages/carriere';
 import Game from './pages/game';
 import menuMusic from "./sound/daisy.mp3";
 import ChatGame from './pages/chatGame';
+import Login2 from './pages/login2';
+import Signup from "./pages/signup"
 
 function App() {
   // Variable de la musique actuellement en background
@@ -46,6 +48,16 @@ function App() {
     music.play();
   });
 
+  // Logo 
+  function getRandomInt(min, max) {
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+  }
+  
+  let r = getRandomInt(0, 4);
+  let logo = require('./images/logo-' + r + '.png');
+
   // Grille
   let grid = "A E I U R F H K N C F V K O QU Y";
   
@@ -54,10 +66,12 @@ function App() {
       <audio id="music" src={bgMusic} autoPlay loop></audio>
       <Background />
       <Routes>
-        <Route path='/' element={<Home setMusic={setMusic} music={menuMusic} soundVolume={soundVolume}/>} exact/>
+        <Route path='/' element={<Home setMusic={setMusic} music={menuMusic} soundVolume={soundVolume} logo={logo} />} exact/>
         <Route path='/carriere' element={<Carriere />} exact/>
         <Route path='/login' element={<Login />} exact/>
+        <Route path='/login2' element={<Login2 logo={logo} errorMessage="🐸 L'identifiant ou le mot de passe est incorrect 🐸" />} exact/>
         <Route path='/register' element={<Register />} exact/>
+        <Route path='/signup' element={<Signup logo={logo} />} exact/>
         <Route path='/definitions' element={<Definitions />} exact/>
         <Route path='/game' element={<Game soundVolume={soundVolume} setMusic={setMusic} grid={grid} />} exact/>
         <Route path='/test' element={<ChatGame/>} exact/>

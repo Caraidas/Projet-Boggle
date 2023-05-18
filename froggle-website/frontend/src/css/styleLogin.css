@@ -1,0 +1,144 @@
+*,
+*::before,
+*::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.loginCont {
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.logo {
+    width: 60%;
+    max-width: 600px;
+    min-width: 250px;
+    animation: appearAnim 0.4s cubic-bezier(.85, 1.76, .75, .81) forwards;
+}
+
+.formCont {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    width: 60%;
+    max-width: 750px;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.input {
+    width: 100%;
+    max-width: 500px;
+    height: 60px;
+    border: 3.5px solid #000;
+    border-radius: 1000px;
+    box-shadow: 0px 2px 0px #000;
+    padding-left: 20px;
+    color: #000;
+    background: #fff;
+    font-size: 1.25rem;
+    font-weight: bold;
+    outline: none;
+    animation: appearAnim 0.4s cubic-bezier(.85, 1.76, .75, .81) forwards;
+}
+
+.input:focus {
+    box-shadow: 0px 1px 0px #000;
+    transform: translateY(1px);
+}
+
+.submit {
+    border-radius: 1000px;
+    background: #67C870;
+    color: #000000;
+    width: 150px;
+    height: 50px;
+    border: 3px solid #000;
+    box-shadow: 0px 2px 0px #000;
+    font-size: 1.1rem;
+    font-weight: bold;
+    cursor: pointer;
+    animation: appearAnim 0.4s cubic-bezier(.85, 1.76, .75, .81) forwards;
+}
+
+.submit:hover {
+    box-shadow: 0px 3px 0px #000;
+    transform: translateY(-1px);
+}
+
+.submit:active {
+    box-shadow: 0px 1px 0px #000;
+    transform: translateY(1px);
+}
+
+.errorContainer {
+    width: 70vmin;
+    height: 50px;
+    color:rgb(255, 75, 75);
+    background-color:#f5d6d9;
+    border: 5px solid rgb(255, 164, 164);
+    box-shadow: 0px 4px 0px rgb(255, 164, 164);
+    border-radius: 10px; 
+    display: flex;
+    justify-content: center;
+    align-items: center; 
+    display: none;
+    animation: appearAnim 0.4s cubic-bezier(.85, 1.76, .75, .81) forwards;
+}
+
+.logoSignup {
+    width: 40%;
+    max-width: 475px;
+    min-width: 250px;
+    animation: appearAnim 0.4s cubic-bezier(.85, 1.76, .75, .81) forwards;
+}
+
+.SignupCont {
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    justify-content: flex-start;
+    padding-top: 5vh;
+    align-items: center;
+    flex-direction: column;
+}
+
+
+/* Animation */
+
+@keyframes appearAnim {
+    from {
+        transform: scale(0);
+    }
+}
+
+/* Media */
+
+@media screen and (max-width: 650px) {
+
+    .input {
+        height: 45px;
+        border: 3px solid #000;
+        box-shadow: 0px 1.5px 0px #000;
+    }
+
+    .formCont {
+        width: 75%;
+    }
+
+    .tosignup {
+        font-size: .75rem;
+    }
+}
+
+@media screen and (max-height: 650px) {
+    .logo {
+        width: 40%;
+    }
+}

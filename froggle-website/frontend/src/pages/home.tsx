@@ -3,20 +3,11 @@ import MainPage from './../components/MainPage';
 
 let img = require('../images/pfp.jpg');
 
-function getRandomInt(min : number, max : number) {
-  min = Math.ceil(min);
-  max = Math.floor(max);
-  return Math.floor(Math.random() * (max - min + 1)) + min;
-}
-
-let r = getRandomInt(0, 4);
-let logo = require('../images/logo-' + r + '.png');
-
 const Home = (props : HomeProps) => {
 
   props.setMusic(props.music);
   return (
-    <MainPage soundVolume={props.soundVolume} text={"BeraM"} img={img} logo={logo}/>
+    <MainPage soundVolume={props.soundVolume} text={"BeraM"} img={img} logo={props.logo}/>
   )
 }
 
@@ -25,6 +16,7 @@ export interface HomeProps {
   soundVolume : number,
   setMusic : (any) => void,
   music : any,
+  logo : any,
 }
 
 export default Home
