@@ -18,8 +18,8 @@ export interface Message {
 export const WaitingRoomSelector = (props: {rooms: WaitingRoom[], onChosenRoom: (username: string, waitingRoom: string) => void}) => {
     const [username, setUsername] = React.useState("")
     const [selectedRoom, setSelectedRoom] = React.useState("")
-    return <div className="WaintingRoomSelector">
-        <div>Username: <input type="text" value={username} onChange={event => setUsername(event.target.value)} /></div>
+    return <div className="WaitingRoomSelector">
+        <div>Nom d'utilisateur: <input type="text" value={username} onChange={event => setUsername(event.target.value)} /></div>
         {/* Renders all the waiting rooms */}
         <div>
             {props.rooms.map(room => <div key={room.name}>
@@ -28,7 +28,7 @@ export const WaitingRoomSelector = (props: {rooms: WaitingRoom[], onChosenRoom: 
             </div>)}
         </div>
         {/* Join the waiting room */}
-        <button onClick={() => props.onChosenRoom(username, selectedRoom)} disabled={username === "" || selectedRoom === "" || props.rooms.findIndex(x => x.name === selectedRoom) === -1}>Join the waiting room</button>
+        <button onClick={() => props.onChosenRoom(username, selectedRoom)} disabled={username === "" || selectedRoom === "" || props.rooms.findIndex(x => x.name === selectedRoom) === -1}>Rejoindre le salon d'attente</button>
     </div>
 }
 
@@ -44,9 +44,9 @@ export const RoomWaiter = (props: {roomName: string, startTimestamp: number, onL
         return () => clearTimeout(handle)
     }, [])
     return <div className="RoomWaiter">
-        <div>Waiting in room {props.roomName} for {Math.floor((currentTimestamp - props.startTimestamp) / 1000)} s.</div>
+        <div>En attente d'autres joueurs dans le salon{props.roomName} depuis {Math.floor((currentTimestamp - props.startTimestamp) / 1000)} s.</div>
         {/* button to leave waiting room, calls the leaveWaitingRoom() funtion */}
-        <div><button onClick={() => props.onLeaving() }>Leave the waiting room</button></div>
+        <div><button onClick={() => props.onLeaving() }>Quitter le salon d'attente</button></div>
     </div>
 }
 
@@ -268,11 +268,11 @@ export const ChatManager = (props: {socketUrl: string}) => {
             <div className="Error">Error: {error} <button onClick={() => setError('')}>OK</button></div>}
         {'disconnected' in chatState && 
             <div className="Disconnected">
-                <div>Disconnected</div>
-                <button onClick={() => setChatState({connecting: true})}>Connect now</button></div>}
+                <div>Vous êtes déconnecté</div>
+                <button onClick={() => setChatState({connecting: true})}>Se connecter</button></div>}
         {'connecting' in chatState &&
             <div className="Connecting">
-                <div>Connecting to server {props.socketUrl}</div>
+                <div>Connexion à la partie veuillez patienter... {props.socketUrl}</div>
             </div>}
         {'roomSelection' in chatState && 
             <WaitingRoomSelector rooms={waitingRooms} onChosenRoom={connectToWaitingRoom} />}

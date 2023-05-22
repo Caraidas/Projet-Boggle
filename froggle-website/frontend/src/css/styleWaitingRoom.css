@@ -1,0 +1,25 @@
+*,
+*::before,
+*::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    width: 90%;
+    max-width: 1250px;
+    height: 100vh;
+    margin: auto;
+    align-items: center;
+    justify-content: center;
+}
+
+.center-container{
+    display: flex;
+    flex-direction: column;
+    width: 90%;
+    align-items: center;
+}

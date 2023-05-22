@@ -84,7 +84,6 @@ class Client(object):
         except:
             return False
 
-
 class WaitingRoom(object):
     def __init__(self, name: str, info: Dict[str, Any]):
         self.name = name

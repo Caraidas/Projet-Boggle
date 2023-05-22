@@ -16,7 +16,7 @@ const Login2 = ({ logo, errorMessage }) => {
         .then((response) => {
             console.log(response.data.status);
             if (response.data.status === "success") {
-              navigate('/home');
+              navigate('/');
             } else if(response.data.status === "error") {
                 console.log("Authentification échouée");
                 setShowError(true); //Modifier la valeur de showError si une erreur survient
