@@ -49,9 +49,6 @@ function App() {
   }
   // ------------------------------------
 
-  // Grille
-  let grid = "A E I U R F H K N C F V K O QU Y";
-
   if (isSoundOpen) {
     setTimeout(function() {toggleSound();}, 5000);
   }
@@ -75,8 +72,8 @@ function App() {
         <Route path='/register' element={<Register />} exact/>
         <Route path='/signup' element={<Signup logo={logo} />} exact/>
         <Route path='/definitions' element={<Definitions />} exact/>
-        <Route path='/game' element={<Game soundVolume={soundVolume} setMusic={setMusic} grid={grid} />} exact/>
-        <Route path='/test' element={<ChatGame/>} exact/>
+        <Route path='/game' element={<Game soundVolume={soundVolume} setMusic={setMusic} grid={"A B C D"} />} exact/>
+        <Route path='/test' element={<ChatGame setMusic={setMusic}/>} exact/>
       </Routes>
       <VolumeSlider isSoundOpen={isSoundOpen} toggleSound={toggleSound} changeSoundVolume={changeSoundVolume} changeMusicVolume={changeMusicVolume} />
     </Router>

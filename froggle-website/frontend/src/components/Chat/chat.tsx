@@ -1,4 +1,8 @@
 import React, { useEffect } from "react"
+import Game from "../../pages/game"
+import "../../css/styleGame.css"
+import Header from "../Header"
+import SalonsGrid from "../SalonsGrid"
 
 
 export interface WaitingRoom {
@@ -18,7 +22,9 @@ export interface Message {
 export const WaitingRoomSelector = (props: {rooms: WaitingRoom[], onChosenRoom: (username: string, waitingRoom: string) => void}) => {
     const [username, setUsername] = React.useState("")
     const [selectedRoom, setSelectedRoom] = React.useState("")
-    return <div className="WaitingRoomSelector">
+
+    return (
+    <div className="WaitingRoomSelector">
         <div>Nom d'utilisateur: <input type="text" value={username} onChange={event => setUsername(event.target.value)} /></div>
         {/* Renders all the waiting rooms */}
         <div>
@@ -30,6 +36,7 @@ export const WaitingRoomSelector = (props: {rooms: WaitingRoom[], onChosenRoom: 
         {/* Join the waiting room */}
         <button onClick={() => props.onChosenRoom(username, selectedRoom)} disabled={username === "" || selectedRoom === "" || props.rooms.findIndex(x => x.name === selectedRoom) === -1}>Rejoindre le salon d'attente</button>
     </div>
+    );
 }
 
 /**
@@ -56,11 +63,14 @@ export const RoomWaiter = (props: {roomName: string, startTimestamp: number, onL
  */
 export const ChatMessageDisplayer = (props: {message: Message}) => {
     const date = React.useMemo(() => new Date(props.message.timestamp).toLocaleTimeString(), [props.message.timestamp])
-    return <div className="ChatMessageDisplayer">
-        <div>{date}</div>
-        <div>{props.message.sender}</div>
-        <div style={{flex: 1}}>{props.message.content}</div>
-    </div>
+
+    return (
+        <>  
+            <div>{date}</div>
+            <div>{props.message.sender}</div>
+            <div style={{flex: 1}}>{props.message.content}</div>
+        </>
+    );
 }
 
 /**
@@ -89,15 +99,32 @@ export const MessageSender = (props: {onMessageWritten: (content: string) => voi
  * 
  * @returns the page with the chat session (messages list, pratical informations)
  */
-export const ChatSession = (props: {messages: Message[], active: boolean, onMessageWritten: (content: string) => void, onLeaving: () => void, onClosing: () => void}) => {
-    return <div className="ChatSession">
-        <ChatMessagesDisplayer messages={props.messages} />
-        {props.active && <MessageSender onMessageWritten={props.onMessageWritten} />}
-        <div>
-            <button onClick={() => props.onLeaving()} disabled={!props.active}>Leave the chat session</button>
-            <button onClick={() => props.onClosing()} disabled={props.active}>Close</button>
+export const ChatSession = (props: {messages: Message[], active: boolean, onMessageWritten: (content: string) => void, onLeaving: () => void, onClosing: () => void, grid: string, setMusic: (music: any) => void, solvedWords : any}) => {
+
+    const [isChatToggled, setChatToggle] = React.useState(false);
+
+    function chatToggleHandler() {
+        if (!isChatToggled) {
+            setChatToggle(true);
+        } else {
+            setChatToggle(false)
+        }
+    }
+
+    return (
+        <div className="ChatSession">
+            <div className="toggleChat" onClick={() => chatToggleHandler()} style={{transform: isChatToggled? 'translateX(-400px)' : 'translateX(0px)'}}>Chat</div>
+            <Game soundVolume={1} grid={props.grid} setMusic={props.setMusic} solvedWords={props.solvedWords} />
+            <div className="chatCont" style={{transform: isChatToggled? 'translateX(0%)' : 'translateX(100%)'}}>
+                <ChatMessagesDisplayer messages={props.messages} />
+                {props.active && <MessageSender onMessageWritten={props.onMessageWritten} />}
+                <div>
+                    <button onClick={() => props.onLeaving()} disabled={!props.active}>Leave the chat session</button>
+                    <button onClick={() => props.onClosing()} disabled={props.active}>Close</button>
+                </div>
+            </div>
         </div>
-    </div>
+    );
 }
 
 interface DisconnectedState { disconnected: true }
@@ -108,12 +135,14 @@ interface ChattingState { startTimestamp: number, messages: Message[], active: b
 type ChatState = DisconnectedState | ConnectingState | RoomSelectionState | WaitingState | ChattingState //can be either of these
 
 
-export const ChatManager = (props: {socketUrl: string}) => {
+export const ChatManager = (props: {socketUrl: string, setMusic: (music: any) => void}) => {
     const [chatState, setChatState] = React.useState<ChatState>({disconnected: true})
     const [connected, setConnected] = React.useState(false)
     const [socket, setSocket] = React.useState<WebSocket|null>(null)
     const [error, setError] = React.useState<string>('')
     const [waitingRooms, setWaitingRooms] = React.useState<WaitingRoom[]>([])
+    const [grid, setGrid] = React.useState("");
+    const [solvedWords, setSolvedWords] = React.useState("");
 
     const onNewSocketMessage = (kind: string, content: Record<string, any>) => {
         console.debug("Received message from websocket", content)
@@ -157,6 +186,10 @@ export const ChatManager = (props: {socketUrl: string}) => {
             case 'chat_session_started':
                 setChatState({startTimestamp: performance.now(), messages: [], active: true})
                 addChatMessage('admin', content.welcome_message)
+                console.log("SLAU");
+                console.log(content.grid);
+                setGrid(content.grid);
+                setSolvedWords(content.solvedWords);
                 break
 
             case 'chat_message_received':
@@ -238,6 +271,7 @@ export const ChatManager = (props: {socketUrl: string}) => {
                     try {
                         json = JSON.parse(data)
                         kind = json['kind']
+                        console.log(json)
                     } catch {
                         console.error("Received invalid JSON", data)
                     }
@@ -263,23 +297,43 @@ export const ChatManager = (props: {socketUrl: string}) => {
         }
     }, [connected, props.socketUrl])
 
-    return <div className="ChatManager">
-        {error !== '' && 
-            <div className="Error">Error: {error} <button onClick={() => setError('')}>OK</button></div>}
-        {'disconnected' in chatState && 
-            <div className="Disconnected">
-                <div>Vous êtes déconnecté</div>
-                <button onClick={() => setChatState({connecting: true})}>Se connecter</button></div>}
-        {'connecting' in chatState &&
-            <div className="Connecting">
-                <div>Connexion à la partie veuillez patienter... {props.socketUrl}</div>
-            </div>}
-        {'roomSelection' in chatState && 
-            <WaitingRoomSelector rooms={waitingRooms} onChosenRoom={connectToWaitingRoom} />}
-        {'waitingRoomName' in chatState &&
-            <RoomWaiter roomName={chatState.waitingRoomName} startTimestamp={chatState.startTimestamp} onLeaving={leaveWaitingRoom} />}
-        {'messages' in chatState && 
-            <ChatSession messages={chatState.messages} active={chatState.active} onMessageWritten={sendChatMessage} onLeaving={leaveChatSession} onClosing={closeChatSession} />
-        }
-    </div>
+    return (
+        <div>
+            {error !== '' && 
+                <div className="Error">Error: {error} <button onClick={() => setError('')}>OK</button></div>}
+            {'disconnected' in chatState && 
+                <>
+                <Header text="Salons" />
+                <div className="salonsCont">
+                    <div>Vous êtes déconnecté</div>
+                    <button onClick={() => setChatState({connecting: true})}>Se connecter</button>
+                </div>
+                </>}  
+                
+            {'connecting' in chatState &&
+            <>
+                <Header text="Salons" />
+                <div className="salonsCont">
+                    <div>Connexion à la partie veuillez patienter... {props.socketUrl}</div>
+                </div>
+            </>}
+            {'roomSelection' in chatState && 
+                <>
+                    <Header text="Salons" />
+                    <div className="salonsCont">
+                        <SalonsGrid rooms={waitingRooms} onChosenRoom={connectToWaitingRoom} />
+                    </div>
+                </>}
+            {'waitingRoomName' in chatState &&
+                <>
+                    <Header text="Salons" />
+                    <div className="salonsCont">                
+                        <RoomWaiter roomName={chatState.waitingRoomName} startTimestamp={chatState.startTimestamp} onLeaving={leaveWaitingRoom} />
+                    </div>
+                </>}
+            {'messages' in chatState && 
+                <ChatSession messages={chatState.messages} active={chatState.active} onMessageWritten={sendChatMessage} onLeaving={leaveChatSession} onClosing={closeChatSession} grid={grid} solvedWords={solvedWords} setMusic={props.setMusic} />
+            }
+        </div>
+    );
 }
