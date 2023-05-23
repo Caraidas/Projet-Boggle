@@ -1,6 +1,8 @@
 #! /usr/bin/env python3
 
 from typing import Dict, List, Any, Union
+import subprocess
+
 
 class ChatHooks(object):
     """
@@ -72,7 +74,28 @@ class ChatHooks(object):
 class DefaultChatHooks(ChatHooks):
     DEFAULT_WELCOME_MESSAGE = "Welcome everybody!"
     DEFAULT_DURATION = 60
-    DEFAULT_ROOMS = {"default": {"attendee_number": 2, "duration": 60, "welcome_message": "Welcome everybody!"}}
+    DEFAULT_ROOMS = {
+        "Nidal": {
+            "attendee_number": 1, 
+            "duration": 60, 
+            "welcome_message": "Welcome everybody!",
+        },
+        "Laura": {
+            "attendee_number": 3, 
+            "duration": 60, 
+            "welcome_message": "Welcome everybody!",
+        },
+        "Paul": {
+            "attendee_number": 2, 
+            "duration": 60, 
+            "welcome_message": "Welcome everybody!",
+        },
+        "Nidal1": {
+            "attendee_number": 1, 
+            "duration": 60, 
+            "welcome_message": "Welcome everybody!",
+        }
+    }
 
     class AttendeeInfo(object):
         def __init__(self, identity):
@@ -101,9 +124,28 @@ class DefaultChatHooks(ChatHooks):
     async def on_chat_session_start(self, waiting_room_name: str, chat_session_id: int, attendee_identities: Dict[int, Dict[str, Any]]) -> Any:
         self._attendees[chat_session_id] = {id: self.AttendeeInfo(x) for (id, x) in attendee_identities.items()}
         room = self._rooms[waiting_room_name]
+
+        #Creation grille 
+        print("Hello world")
+        process = subprocess.Popen(["C:\\Users\\Nidal\\Documents\\BUT2\\Boggle\\Projet-Boggle\\froggle-website\\backend\\src\\chatac\\game-engine\\grid_build", "C:\\Users\\Nidal\\Documents\\BUT2\\Boggle\\Projet-Boggle\\froggle-website\\backend\\src\\chatac\\game-engine\\frequences.txt",'4','4'], stdout=subprocess.PIPE)
+        output, error = process.communicate()
+        grid = output.decode()
+        grid = grid.strip()
+        print(grid)
+        print(type(grid))
+
+        process2 = subprocess.Popen(["C:\\Users\\Nidal\\Documents\\BUT2\\Boggle\\Projet-Boggle\\froggle-website\\backend\\src\\chatac\\game-engine\\solve", "C:\\Users\\Nidal\\Documents\\BUT2\\Boggle\\Projet-Boggle\\froggle-website\\backend\\src\\chatac\\game-engine\\dico.lex", "3", "4", "4"] + grid.split(" "), stdout=subprocess.PIPE)
+        output2, error2 = process2.communicate()
+        solutionsString = output2.decode()
+        #solutions = solutionsString.strip().split(" ")
+        print(solutionsString)
+        print("end")
+
         return {
             "welcome_message": room.get("welcome_message", self.DEFAULT_WELCOME_MESSAGE), 
-            "duration": self._rooms[waiting_room_name].get("duration", self.DEFAULT_DURATION)
+            "duration": self._rooms[waiting_room_name].get("duration", self.DEFAULT_DURATION),
+            "grid": grid,
+            "solvedWords": solutionsString
         }
 
     async def on_chat_message(self, chat_session_id: int, sender_id: int, content: Any) -> Dict[int, Any]:

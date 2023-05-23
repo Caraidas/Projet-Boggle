@@ -5,9 +5,27 @@ import GameCard from '../components/GameCard';
 import picture from "../images/pfp.jpg"
 import gameMusic from "../sound/kirby.mp3";
 
-const Game = ({ soundVolume, grid, setMusic }) => {
+const Game = ({ soundVolume, grid, setMusic, solvedWords }) => {
 
     setMusic(gameMusic);
+    let solvedWordslst = solvedWords.split(" ");
+
+    function changeHandler(event) {
+        let word = event.target.value;
+        let UppercasedWord = word.toUpperCase();
+        event.target.value = UppercasedWord;
+        
+        if (word != "") {
+            if (solvedWordslst.includes(UppercasedWord) && !foundWords.includes(UppercasedWord)) {
+                console.log("oui");
+                setFoundWords([...foundWords] + UppercasedWord);
+                setWords(words + 1);
+            }
+        }
+    }
+
+    let [foundWords, setFoundWords] = React.useState([]);
+    let [words, setWords] = React.useState(0);
   return (
     <>
         <div className='timer'>2:53</div>
@@ -18,9 +36,8 @@ const Game = ({ soundVolume, grid, setMusic }) => {
                         <Cell letter={letter} soundVolume={soundVolume} />
                     ))}
                 </div>
-                <form onSubmit={console.log("salut")}>
-                    <input className='gameInput' type='text'/>
-                </form>
+                <input className='gameInput' type='text' onChange={(e) => changeHandler(e)} />
+                {words}
             </div>
             <div className='players'>
                 <GameCard picture={picture} name="Nidal le mec louche sa mère" words="15/32" points={2034} place={1} />

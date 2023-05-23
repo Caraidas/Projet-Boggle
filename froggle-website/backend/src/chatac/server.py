@@ -79,6 +79,7 @@ class Client(object):
         message = {'kind': kind}
         message.update(kwargs)
         try:
+            logger.info(message)
             await asyncio.wait_for(self.websocket.send_json(message), MESSAGE_SEND_TIMEOUT)
             return True
         except:
@@ -127,6 +128,8 @@ class ChatSession(object):
         self.clients = clients
         self.deadline = None
         self.welcome_message = None
+        self.grid = None
+        self.solvedWords = None
         self.manager_task: Optional[Task] = None  # to be set by the manager
 
         self._chat_message_queue = asyncio.Queue()  # queue for chat messages to be sent
@@ -205,6 +208,8 @@ class ChatServer(object):
                 chat_session_params = await self.hooks.on_chat_session_start(waiting_room.name, chat_session.id, {id: x.identity for (id, x) in attendees.items()})
                 chat_session.deadline = time.monotonic() + chat_session_params['duration']
                 chat_session.welcome_message = chat_session_params.get('welcome_message', '')
+                chat_session.grid = chat_session_params.get('grid', '')
+                chat_session.solvedWords = chat_session_params.get('solvedWords', '')
                 self._chat_sessions[chat_session.id] = chat_session
                 manager_task = asyncio.create_task(self._chat_session_manager(chat_session))
                 chat_session.manager_task = manager_task
@@ -226,7 +231,7 @@ class ChatServer(object):
             client.waiting_room = None
             client.chat_session = chat_session
         try:
-            await chat_session.send_message(None, 'chat_session_started', welcome_message=chat_session.welcome_message)
+            await chat_session.send_message(None, 'chat_session_started', welcome_message=chat_session.welcome_message, grid=chat_session.grid, solvedWords=chat_session.solvedWords)
             
             remaining_time = chat_session.deadline - time.monotonic()
             while remaining_time > 0 and (chat_session.clients or chat_session.not_empty_message_queue()):
@@ -272,7 +277,7 @@ class ChatServer(object):
 
         def get_waiting_rooms_desc():
             return {k: {
-                    'attendee_number': v.attendee_number, 
+                    'attendee_number': v.attendee_number,
                     'description': v.description} for (k, v) in self._waiting_rooms.items() }
         
         try:
