@@ -5,13 +5,11 @@ import Background from './components/Background';
 import VolumeSlider from './components/VolumeSlider';
 import Home from './pages/home';
 import Login from './pages/login';
-import Register from './pages/register';
 import Definitions from './pages/definitions';
 import Carriere from './pages/carriere';
 import Game from './pages/game';
 import menuMusic from "./sound/daisy.mp3";
 import ChatGame from './pages/chatGame';
-import Login2 from './pages/login2';
 import Signup from "./pages/signup"
 
 function App() {
@@ -67,12 +65,10 @@ function App() {
       <Routes>
         <Route path='/' element={<Home setMusic={setMusic} music={menuMusic} soundVolume={soundVolume} logo={logo} />} exact/>
         <Route path='/carriere' element={<Carriere />} exact/>
-        <Route path='/login' element={<Login />} exact/>
-        <Route path='/login2' element={<Login2 logo={logo} errorMessage="🐸 L'identifiant ou le mot de passe est incorrect 🐸" />} exact/>
-        <Route path='/register' element={<Register />} exact/>
+        <Route path='/login' element={<Login logo={logo} errorMessage="🐸 L'identifiant ou le mot de passe est incorrect 🐸" />} exact/>
         <Route path='/signup' element={<Signup logo={logo} />} exact/>
         <Route path='/definitions' element={<Definitions />} exact/>
-        <Route path='/game' element={<Game soundVolume={soundVolume} setMusic={setMusic} grid={"A B C D"} />} exact/>
+        <Route path='/game' element={<Game soundVolume={soundVolume} setMusic={setMusic} grid={"A B C D"} solvedWords={""} />} exact/>
         <Route path='/test' element={<ChatGame setMusic={setMusic}/>} exact/>
       </Routes>
       <VolumeSlider isSoundOpen={isSoundOpen} toggleSound={toggleSound} changeSoundVolume={changeSoundVolume} changeMusicVolume={changeMusicVolume} />
