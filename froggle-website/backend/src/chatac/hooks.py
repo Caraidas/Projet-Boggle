@@ -92,8 +92,8 @@ class DefaultChatHooks(ChatHooks):
         },
         "Nidal1": {
             "attendee_number": 1, 
-            "duration": 60, 
-            "welcome_message": "Welcome everybody!",
+            "duration": 300, 
+            "welcome_message": "Bienvenue dans la faille !",
         }
     }
 

@@ -14,7 +14,7 @@
     border: 4px solid #000;
     box-shadow: 0px 4px 0px #000;
     position: absolute;
-    z-index: 999;
+    z-index: 99;
     top: 15px;
     left: 50%;
     transform: translate(-50%, 0%);
@@ -88,7 +88,7 @@
     width: 400px;
     transform: translateX(100%);
     background: #fff;
-    transition: all 0.3s cubic-bezier(.85,1.76,.75,.81);
+    transition: all 0.3s cubic-bezier(.85, 1.76, .75, .81);
 }
 
 .toggleChat {
@@ -97,16 +97,16 @@
     right: 0;
     cursor: pointer;
     transform: translateX(0px);
-    transition: all 0.3s cubic-bezier(.85,1.76,.75,.81);
+    transition: all 0.3s cubic-bezier(.85, 1.76, .75, .81);
 }
 
-.salonsCont {
+/* .salonsCont {
     width: 100%;
     height: 100vh;
     display: flex;
     flex-direction: column;
     justify-content: center;
-}
+} */
 
 .salonRejButton {
     width: 150px;
@@ -118,11 +118,22 @@
     font-size: 1.25rem;
     font-weight: 900;
     background: #F1E368;
+    animation: appear 0.25s cubic-bezier(.85, 1.76, .75, .81);
 }
 
 .salonRejButton:active {
     box-shadow: 0px 1px 0px #000;
     transform: translateY(2px);
+}
+
+@keyframes appear {
+    from {
+        transform: scale(0);
+    }
+
+    to {
+        transform: scale(1);
+    }
 }
 
 @media screen and (max-width: 1000px) {
@@ -144,7 +155,7 @@
         width: fit-content;
     }
 
-    .board {   
+    .board {
         grid-template-columns: repeat(4, 60px);
     }
 }

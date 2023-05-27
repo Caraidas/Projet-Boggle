@@ -3,6 +3,7 @@ import Game from "../../pages/game"
 import "../../css/styleGame.css"
 import Header from "../Header"
 import SalonsGrid from "../SalonsGrid"
+import ChatSection from "../ChatSection"
 
 
 export interface WaitingRoom {
@@ -50,11 +51,13 @@ export const RoomWaiter = (props: {roomName: string, startTimestamp: number, onL
         const handle = setInterval(() => setCurrentTimestamp(performance.now()), 1000)
         return () => clearTimeout(handle)
     }, [])
-    return <div className="RoomWaiter">
+    return (
+    <div className="RoomWaiter">
         <div>En attente d'autres joueurs dans le salon{props.roomName} depuis {Math.floor((currentTimestamp - props.startTimestamp) / 1000)} s.</div>
         {/* button to leave waiting room, calls the leaveWaitingRoom() funtion */}
         <div><button onClick={() => props.onLeaving() }>Quitter le salon d'attente</button></div>
     </div>
+    );
 }
 
 /**
@@ -89,10 +92,12 @@ export const ChatMessagesDisplayer = (props: {messages: Message[]}) => {
  */
 export const MessageSender = (props: {onMessageWritten: (content: string) => void}) => {
     const [content, setContent] = React.useState("")
-    return <div className="MessageSender">
+
+    return (
+    <div className="MessageSender">
         <input type="text" value={content} style={{flex: 1}} onChange={event => setContent(event.target.value)} />
         <button onClick={() => {props.onMessageWritten(content); setContent('')}}>Send</button>
-    </div>
+    </div>);
 }
 
 /**
@@ -112,18 +117,20 @@ export const ChatSession = (props: {messages: Message[], active: boolean, onMess
     }
 
     return (
-        <div className="ChatSession">
-            <div className="toggleChat" onClick={() => chatToggleHandler()} style={{transform: isChatToggled? 'translateX(-400px)' : 'translateX(0px)'}}>Chat</div>
-            <Game soundVolume={1} grid={props.grid} setMusic={props.setMusic} solvedWords={props.solvedWords} />
-            <div className="chatCont" style={{transform: isChatToggled? 'translateX(0%)' : 'translateX(100%)'}}>
-                <ChatMessagesDisplayer messages={props.messages} />
-                {props.active && <MessageSender onMessageWritten={props.onMessageWritten} />}
-                <div>
-                    <button onClick={() => props.onLeaving()} disabled={!props.active}>Leave the chat session</button>
-                    <button onClick={() => props.onClosing()} disabled={props.active}>Close</button>
-                </div>
-            </div>
-        </div>
+        // <div className="ChatSession">
+        //     <div className="toggleChat" onClick={() => chatToggleHandler()} style={{transform: isChatToggled? 'translateX(-400px)' : 'translateX(0px)'}}>Chat</div>
+
+        //     <Game soundVolume={1} grid={props.grid} setMusic={props.setMusic} solvedWords={props.solvedWords} />
+        //     <div className="chatCont" style={{transform: isChatToggled? 'translateX(0%)' : 'translateX(100%)'}}>
+        //         <ChatMessagesDisplayer messages={props.messages} />
+        //         {props.active && <MessageSender onMessageWritten={props.onMessageWritten} />}
+        //         <div>
+        //             <button onClick={() => props.onLeaving()} disabled={!props.active}>Leave the chat session</button>
+        //             <button onClick={() => props.onClosing()} disabled={props.active}>Close</button>
+        //         </div>
+        //     </div>
+        // </div>
+        <></>
     );
 }
 
@@ -186,8 +193,6 @@ export const ChatManager = (props: {socketUrl: string, setMusic: (music: any) =>
             case 'chat_session_started':
                 setChatState({startTimestamp: performance.now(), messages: [], active: true})
                 addChatMessage('admin', content.welcome_message)
-                console.log("SLAU");
-                console.log(content.grid);
                 setGrid(content.grid);
                 setSolvedWords(content.solvedWords);
                 break
@@ -299,8 +304,6 @@ export const ChatManager = (props: {socketUrl: string, setMusic: (music: any) =>
 
     return (
         <div>
-            {error !== '' && 
-                <div className="Error">Error: {error} <button onClick={() => setError('')}>OK</button></div>}
             {'disconnected' in chatState && 
                 <>
                 <Header text="Salons" />
@@ -320,9 +323,7 @@ export const ChatManager = (props: {socketUrl: string, setMusic: (music: any) =>
             {'roomSelection' in chatState && 
                 <>
                     <Header text="Salons" />
-                    <div className="salonsCont">
-                        <SalonsGrid rooms={waitingRooms} onChosenRoom={connectToWaitingRoom} />
-                    </div>
+                    <SalonsGrid rooms={waitingRooms} onChosenRoom={connectToWaitingRoom} />
                 </>}
             {'waitingRoomName' in chatState &&
                 <>
@@ -332,7 +333,11 @@ export const ChatManager = (props: {socketUrl: string, setMusic: (music: any) =>
                     </div>
                 </>}
             {'messages' in chatState && 
-                <ChatSession messages={chatState.messages} active={chatState.active} onMessageWritten={sendChatMessage} onLeaving={leaveChatSession} onClosing={closeChatSession} grid={grid} solvedWords={solvedWords} setMusic={props.setMusic} />
+                <>
+                    <ChatSection messages={chatState.messages} active={chatState.active} onMessageWritten={sendChatMessage} onLeaving={leaveChatSession} onClosing={closeChatSession} grid={grid} solvedWords={solvedWords} setMusic={props.setMusic}  />
+                    <Game soundVolume={1} grid={grid} setMusic={props.setMusic} solvedWords={solvedWords} />
+                </>
+                // <ChatSession messages={chatState.messages} active={chatState.active} onMessageWritten={sendChatMessage} onLeaving={leaveChatSession} onClosing={closeChatSession} grid={grid} solvedWords={solvedWords} setMusic={props.setMusic} />
             }
         </div>
     );
