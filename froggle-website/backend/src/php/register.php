@@ -57,7 +57,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     // Checks if the email is already in use, then returns an error state and a reusable message
-    $query = $db->prepare("SELECT COUNT(*) FROM user WHERE email = :email");
+    $query = $db->prepare("SELECT COUNT(*) FROM B_JOUEUR WHERE mail = :email");
     $query->bindParam(':email', $email);
     $query->execute();
     $count = $query->fetchColumn();
@@ -71,7 +71,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       $hashed_password = hash('sha256', $password);
 
       // Insert the new user in database
-      $query = $db->prepare("INSERT INTO user (username, email, password) VALUES (:username, :email, :password)");
+      $query = $db->prepare("INSERT INTO B_JOUEUR (ID_Joueur, pseudo, mail, mdp, XP_Actuel, Photo_De_Profile, Est_Prive) VALUES (NULL, :username, :email, :password, 0, NULL, 0)");
       $query->bindParam(':username', $username);
       $query->bindParam(':email', $email);
       $query->bindParam(':password', $hashed_password);

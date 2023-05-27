@@ -44,7 +44,7 @@ if ($data['email'] && $data['password']) {
   $pdo = new PDO('mysql:host=localhost;dbname=boggle;charset=utf8', 'username', 'password');
 
   // Prépare la requête de sélection de l'utilisateur
-  $statement = $pdo->prepare('SELECT * FROM user WHERE email = :email');
+  $statement = $pdo->prepare('SELECT * FROM B_JOUEUR WHERE mail = :email');
 
   // Lie le paramètre :username à la valeur de l'input username
   $statement->bindValue(':email', $username, PDO::PARAM_STR);
