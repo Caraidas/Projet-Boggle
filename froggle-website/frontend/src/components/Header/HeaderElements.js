@@ -15,11 +15,9 @@ export const HeaderContainer = styled.div`
     align-items: center;
     width: 90%;
     max-width: 1250px;
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
     padding: 0px 0px 0px 0px;
     height: 75px;
+    margin: 0 auto;
 `
 
 export const Logo = styled.img`

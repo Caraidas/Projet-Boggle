@@ -43,7 +43,7 @@ function Signup({ logo }) {
                 <button className='submit'>Se connecter</button>
             </form>
             <div className='tosignup'>
-                Vous avez déjà un compte ? <Link to="/login2">Connectez vous.</Link>
+                Vous avez déjà un compte ? <Link to="/login">Connectez vous.</Link>
             </div>
         </div>
     </>
