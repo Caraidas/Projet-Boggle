@@ -87,7 +87,7 @@ class DefaultChatHooks(ChatHooks):
         },
         "Paul": {
             "attendee_number": 2, 
-            "duration": 60, 
+            "duration": 3600, 
             "welcome_message": "Welcome everybody!",
         },
         "Nidal1": {
@@ -123,18 +123,19 @@ class DefaultChatHooks(ChatHooks):
 
     async def on_chat_session_start(self, waiting_room_name: str, chat_session_id: int, attendee_identities: Dict[int, Dict[str, Any]]) -> Any:
         self._attendees[chat_session_id] = {id: self.AttendeeInfo(x) for (id, x) in attendee_identities.items()}
+        identities = [a.identity['name']  for a in self._attendees[chat_session_id].values()] 
         room = self._rooms[waiting_room_name]
 
         #Creation grille 
         print("Hello world")
-        process = subprocess.Popen(["C:\\Users\\Nidal\\Documents\\BUT2\\Boggle\\Projet-Boggle\\froggle-website\\backend\\src\\chatac\\game-engine\\grid_build", "C:\\Users\\Nidal\\Documents\\BUT2\\Boggle\\Projet-Boggle\\froggle-website\\backend\\src\\chatac\\game-engine\\frequences.txt",'4','4'], stdout=subprocess.PIPE)
+        process = subprocess.Popen(["C:\\Users\\33768\\Documents\\GitHub\\Projet-Boggle\\froggle-website\\backend\\src\\chatac\\game-engine\\grid_build", "C:\\Users\\33768\\Documents\\GitHub\\Projet-Boggle\\froggle-website\\backend\\src\\chatac\\game-engine\\frequences.txt",'4','4'], stdout=subprocess.PIPE)
         output, error = process.communicate()
         grid = output.decode()
         grid = grid.strip()
         print(grid)
         print(type(grid))
 
-        process2 = subprocess.Popen(["C:\\Users\\Nidal\\Documents\\BUT2\\Boggle\\Projet-Boggle\\froggle-website\\backend\\src\\chatac\\game-engine\\solve", "C:\\Users\\Nidal\\Documents\\BUT2\\Boggle\\Projet-Boggle\\froggle-website\\backend\\src\\chatac\\game-engine\\dico.lex", "3", "4", "4"] + grid.split(" "), stdout=subprocess.PIPE)
+        process2 = subprocess.Popen(["C:\\Users\\33768\\Documents\\GitHub\\Projet-Boggle\\froggle-website\\backend\\src\\chatac\\game-engine\\solve", "C:\\Users\\33768\\Documents\\GitHub\\Projet-Boggle\\froggle-website\\backend\\src\\chatac\\game-engine\\dico.lex", "3", "4", "4"] + grid.split(" "), stdout=subprocess.PIPE)
         output2, error2 = process2.communicate()
         solutionsString = output2.decode()
         #solutions = solutionsString.strip().split(" ")
@@ -145,7 +146,8 @@ class DefaultChatHooks(ChatHooks):
             "welcome_message": room.get("welcome_message", self.DEFAULT_WELCOME_MESSAGE), 
             "duration": self._rooms[waiting_room_name].get("duration", self.DEFAULT_DURATION),
             "grid": grid,
-            "solvedWords": solutionsString
+            "solvedWords": solutionsString,
+            "attendees" :  identities
         }
 
     async def on_chat_message(self, chat_session_id: int, sender_id: int, content: Any) -> Dict[int, Any]:
@@ -169,7 +171,7 @@ class DefaultChatHooks(ChatHooks):
         """Send the stats for the session"""
         attendees = self._attendees[chat_session_id]
         stats = [f"{a.identity['name']} sent {a.message_number} messages with {a.char_number} chars" for a in attendees.values()] 
-        joined = "\n".join(stats)
+        joined = "\\n".join(stats)
         return f"Did you know that: {joined}"
 
 

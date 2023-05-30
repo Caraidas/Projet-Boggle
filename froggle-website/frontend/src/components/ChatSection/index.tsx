@@ -5,7 +5,7 @@ import soundIcon from "./../../images/chat.png";
 import Messages from '../Messages';
 import MessageSenderInput from '../MessageSenderInput';
 
-const ChatSection = (props: {messages: Message[], active: boolean, onMessageWritten: (content: string) => void, onLeaving: () => void, onClosing: () => void, grid: string, setMusic: (music: any) => void, solvedWords : any}) => {
+const ChatSection = (props: {messages: Message[], active: boolean, onMessageWritten: (content: string) => void,onLeaving: () => void, onClosing: () => void, grid: string, setMusic: (music: any) => void, solvedWords : any}) => {
     const [isChatToggled, setChatToggle] = React.useState(false);
 
     function chatToggleHandler() {

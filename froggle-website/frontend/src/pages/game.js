@@ -1,11 +1,11 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Cell from '../components/Cell';
 import "../css/styleGame.css";
 import GameCard from '../components/GameCard';
 import picture from "../images/pfp.jpg"
 import gameMusic from "../sound/kirby.mp3";
 
-const Game = ({ soundVolume, grid, setMusic, solvedWords }) => {
+const Game = ({ soundVolume, grid, setMusic, solvedWords, onWordSent, attendees }) => {
 
     setMusic(gameMusic);
     let solvedWordslst = solvedWords.split(" ");
@@ -23,9 +23,21 @@ const Game = ({ soundVolume, grid, setMusic, solvedWords }) => {
             }
         }
     }
+    ////onChange={(e) => changeHandler(e)
 
     let [foundWords, setFoundWords] = React.useState([]);
     let [words, setWords] = React.useState(0);
+    let [wordInput, setWordInput] = React.useState("");
+    let [players, setPlayers] = React.useState([]);
+
+    React.useEffect(() => {
+       let p = []
+       for (var i = 0; i < attendees.length; i++) {
+            p.push([attendees[i],0,0,i+1])
+        }
+      setPlayers(p)
+    }, [])
+    console.log(players)
   return (
     <>
         <div className='timer'>2:53</div>
@@ -36,14 +48,16 @@ const Game = ({ soundVolume, grid, setMusic, solvedWords }) => {
                         <Cell letter={letter} soundVolume={soundVolume} />
                     ))}
                 </div>
-                <input className='gameInput' type='text' onChange={(e) => changeHandler(e)} />
+                <input className='gameInput' type='text' onChange={(e) => setWordInput(e.target.value)} />
+                <button onClick={(e) => onWordSent(wordInput)}>Envoyer</button>
                 {words}
             </div>
             <div className='players'>
-                <GameCard picture={picture} name="Nidal le mec louche sa mère" words="15/32" points={2034} place={1} />
-                <GameCard picture={picture} name="Thonin77" words="15/32" points={34} place={4} />
-                <GameCard picture={picture} name="Eloody" words="15/32" points={0} place={3} />
-                <GameCard picture={picture} name="Bera77" words="15/32" points={390} place={2} />
+            {players.map(player => (
+             
+                <GameCard picture={picture} name={player[0]} words={player[1]+"/"+solvedWords.length} points={player[2]} place={player[3]} />
+           
+           ))}
             </div>
         </div>
     </>
