@@ -6,11 +6,14 @@ export const DefinitionBox =  styled.div`
     overflow-y:scroll;
     overflow-x:hidden;
     background-color:#F1E368;
-    margin-bottom:10px;
+    margin-top:25px;
     padding: 1rem;
     border: 3px solid #000;
     border-radius: 10px;
     box-shadow: 0px 3px 0px #000;
+    @media screen and (max-width: 500px) {
+        width:100%;
+    }
 `
 export const DefinitionTitle = styled.h3`
     font-family: 'Cabin', sans-serif;

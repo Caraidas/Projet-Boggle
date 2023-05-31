@@ -150,6 +150,7 @@ export const ChatManager = (props: {primaryColor : string, socketUrl: string, se
     const [waitingRooms, setWaitingRooms] = React.useState<WaitingRoom[]>([])
     const [grid, setGrid] = React.useState("");
     const [solvedWords, setSolvedWords] = React.useState("");
+    const [players, setPlayers] = React.useState([]);
 
     const onNewSocketMessage = (kind: string, content: Record<string, any>) => {
         console.debug("Received message from websocket", content)
@@ -191,6 +192,8 @@ export const ChatManager = (props: {primaryColor : string, socketUrl: string, se
                 break
 
             case 'chat_session_started':
+                console.log(content.attendees)
+                setPlayers(content.attendees)
                 setChatState({startTimestamp: performance.now(), messages: [], active: true})
                 addChatMessage('admin', content.welcome_message)
                 setGrid(content.grid);
@@ -200,7 +203,10 @@ export const ChatManager = (props: {primaryColor : string, socketUrl: string, se
             case 'chat_message_received':
                 addChatMessage(content.sender, content.content)
                 break
-
+            
+            case 'word_found':
+                console.log(content.score)
+                break
             case 'attendee_left':
                 addChatMessage('admin', `Attendee ${content.attendee} left the chat session.`)
                 break
@@ -242,6 +248,10 @@ export const ChatManager = (props: {primaryColor : string, socketUrl: string, se
     }, [sendToSocket])
     const sendChatMessage = React.useCallback((content: string) => {
         sendToSocket('send_chat_message', {content: content})
+    }, [sendToSocket])
+    const sendWord = React.useCallback((content: string) => {
+        console.log(content)
+        sendToSocket('send_word', {content: content})
     }, [sendToSocket])
     const leaveChatSession = React.useCallback(() => {
         sendToSocket('leave_chat_session', {})
@@ -335,7 +345,7 @@ export const ChatManager = (props: {primaryColor : string, socketUrl: string, se
             {'messages' in chatState && 
                 <>
                     <ChatSection primaryColor={props.primaryColor} messages={chatState.messages} active={chatState.active} onMessageWritten={sendChatMessage} onLeaving={leaveChatSession} onClosing={closeChatSession} grid={grid} solvedWords={solvedWords} setMusic={props.setMusic}  />
-                    <Game soundVolume={1} grid={grid} setMusic={props.setMusic} solvedWords={solvedWords} primaryColor={props.primaryColor} />
+                    <Game soundVolume={1} grid={grid} setMusic={props.setMusic} solvedWords={solvedWords} primaryColor={props.primaryColor} onWordSent={sendWord} attendees={players} />
                 </>
                 // <ChatSession messages={chatState.messages} active={chatState.active} onMessageWritten={sendChatMessage} onLeaving={leaveChatSession} onClosing={closeChatSession} grid={grid} solvedWords={solvedWords} setMusic={props.setMusic} />
             }

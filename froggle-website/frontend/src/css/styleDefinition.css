@@ -1,9 +1,23 @@
+*,
+*::before,
+*::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
 
-.container{
+.container-def{
+    position:absolute;
     display: flex;
+    flex-direction: row;
     width: 90%;
     height:auto;
-    margin: auto
+    margin: 75px auto auto 0;
+    left: 0; 
+    right: 0; 
+    margin-left: auto; 
+    margin-right: auto; 
+
 }
 
 .definitionsContainer{
@@ -31,6 +45,7 @@
 .search{
     display: flex;
     flex-wrap: nowrap;
+    margin-top: 10px;
 }
 
 .definitionInput{
@@ -60,6 +75,13 @@
     border-radius: 20px;
     font-size: 24px;
     font-weight: bold;
+}
+
+.defMessage{
+    margin:auto ;
+    font-size: 2rem;
+    font-weight: bold;
+    color: #000;
 }
 
 .frog{
@@ -93,4 +115,42 @@
     border-bottom: 20px solid transparent;
     left: 32px;
     bottom: -24px;
+}
+
+@media screen and (max-width: 900px) {
+
+    .sideContainer{
+        display: none;
+    }
+
+    .definitionsContainer{
+        width: 100%;
+        height:auto;
+        max-height: 80vh;
+    }
+
+    .defMessage{
+        margin:auto ;
+        font-size: 3vmin;
+        font-weight: bold;
+        color: #000;
+    }
+}
+
+@media screen and (max-width: 500px) {
+
+    .search{
+        flex-direction: column
+    }
+
+    .definitionInput{
+        width: 100%;
+    }
+
+    .definitionSubmit{
+        width: 100%;
+        height: 50px;
+        border-radius: 10px;
+        margin-bottom: 10px;
+    }
 }

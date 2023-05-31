@@ -51,6 +51,7 @@ it is up to you to adapt it for you real needs with custom hooks! Good luck!
 """
 
 import asyncio, logging, os, sys, json, time
+import subprocess
 from aiohttp import web, WSMsgType, WSCloseCode, ClientConnectionError
 from typing import Dict, Any, List
 from .hooks import ChatHooks
@@ -130,6 +131,7 @@ class ChatSession(object):
         self.welcome_message = None
         self.grid = None
         self.solvedWords = None
+        self.attendees = None
         self.manager_task: Optional[Task] = None  # to be set by the manager
 
         self._chat_message_queue = asyncio.Queue()  # queue for chat messages to be sent
@@ -190,7 +192,6 @@ class ChatServer(object):
         self.port: int = port
         self.hooks = hooks
         self.hooks_params = hooks_params
-
         self._connected_clients = {}
         self._waiting_rooms = {}
         self._chat_sessions = {}
@@ -200,6 +201,7 @@ class ChatServer(object):
         This coroutine is executed to manage the waiting room
         """
         logger.info(f"Starting the waiting room manager for room {waiting_room}")
+        
         try:
             while True:
                 attendee_ids = await waiting_room.wait_for_attendees()
@@ -209,6 +211,7 @@ class ChatServer(object):
                 chat_session.deadline = time.monotonic() + chat_session_params['duration']
                 chat_session.welcome_message = chat_session_params.get('welcome_message', '')
                 chat_session.grid = chat_session_params.get('grid', '')
+                chat_session.attendees = chat_session_params.get('attendees', '')
                 chat_session.solvedWords = chat_session_params.get('solvedWords', '')
                 self._chat_sessions[chat_session.id] = chat_session
                 manager_task = asyncio.create_task(self._chat_session_manager(chat_session))
@@ -226,12 +229,13 @@ class ChatServer(object):
         A manager to deal with a chat session
         """
         logger.info(f"Starting the chat session manager for chat session {chat_session}")
+
         for client in chat_session.clients.values():
             client.state = 'chatting'
             client.waiting_room = None
             client.chat_session = chat_session
         try:
-            await chat_session.send_message(None, 'chat_session_started', welcome_message=chat_session.welcome_message, grid=chat_session.grid, solvedWords=chat_session.solvedWords)
+            await chat_session.send_message(None, 'chat_session_started', welcome_message=chat_session.welcome_message, grid=chat_session.grid, solvedWords=chat_session.solvedWords, attendees = chat_session.attendees)
             
             remaining_time = chat_session.deadline - time.monotonic()
             while remaining_time > 0 and (chat_session.clients or chat_session.not_empty_message_queue()):
@@ -342,6 +346,14 @@ class ChatServer(object):
                                     await client.send_message('message_not_provided')
                             else:
                                 await client.send_message('not_chatting')
+                        elif msg_kind == 'send_word':
+                            content = decoded_msg.get('content')
+                            if content:
+                                process = subprocess.Popen(["C:\\Users\\33768\\Documents\\GitHub\\Projet-Boggle\\froggle-website\\backend\\src\\chatac\\game-engine\\score", ""+content.upper()], stdout=subprocess.PIPE)
+                                output, error = process.communicate()
+                                score = output.decode()
+                                await client.send_message('word_found', score=score,sender=client.identity.get('name'))
+                                logger.info(f"Mot: {score}")
                         
                         elif msg_kind == 'leave_chat_session':
                             if client.chat_session:

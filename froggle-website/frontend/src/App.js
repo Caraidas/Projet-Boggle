@@ -12,6 +12,7 @@ import menuMusic from "./sound/daisy.mp3";
 import ChatGame from './pages/chatGame';
 import Signup from "./pages/signup"
 import ProfilePage from './pages/profile';
+import Social from './pages/social';
 
 function App() {
 
@@ -82,6 +83,7 @@ function App() {
         <Route path='/game' element={<Game soundVolume={soundVolume} setMusic={setMusic} grid={"A B C D"} solvedWords={""} primaryColor={primaryColor} />} exact/>
         <Route path='/test' element={<ChatGame setMusic={setMusic} primaryColor={primaryColor} />} exact/>
         <Route path='/profile' element={<ProfilePage primaryColor={primaryColor} setColor={selectColor} />} exact/>
+        <Route path='/social' element={<Social/>} exact/>
       </Routes>
       <VolumeSlider isSoundOpen={isSoundOpen} toggleSound={toggleSound} changeSoundVolume={changeSoundVolume} changeMusicVolume={changeMusicVolume} />
     </Router>
