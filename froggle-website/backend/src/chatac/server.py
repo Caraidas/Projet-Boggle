@@ -352,7 +352,8 @@ class ChatServer(object):
                                 process = subprocess.Popen(["C:\\Users\\33768\\Documents\\GitHub\\Projet-Boggle\\froggle-website\\backend\\src\\chatac\\game-engine\\score", ""+content.upper()], stdout=subprocess.PIPE)
                                 output, error = process.communicate()
                                 score = output.decode()
-                                await client.send_message('word_found', score=score,sender=client.identity.get('name'))
+                                score = score.strip()
+                                await client.send_message('word_found', score=score,sender=client.identity.get('name'), word=content.upper())
                                 logger.info(f"Mot: {score}")
                         
                         elif msg_kind == 'leave_chat_session':

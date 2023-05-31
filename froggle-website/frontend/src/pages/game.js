@@ -5,7 +5,7 @@ import GameCard from '../components/GameCard';
 import picture from "../images/pfp.jpg"
 import gameMusic from "../sound/kirby.mp3";
 
-const Game = ({ soundVolume, grid, setMusic, solvedWords, onWordSent, attendees, primaryColor }) => {
+const Game = ({ soundVolume, grid, setMusic, solvedWords, onWordSent, attendees , primaryColor, stats}) => {
 
     setMusic(gameMusic);
     let solvedWordslst = solvedWords.split(" ");
@@ -37,7 +37,6 @@ const Game = ({ soundVolume, grid, setMusic, solvedWords, onWordSent, attendees,
         }
       setPlayers(p)
     }, [])
-    console.log(players)
   return (
     <>
         <div className='timer' style={{background: primaryColor}}>2:53</div>

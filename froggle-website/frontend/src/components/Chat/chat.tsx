@@ -151,6 +151,7 @@ export const ChatManager = (props: {primaryColor : string, socketUrl: string, se
     const [grid, setGrid] = React.useState("");
     const [solvedWords, setSolvedWords] = React.useState("");
     const [players, setPlayers] = React.useState([]);
+    const [stats, setStats] = React.useState<any>({});
 
     const onNewSocketMessage = (kind: string, content: Record<string, any>) => {
         console.debug("Received message from websocket", content)
@@ -192,12 +193,21 @@ export const ChatManager = (props: {primaryColor : string, socketUrl: string, se
                 break
 
             case 'chat_session_started':
+                console.log("Attendees:")
                 console.log(content.attendees)
                 setPlayers(content.attendees)
                 setChatState({startTimestamp: performance.now(), messages: [], active: true})
                 addChatMessage('admin', content.welcome_message)
                 setGrid(content.grid);
                 setSolvedWords(content.solvedWords);
+
+                let obj : any = {}
+                for(const player of content.attendees) {
+                    obj[player] =[0, []] 
+                }
+
+                setStats({...stats,  obj
+               });
                 break
 
             case 'chat_message_received':
@@ -206,6 +216,16 @@ export const ChatManager = (props: {primaryColor : string, socketUrl: string, se
             
             case 'word_found':
                 console.log(content.score)
+                console.log(stats)
+                let player = stats[content.sender]
+                console.log("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA : " + player)
+                let score = player[0] + content.score
+                let words = player[1].push(content.word)
+
+                setStats(prevData => ({
+                    ...prevData,
+                    [content.sender]: [score, words]
+                  }));
                 break
             case 'attendee_left':
                 addChatMessage('admin', `Attendee ${content.attendee} left the chat session.`)
@@ -228,7 +248,10 @@ export const ChatManager = (props: {primaryColor : string, socketUrl: string, se
             default:
                 setError(`Received non understable message: kind=${kind} content=${JSON.stringify(content)}`)
         }
+
+        
     }
+
 
     /**
      * 
@@ -345,7 +368,7 @@ export const ChatManager = (props: {primaryColor : string, socketUrl: string, se
             {'messages' in chatState && 
                 <>
                     <ChatSection primaryColor={props.primaryColor} messages={chatState.messages} active={chatState.active} onMessageWritten={sendChatMessage} onLeaving={leaveChatSession} onClosing={closeChatSession} grid={grid} solvedWords={solvedWords} setMusic={props.setMusic}  />
-                    <Game soundVolume={1} grid={grid} setMusic={props.setMusic} solvedWords={solvedWords} primaryColor={props.primaryColor} onWordSent={sendWord} attendees={players} />
+                    <Game primaryColor={props.primaryColor} soundVolume={1} grid={grid} setMusic={props.setMusic} solvedWords={solvedWords} onWordSent={sendWord} attendees={players} stats={stats}/>
                 </>
                 // <ChatSession messages={chatState.messages} active={chatState.active} onMessageWritten={sendChatMessage} onLeaving={leaveChatSession} onClosing={closeChatSession} grid={grid} solvedWords={solvedWords} setMusic={props.setMusic} />
             }
