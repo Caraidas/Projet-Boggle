@@ -36,12 +36,12 @@ $data = json_decode(file_get_contents('php://input'), true);
 
 // Vérifie si le formulaire de connexion a été soumis
 if ($data['email'] && $data['password']) {
-  // Vérifie les identifiants d'utilisateur dans la base de données
-  $username = $data['email'];
+  // Vérifie les ideemail'];
   $password = $data['password'];
+  $username = $data['email'];
 
   // Établir la connexion à la base de données via PDO
-  $pdo = new PDO('mysql:host=localhost;dbname=boggle;charset=utf8', 'username', 'password');
+  $pdo = new PDO('mysql:host=localhost;dbname=boggle;charset=utf8', 'user', 'password');
 
   // Prépare la requête de sélection de l'utilisateur
   $statement = $pdo->prepare('SELECT * FROM B_JOUEUR WHERE mail = :email');
@@ -55,12 +55,16 @@ if ($data['email'] && $data['password']) {
   // Récupère la première ligne du résultat de la requête
   $user = $statement->fetch(PDO::FETCH_ASSOC);
 
-  // Vérifie si l'utilisateur a été trouvé et si le mot de passe est correct
-  if ($user && (hash('sha256', $password) === $user['password'])) {
-    // Authentification réussie, stocke les informations d'utilisateur dans la session
-    $_SESSION['user_id'] = $user['id'];
-    $_SESSION['email'] = $user['email'];
 
+  // Vérifie si l'utilisateur a été trouvé et si le mot de passe est correct
+  if ($user && (hash('sha256', $password) === $user['mdp'])) {
+    // Authentification réussie, stocke les informations d'utilisateur dans la session
+    $_SESSION['user_id'] = $user['ID_Joueur'];
+    $_SESSION['email'] = $user['mail'];
+    $_SESSION['pseudo'] = $user['pseudo'];
+    $_SESSION['XP_Actuel'] = $user['XP_Actuel'];
+    $_SESSION['Photo_De_Profile'] = $user['Photo_De_Profile'];
+    $_SESSION['Est_Prive'] = $user['Est_Prive'];
     // Retourne une réponse JSON avec un code de statut 200 et un message d'authentification réussie
 
     echo json_encode(array('status' => 'success', 'message' => 'Authentification réussie'));

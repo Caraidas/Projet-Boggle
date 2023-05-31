@@ -28,7 +28,7 @@ cors();
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
   $data = json_decode(file_get_contents('php://input'), true);
-  // Get the react form data 
+  // Get the react form data
   $username = $data['username'];
   $email = $data['email'];
   $password = $data['password'];
@@ -47,11 +47,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $host = 'localhost';
     $dbname = 'boggle';
-    $username = 'username';
+    $usernamebdd = 'user';
     $pass = 'password';
 
     try {
-      $db = new PDO("mysql:host=$host;dbname=$dbname", $username, $pass);
+      $db = new PDO("mysql:host=$host;dbname=$dbname", $usernamebdd, $pass);
     } catch (PDOException $e) {
       die("Erreur de connexion à la base de données: " . $e->getMessage());
     }
