@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { CellContainer, Letter } from './CellElements'
 import click from "../../sound/toggleLetter.wav";
 
-const Cell = ({ letter, soundVolume }) => {
+const Cell = ({ letter, soundVolume, primaryColor }) => {
 
     let [isToggled, setToggle] = useState(false);
 
@@ -18,7 +18,7 @@ const Cell = ({ letter, soundVolume }) => {
     }
 
   return (
-    <CellContainer onClick={toggle} isToggled={isToggled}>
+    <CellContainer onClick={toggle} primaryColor={primaryColor} isToggled={isToggled}>
         <Letter>
             {letter}
         </Letter>

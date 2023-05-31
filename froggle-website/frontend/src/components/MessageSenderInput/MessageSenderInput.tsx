@@ -24,7 +24,7 @@ export const MessageSenderButton = styled.button`
     display: flex;
     justify-content: center;
     align-items: center;
-    background: #F1E368;
+    background: ${props => props.primaryColor};
     border: 3px solid #000;
     box-shadow: 0px 1px 0px #000;
     border-radius: 7px;

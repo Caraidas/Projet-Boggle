@@ -2,7 +2,7 @@ import React from 'react'
 import { MessageInputText, MessageSenderButton, MessageSenderCont, MessageSenderImg } from './MessageSenderInput';
 import envoyer from "../../images/envoyer.png";
 
-const MessageSenderInput = (props: {onMessageWritten: (content: string) => void}) => {
+const MessageSenderInput = (props: {primaryColor : string, onMessageWritten: (content: string) => void}) => {
     const [content, setContent] = React.useState("")
 
     return (
@@ -10,7 +10,7 @@ const MessageSenderInput = (props: {onMessageWritten: (content: string) => void}
         <>
             <MessageSenderCont>
                 <MessageInputText type="text" value={content} onChange={event => setContent(event.target.value)} />
-                <MessageSenderButton onClick={() => {props.onMessageWritten(content); setContent('')}}>
+                <MessageSenderButton primaryColor={props.primaryColor} onClick={() => {props.onMessageWritten(content); setContent('')}}>
                     <MessageSenderImg src={envoyer} />
                 </MessageSenderButton>
             </MessageSenderCont>

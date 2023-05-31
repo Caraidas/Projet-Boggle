@@ -7,7 +7,6 @@
 }
 
 .timer {
-    background: #F1E368;
     width: 150px;
     height: 65px;
     border-radius: 500px;
@@ -117,7 +116,6 @@
     cursor: pointer;
     font-size: 1.25rem;
     font-weight: 900;
-    background: #F1E368;
     animation: appear 0.25s cubic-bezier(.85, 1.76, .75, .81);
 }
 

@@ -5,7 +5,7 @@ import soundIcon from "./../../images/chat.png";
 import Messages from '../Messages';
 import MessageSenderInput from '../MessageSenderInput';
 
-const ChatSection = (props: {messages: Message[], active: boolean, onMessageWritten: (content: string) => void, onLeaving: () => void, onClosing: () => void, grid: string, setMusic: (music: any) => void, solvedWords : any}) => {
+const ChatSection = (props: {messages: Message[], active: boolean, onMessageWritten: (content: string) => void, onLeaving: () => void, onClosing: () => void, grid: string, setMusic: (music: any) => void, solvedWords : any, primaryColor: string}) => {
     const [isChatToggled, setChatToggle] = React.useState(false);
 
     function chatToggleHandler() {
@@ -24,8 +24,8 @@ const ChatSection = (props: {messages: Message[], active: boolean, onMessageWrit
         <>
             <ChatToggler toggled={isChatToggled} src={soundIcon} onClick={() => chatToggleHandler()} />
             <ChatContainer toggled={isChatToggled}>
-                <Messages messages={props.messages} />
-                {props.active && <MessageSenderInput onMessageWritten={props.onMessageWritten} />}
+                <Messages primaryColor={props.primaryColor} messages={props.messages} />
+                {props.active && <MessageSenderInput primaryColor={props.primaryColor} onMessageWritten={props.onMessageWritten} />}
                 <QuitButton onClick={() => handleLeaving()}>Quitter</QuitButton>
             </ChatContainer>
         </>

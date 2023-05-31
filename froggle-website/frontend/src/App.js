@@ -11,6 +11,7 @@ import Game from './pages/game';
 import menuMusic from "./sound/daisy.mp3";
 import ChatGame from './pages/chatGame';
 import Signup from "./pages/signup"
+import ProfilePage from './pages/profile';
 
 function App() {
 
@@ -57,6 +58,16 @@ function App() {
     changeMusicVolume(localStorage.getItem('musicVolume') ? localStorage.getItem('musicVolume') : 100)
     music.play();
   });
+
+  // COuleur 
+  let pc = localStorage.getItem('primaryColor') ? localStorage.getItem('primaryColor') : '#F1E368';
+  const [primaryColor, setPrimaryColor] = React.useState(pc);
+
+  function selectColor(color) {
+    setPrimaryColor(color);
+    console.log(color);
+    localStorage.setItem("primaryColor", color);
+  }
   
   return (
     <Router>
@@ -64,12 +75,13 @@ function App() {
       <Background />
       <Routes>
         <Route path='/' element={<Home setMusic={setMusic} music={menuMusic} soundVolume={soundVolume} logo={logo} />} exact/>
-        <Route path='/carriere' element={<Carriere />} exact/>
+        <Route path='/carriere' element={<Carriere primaryColor={primaryColor} />} exact/>
         <Route path='/login' element={<Login logo={logo} errorMessage="🐸 L'identifiant ou le mot de passe est incorrect 🐸" />} exact/>
         <Route path='/signup' element={<Signup logo={logo} />} exact/>
         <Route path='/definitions' element={<Definitions />} exact/>
-        <Route path='/game' element={<Game soundVolume={soundVolume} setMusic={setMusic} grid={"A B C D"} solvedWords={""} />} exact/>
-        <Route path='/test' element={<ChatGame setMusic={setMusic}/>} exact/>
+        <Route path='/game' element={<Game soundVolume={soundVolume} setMusic={setMusic} grid={"A B C D"} solvedWords={""} primaryColor={primaryColor} />} exact/>
+        <Route path='/test' element={<ChatGame setMusic={setMusic} primaryColor={primaryColor} />} exact/>
+        <Route path='/profile' element={<ProfilePage primaryColor={primaryColor} setColor={selectColor} />} exact/>
       </Routes>
       <VolumeSlider isSoundOpen={isSoundOpen} toggleSound={toggleSound} changeSoundVolume={changeSoundVolume} changeMusicVolume={changeMusicVolume} />
     </Router>

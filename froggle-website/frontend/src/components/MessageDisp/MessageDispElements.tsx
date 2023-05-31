@@ -11,7 +11,6 @@ const appearAnim = keyframes`
 
 export const MessageCont = styled.div`
   width: 100%;
-  background: #f1e368;
   border: 2.5px solid #000;
   box-shadow: 0px 3px 0px #000;
   border-radius: 10px;

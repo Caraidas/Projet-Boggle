@@ -142,7 +142,7 @@ interface ChattingState { startTimestamp: number, messages: Message[], active: b
 type ChatState = DisconnectedState | ConnectingState | RoomSelectionState | WaitingState | ChattingState //can be either of these
 
 
-export const ChatManager = (props: {socketUrl: string, setMusic: (music: any) => void}) => {
+export const ChatManager = (props: {primaryColor : string, socketUrl: string, setMusic: (music: any) => void}) => {
     const [chatState, setChatState] = React.useState<ChatState>({disconnected: true})
     const [connected, setConnected] = React.useState(false)
     const [socket, setSocket] = React.useState<WebSocket|null>(null)
@@ -323,7 +323,7 @@ export const ChatManager = (props: {socketUrl: string, setMusic: (music: any) =>
             {'roomSelection' in chatState && 
                 <>
                     <Header text="Salons" />
-                    <SalonsGrid rooms={waitingRooms} onChosenRoom={connectToWaitingRoom} />
+                    <SalonsGrid primaryColor={props.primaryColor} rooms={waitingRooms} onChosenRoom={connectToWaitingRoom} />
                 </>}
             {'waitingRoomName' in chatState &&
                 <>
@@ -334,8 +334,8 @@ export const ChatManager = (props: {socketUrl: string, setMusic: (music: any) =>
                 </>}
             {'messages' in chatState && 
                 <>
-                    <ChatSection messages={chatState.messages} active={chatState.active} onMessageWritten={sendChatMessage} onLeaving={leaveChatSession} onClosing={closeChatSession} grid={grid} solvedWords={solvedWords} setMusic={props.setMusic}  />
-                    <Game soundVolume={1} grid={grid} setMusic={props.setMusic} solvedWords={solvedWords} />
+                    <ChatSection primaryColor={props.primaryColor} messages={chatState.messages} active={chatState.active} onMessageWritten={sendChatMessage} onLeaving={leaveChatSession} onClosing={closeChatSession} grid={grid} solvedWords={solvedWords} setMusic={props.setMusic}  />
+                    <Game soundVolume={1} grid={grid} setMusic={props.setMusic} solvedWords={solvedWords} primaryColor={props.primaryColor} />
                 </>
                 // <ChatSession messages={chatState.messages} active={chatState.active} onMessageWritten={sendChatMessage} onLeaving={leaveChatSession} onClosing={closeChatSession} grid={grid} solvedWords={solvedWords} setMusic={props.setMusic} />
             }

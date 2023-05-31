@@ -6,10 +6,10 @@ function substituteHost(s: string): string {
   return s.replace('myhost', document.location.host).replace('myprotocol', document.location.protocol === 'http:' ? 'ws:' : 'wss:');
 }
 
-function ChatGame(props: { setMusic: (music: any) => void }) {
+function ChatGame(props: { primaryColor : string, setMusic: (music: any) => void }) {
   return (
     <div>
-      <ChatManager setMusic={props.setMusic} socketUrl={substituteHost(process.env.REACT_APP_BACKEND_URL || 'ws://localhost:8090/chat')} />
+      <ChatManager primaryColor={props.primaryColor} setMusic={props.setMusic} socketUrl={substituteHost(process.env.REACT_APP_BACKEND_URL || 'ws://localhost:8090/chat')} />
     </div>
   );
 }

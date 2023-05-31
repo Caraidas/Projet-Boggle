@@ -6,7 +6,7 @@ import CarriereCard from '../components/CarriereCard';
 
 import pic1 from '../images/pfp.jpg';
 
-const Carriere = () => {
+const Carriere = ({ primaryColor }) => {
 
   let pics = [pic1, pic1, pic1];
 
@@ -22,7 +22,7 @@ const Carriere = () => {
 
           <div className='heroLevel'>
             <div className='level'>Niv : 53</div>
-            <ProgressBar width="100" height="35" total={4000} current={1500} color="#f1e368" />
+            <ProgressBar width="100" height="35" total={4000} current={1500} color={primaryColor} />
             <div className='exp'>1500/4000</div>
           </div>
         </div>
@@ -30,7 +30,7 @@ const Carriere = () => {
 
       <div className='gamesBgCont'>
 
-        <div className='gamesCont'>
+        <div className='gamesCont' style={{background: primaryColor}}>
           <h2 className='bigTitle'>Statistiques des parties</h2>
           
           <div className='statCont1'> 

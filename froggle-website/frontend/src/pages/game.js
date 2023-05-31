@@ -5,7 +5,7 @@ import GameCard from '../components/GameCard';
 import picture from "../images/pfp.jpg"
 import gameMusic from "../sound/kirby.mp3";
 
-const Game = ({ soundVolume, grid, setMusic, solvedWords }) => {
+const Game = ({ soundVolume, grid, setMusic, solvedWords, primaryColor }) => {
 
     setMusic(gameMusic);
     let solvedWordslst = solvedWords.split(" ");
@@ -28,12 +28,12 @@ const Game = ({ soundVolume, grid, setMusic, solvedWords }) => {
     let [words, setWords] = React.useState(0);
   return (
     <>
-        <div className='timer'>2:53</div>
+        <div className='timer' style={{background: primaryColor}}>2:53</div>
         <div className='gameCont'>
             <div className='boardCont'>
                 <div className='board'>
                     {grid.split(" ").map((letter) => (
-                        <Cell letter={letter} soundVolume={soundVolume} />
+                        <Cell letter={letter} soundVolume={soundVolume} primaryColor={primaryColor} />
                     ))}
                 </div>
                 <input className='gameInput' type='text' onChange={(e) => changeHandler(e)} />

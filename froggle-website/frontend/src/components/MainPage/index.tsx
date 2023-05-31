@@ -16,7 +16,7 @@ const MainPage = (props : MainPageProps) => {
             <Logo src={props.logo}/>
             <Profile>
                 <ProfilePicture src={props.img}/>
-                <UserName text={props.text} onMouseEnter={playSound}>{props.text}</UserName>
+                <UserName to="/profile" text={props.text} onMouseEnter={playSound}>{props.text}</UserName>
             </Profile>
         </MainNav>
         <MainLinks>

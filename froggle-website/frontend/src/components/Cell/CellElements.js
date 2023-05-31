@@ -3,7 +3,7 @@ import styled, { keyframes } from "styled-components"
 export const CellContainer = styled.div`
     width: 95px;
     aspect-ratio: 1;
-    background: ${({ isToggled }) => (isToggled ? '#F1E368' : "#fff")};
+    background: ${props => props.isToggled ? props.primaryColor : "#fff"};
     border: 4px solid #000;
     border-radius: 7px;
     display: flex;

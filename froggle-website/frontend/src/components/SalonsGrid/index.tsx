@@ -3,7 +3,7 @@ import Salon from '../Salon'
 import { SalonsGridContainer, SalonsGridWrapper } from './SalonsGridElements'
 import "../../css/styleGame.css"
 
-const SalonsGrid = (props: {rooms: any, onChosenRoom: (username: string, waitingRoom: string) => any}) => {
+const SalonsGrid = (props: {primaryColor : string, rooms: any, onChosenRoom: (username: string, waitingRoom: string) => any}) => {
     const [username, setUsername] = React.useState("Nidal") // TODO : à remplacer par le username dans la bdd
     const [selectedRoom, setSelectedRoom] = React.useState("")
 
@@ -18,10 +18,10 @@ const SalonsGrid = (props: {rooms: any, onChosenRoom: (username: string, waiting
         <SalonsGridWrapper>
             <SalonsGridContainer>
                 {props.rooms.map((room) => 
-                    <Salon key={room.name} name={room.name} desc={room.description} attendeeNumber={room.attendeeNumber} onselection={e => handle(e)} bgColor={"#F1E368"} selectedRoom={selectedRoom} />
+                    <Salon key={room.name} name={room.name} desc={room.description} attendeeNumber={room.attendeeNumber} onselection={e => handle(e)} bgColor={props.primaryColor} selectedRoom={selectedRoom} />
                     )}
             </SalonsGridContainer>
-            <button className='salonRejButton' onClick={() => props.onChosenRoom(username, selectedRoom)} disabled={username === "" || selectedRoom === "" || props.rooms.findIndex(x => x.name === selectedRoom) === -1}>Rejoindre</button>
+            <button style={{background : props.primaryColor}} className='salonRejButton' onClick={() => props.onChosenRoom(username, selectedRoom)} disabled={username === "" || selectedRoom === "" || props.rooms.findIndex(x => x.name === selectedRoom) === -1}>Rejoindre</button>
         </SalonsGridWrapper>
     </>
   )
