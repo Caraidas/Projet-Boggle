@@ -61,9 +61,9 @@ if ($data['email'] && $data['password']) {
     // Authentification réussie, stocke les informations d'utilisateur dans la session
     $_SESSION['user_id'] = $user['ID_Joueur'];
     $_SESSION['email'] = $user['mail'];
-    // Retourne une réponse JSON avec un code de statut 200 et un message d'authentification réussie
-
-    echo json_encode(array('status' => 'success', 'message' => 'Authentification réussie', 'pseudo' => $user['pseudo'], 'XP_Actuel' => $user['XP_Actuel'], 'Photo_De_Profile' => $user['Photo_De_Profile'], 'Est_Prive' => $user['Est_Prive']));
+    // Ret$sessionData = $_SESSION['user_id'];ourne une réponse JSON avec un code de statut 200 et un message d'authentification réussie
+    $sessionData = array('pseudo' => $user['pseudo'], 'XP_Actuel' => $user['XP_Actuel'], 'Photo_De_Profile' => $user['Photo_De_Profile'], 'Est_Prive' => $user['Est_Prive']);
+    echo json_encode(array('status' => 'success', 'message' => 'Authentification réussie','sessionData' => $sessionData));
     http_response_code(200);
     exit();
   } else {

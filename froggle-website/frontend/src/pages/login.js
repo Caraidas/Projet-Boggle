@@ -15,8 +15,11 @@ const Login = ({ logo, errorMessage }) => {
         axios.post("http://localhost/boggle/php/login.php", {email, password})
         .then((response) => {
             console.log(response.data.status);
+            console.log(response.data.sessionData);
             if (response.data.status === "success") {
-              navigate('/');
+                const userData = {pseudo: response.data.sessionData.pseudo, XP_Actuel: response.data.sessionData.XP_Actuel, Photo_De_Profile: response.data.sessionData.Photo_De_Profile, Est_Prive:response.data.sessionData.Est_Prive};
+                localStorage.setItem('userData', JSON.stringify(userData));
+                navigate('/');
             } else if(response.data.status === "error") {
                 console.log("Authentification échouée");
                 setShowError(true); //Modifier la valeur de showError si une erreur survient
