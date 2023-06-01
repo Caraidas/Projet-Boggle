@@ -77,7 +77,7 @@ class DefaultChatHooks(ChatHooks):
     DEFAULT_ROOMS = {
         "Nidal": {
             "attendee_number": 1, 
-            "duration": 60, 
+            "duration": 10, 
             "welcome_message": "Welcome everybody!",
         },
         "Laura": {

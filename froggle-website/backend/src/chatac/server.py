@@ -128,6 +128,7 @@ class ChatSession(object):
         ChatSession._COUNTER += 1
         self.clients = clients
         self.deadline = None
+        self.duration = None
         self.welcome_message = None
         self.grid = None
         self.solvedWords = None
@@ -209,6 +210,7 @@ class ChatServer(object):
                 chat_session = ChatSession(attendees)
                 chat_session_params = await self.hooks.on_chat_session_start(waiting_room.name, chat_session.id, {id: x.identity for (id, x) in attendees.items()})
                 chat_session.deadline = time.monotonic() + chat_session_params['duration']
+                chat_session.duration = chat_session_params.get('duration', '')
                 chat_session.welcome_message = chat_session_params.get('welcome_message', '')
                 chat_session.grid = chat_session_params.get('grid', '')
                 chat_session.attendees = chat_session_params.get('attendees', '')
@@ -235,7 +237,7 @@ class ChatServer(object):
             client.waiting_room = None
             client.chat_session = chat_session
         try:
-            await chat_session.send_message(None, 'chat_session_started', welcome_message=chat_session.welcome_message, grid=chat_session.grid, solvedWords=chat_session.solvedWords, attendees = chat_session.attendees)
+            await chat_session.send_message(None, 'chat_session_started', welcome_message=chat_session.welcome_message, grid=chat_session.grid, solvedWords=chat_session.solvedWords, attendees = chat_session.attendees, duration = chat_session.duration)
             
             remaining_time = chat_session.deadline - time.monotonic()
             while remaining_time > 0 and (chat_session.clients or chat_session.not_empty_message_queue()):

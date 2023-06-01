@@ -152,6 +152,7 @@ export const ChatManager = (props: {primaryColor : string, socketUrl: string, se
     const [solvedWords, setSolvedWords] = React.useState("");
     const [players, setPlayers] = React.useState([]);
     const [stats, setStats] = React.useState<any>({});
+    const [duration, setDuration] = React.useState(0)
 
     const onNewSocketMessage = (kind: string, content: Record<string, any>) => {
         console.debug("Received message from websocket", content)
@@ -200,6 +201,7 @@ export const ChatManager = (props: {primaryColor : string, socketUrl: string, se
                 addChatMessage('admin', content.welcome_message)
                 setGrid(content.grid);
                 setSolvedWords(content.solvedWords);
+                setDuration(content.duration);
 
                 let obj : any = {}
                 for(const player of content.attendees) {
@@ -368,7 +370,7 @@ export const ChatManager = (props: {primaryColor : string, socketUrl: string, se
             {'messages' in chatState && 
                 <>
                     <ChatSection primaryColor={props.primaryColor} messages={chatState.messages} active={chatState.active} onMessageWritten={sendChatMessage} onLeaving={leaveChatSession} onClosing={closeChatSession} grid={grid} solvedWords={solvedWords} setMusic={props.setMusic}  />
-                    <Game primaryColor={props.primaryColor} soundVolume={1} grid={grid} setMusic={props.setMusic} solvedWords={solvedWords} onWordSent={sendWord} attendees={players} stats={stats}/>
+                    <Game primaryColor={props.primaryColor} soundVolume={1} grid={grid} setMusic={props.setMusic} solvedWords={solvedWords} onWordSent={sendWord} attendees={players} stats={stats} duration={duration} onLeaving={leaveChatSession} onClosing={closeChatSession}/>
                 </>
                 // <ChatSession messages={chatState.messages} active={chatState.active} onMessageWritten={sendChatMessage} onLeaving={leaveChatSession} onClosing={closeChatSession} grid={grid} solvedWords={solvedWords} setMusic={props.setMusic} />
             }
