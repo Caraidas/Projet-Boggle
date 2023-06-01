@@ -143,7 +143,7 @@ type ChatState = DisconnectedState | ConnectingState | RoomSelectionState | Wait
 
 
 export const ChatManager = (props: {primaryColor : string, socketUrl: string, setMusic: (music: any) => void}) => {
-    const [chatState, setChatState] = React.useState<ChatState>({disconnected: true})
+    const [chatState, setChatState] = React.useState<ChatState>({connecting: true})
     const [connected, setConnected] = React.useState(false)
     const [socket, setSocket] = React.useState<WebSocket|null>(null)
     const [error, setError] = React.useState<string>('')
@@ -337,24 +337,25 @@ export const ChatManager = (props: {primaryColor : string, socketUrl: string, se
         }
     }, [connected, props.socketUrl])
 
+    /*            
+    {'connecting' in chatState &&
+        <>
+            <Header text="Salons" />
+            <div className="salonsCont">
+                <div>Connexion à la partie veuillez patienter... {props.socketUrl}</div>
+            </div>
+        </>}
+    {'disconnected' in chatState && 
+    <>
+        <Header text="Salons" />
+        <div className="salonsCont">
+            <div>Vous êtes déconnecté</div>
+            <button onClick={() => setChatState({connecting: true})}>Se connecter</button>
+        </div>
+    </>} 
+    */
     return (
         <div>
-            {'disconnected' in chatState && 
-                <>
-                <Header text="Salons" />
-                <div className="salonsCont">
-                    <div>Vous êtes déconnecté</div>
-                    <button onClick={() => setChatState({connecting: true})}>Se connecter</button>
-                </div>
-                </>}  
-                
-            {'connecting' in chatState &&
-            <>
-                <Header text="Salons" />
-                <div className="salonsCont">
-                    <div>Connexion à la partie veuillez patienter... {props.socketUrl}</div>
-                </div>
-            </>}
             {'roomSelection' in chatState && 
                 <>
                     <Header text="Salons" />

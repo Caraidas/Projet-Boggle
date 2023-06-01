@@ -4,7 +4,9 @@ import { SalonsGridContainer, SalonsGridWrapper } from './SalonsGridElements'
 import "../../css/styleGame.css"
 
 const SalonsGrid = (props: {primaryColor : string, rooms: any, onChosenRoom: (username: string, waitingRoom: string) => any}) => {
-    const [username, setUsername] = React.useState("Nidal") // TODO : à remplacer par le username dans la bdd
+    const userDataString = localStorage.getItem('userData');
+    const userData = userDataString ? JSON.parse(userDataString) : null;
+    const [username, setUsername] = React.useState(userData?.pseudo) // TODO : à remplacer par le username dans la bdd
     const [selectedRoom, setSelectedRoom] = React.useState("")
 
     function handle(name:string) {
@@ -14,7 +16,6 @@ const SalonsGrid = (props: {primaryColor : string, rooms: any, onChosenRoom: (us
 
   return (
     <>
-        <input type="text" value={username} onChange={event => setUsername(event.target.value)} />
         <SalonsGridWrapper>
             <SalonsGridContainer>
                 {props.rooms.map((room) => 
