@@ -7,14 +7,14 @@ import pfp from "../images/pfp.jpg";
 const ProfilePage = (props: { primaryColor: string, setColor: (color : string) => void }) => {
 
   let colors = [
-    "#E33C3C",
-    "#F0A246",
+    "#ED3E3E",
+    "#F4A459",
     "#F1E368",
     "#45BE5F",
-    "#5EBFD4",
-    "#4672C7",
+    "#43BDA0",
+    "#6B81F3",
     "#795DB2",
-    "#D851BA",
+    "#A95D9D",
   ];
 
   return (
