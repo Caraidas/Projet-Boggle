@@ -43,19 +43,18 @@ const Game = ({ soundVolume, grid, setMusic, solvedWords, onWordSent, attendees 
         <div className='gameCont'>
             <div className='boardCont'>
                 <div className='board'>
-                    {grid.split(" ").map((letter) => (
-                        <Cell letter={letter} soundVolume={soundVolume} primaryColor={primaryColor} />
+                    {grid.split(" ").map((letter, index) => (
+                        <Cell key={index} letter={letter} soundVolume={soundVolume} primaryColor={primaryColor} />
                     ))}
                 </div>
                 <input className='gameInput' type='text' onChange={(e) => setWordInput(e.target.value)} />
                 <button onClick={(e) => onWordSent(wordInput)}>Envoyer</button>
-                {words}
             </div>
             <div className='players'>
             {players.map(player => (
              
-                <GameCard picture={picture} name={player[0]} words={player[1]+"/"+solvedWords.length} points={player[2]} place={player[3]} />
-           
+                <GameCard key={player[0]} picture={picture} name={player[0]} words={player[1]+"/"+solvedWords.length} points={stats[player[0]][0]} place={player[3]} />
+                
            ))}
             </div>
         </div>

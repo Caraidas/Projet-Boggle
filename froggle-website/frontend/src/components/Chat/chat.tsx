@@ -173,6 +173,20 @@ export const ChatManager = (props: {primaryColor : string, socketUrl: string, se
             return waitingRooms
         }
 
+        const updateStatsForPlayer = (playerName: string, score: number, words: string[]) => {
+            setStats((prevStats) => {
+                const playerStats = prevStats[playerName] || [0, []];
+                const [existingScore, existingWords] = playerStats;
+            
+                const updatedStats = {
+                  ...prevStats,
+                  [playerName]: [existingScore + score, [...existingWords, ...words]],
+                };
+            
+                return updatedStats;
+              });
+          };          
+
         switch(kind) {
             case 'waiting_room_list':
                 setWaitingRooms(readWaitingRooms(content))
@@ -201,31 +215,40 @@ export const ChatManager = (props: {primaryColor : string, socketUrl: string, se
                 setGrid(content.grid);
                 setSolvedWords(content.solvedWords);
 
-                let obj : any = {}
-                for(const player of content.attendees) {
-                    obj[player] =[0, []] 
+                for(let player of content.attendees) {
+                    setStats((prevData) => {
+                        
+                        const update = { 
+                            ...prevData,
+                            [player]: [0, []]
+                    }
+                    
+                    console.log(update);
+                    return update;
+                    });
                 }
-
-                setStats({...stats,  obj
-               });
-                break
+                break;
 
             case 'chat_message_received':
                 addChatMessage(content.sender, content.content)
                 break
             
             case 'word_found':
+                // TODO : Faire les verifs du style "le mec a pas deja proposé ce mot", "ce mot existe dans la liste des mots de la grille", ...
                 console.log(content.score)
+                console.log(content.sender)
                 console.log(stats)
                 let player = stats[content.sender]
-                console.log("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA : " + player)
-                let score = player[0] + content.score
-                let words = player[1].push(content.word)
+                console.log("AAAAAAAAAAAAA : " + player)
+                let score = parseInt(content.score);
+                let words = [content.word];
 
-                setStats(prevData => ({
-                    ...prevData,
-                    [content.sender]: [score, words]
-                  }));
+                updateStatsForPlayer(content.sender, score, words);
+                console.log(player);
+                console.log(score);
+                console.log(words);
+                console.log(stats);
+                // {"Nidal":[102,["patate"', "zoo", "igloo"], "Laura":[20,['oui']}
                 break
             case 'attendee_left':
                 addChatMessage('admin', `Attendee ${content.attendee} left the chat session.`)
@@ -273,7 +296,7 @@ export const ChatManager = (props: {primaryColor : string, socketUrl: string, se
         sendToSocket('send_chat_message', {content: content})
     }, [sendToSocket])
     const sendWord = React.useCallback((content: string) => {
-        console.log(content)
+        console.log(content);
         sendToSocket('send_word', {content: content})
     }, [sendToSocket])
     const leaveChatSession = React.useCallback(() => {
@@ -368,7 +391,7 @@ export const ChatManager = (props: {primaryColor : string, socketUrl: string, se
             {'messages' in chatState && 
                 <>
                     <ChatSection primaryColor={props.primaryColor} messages={chatState.messages} active={chatState.active} onMessageWritten={sendChatMessage} onLeaving={leaveChatSession} onClosing={closeChatSession} grid={grid} solvedWords={solvedWords} setMusic={props.setMusic}  />
-                    <Game primaryColor={props.primaryColor} soundVolume={1} grid={grid} setMusic={props.setMusic} solvedWords={solvedWords} onWordSent={sendWord} attendees={players} stats={stats}/>
+                    <Game primaryColor={props.primaryColor} soundVolume={1} grid={grid} setMusic={props.setMusic} solvedWords={solvedWords} onWordSent={sendWord} attendees={players} stats={stats} />
                 </>
                 // <ChatSession messages={chatState.messages} active={chatState.active} onMessageWritten={sendChatMessage} onLeaving={leaveChatSession} onClosing={closeChatSession} grid={grid} solvedWords={solvedWords} setMusic={props.setMusic} />
             }
