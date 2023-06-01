@@ -80,8 +80,7 @@ function App() {
         <Route path='/login' element={<Login logo={logo} errorMessage="🐸 L'identifiant ou le mot de passe est incorrect 🐸" />} exact/>
         <Route path='/signup' element={<Signup logo={logo} />} exact/>
         <Route path='/definitions' element={<Definitions />} exact/>
-        <Route path='/game' element={<Game soundVolume={soundVolume} setMusic={setMusic} grid={"A B C D"} solvedWords={""} primaryColor={primaryColor} />} exact/>
-        <Route path='/test' element={<ChatGame setMusic={setMusic} primaryColor={primaryColor} />} exact/>
+        <Route path='/game' element={<ChatGame setMusic={setMusic} primaryColor={primaryColor} />} exact/>
         <Route path='/profile' element={<ProfilePage primaryColor={primaryColor} setColor={selectColor} />} exact/>
         <Route path='/social' element={<Social/>} exact/>
       </Routes>

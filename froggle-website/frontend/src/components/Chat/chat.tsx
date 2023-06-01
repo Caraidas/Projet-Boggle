@@ -143,7 +143,7 @@ type ChatState = DisconnectedState | ConnectingState | RoomSelectionState | Wait
 
 
 export const ChatManager = (props: {primaryColor : string, socketUrl: string, setMusic: (music: any) => void}) => {
-    const [chatState, setChatState] = React.useState<ChatState>({disconnected: true})
+    const [chatState, setChatState] = React.useState<ChatState>({connecting: true})
     const [connected, setConnected] = React.useState(false)
     const [socket, setSocket] = React.useState<WebSocket|null>(null)
     const [error, setError] = React.useState<string>('')
@@ -152,6 +152,7 @@ export const ChatManager = (props: {primaryColor : string, socketUrl: string, se
     const [solvedWords, setSolvedWords] = React.useState("");
     const [players, setPlayers] = React.useState([]);
     const [stats, setStats] = React.useState<any>({});
+    const [duration, setDuration] = React.useState(0)
 
     const onNewSocketMessage = (kind: string, content: Record<string, any>) => {
         console.debug("Received message from websocket", content)
@@ -214,6 +215,7 @@ export const ChatManager = (props: {primaryColor : string, socketUrl: string, se
                 addChatMessage('admin', content.welcome_message)
                 setGrid(content.grid);
                 setSolvedWords(content.solvedWords);
+                setDuration(content.duration);
 
                 for(let player of content.attendees) {
                     setStats((prevData) => {
@@ -358,24 +360,25 @@ export const ChatManager = (props: {primaryColor : string, socketUrl: string, se
         }
     }, [connected, props.socketUrl])
 
+    /*            
+    {'connecting' in chatState &&
+        <>
+            <Header text="Salons" />
+            <div className="salonsCont">
+                <div>Connexion à la partie veuillez patienter... {props.socketUrl}</div>
+            </div>
+        </>}
+    {'disconnected' in chatState && 
+    <>
+        <Header text="Salons" />
+        <div className="salonsCont">
+            <div>Vous êtes déconnecté</div>
+            <button onClick={() => setChatState({connecting: true})}>Se connecter</button>
+        </div>
+    </>} 
+    */
     return (
         <div>
-            {'disconnected' in chatState && 
-                <>
-                <Header text="Salons" />
-                <div className="salonsCont">
-                    <div>Vous êtes déconnecté</div>
-                    <button onClick={() => setChatState({connecting: true})}>Se connecter</button>
-                </div>
-                </>}  
-                
-            {'connecting' in chatState &&
-            <>
-                <Header text="Salons" />
-                <div className="salonsCont">
-                    <div>Connexion à la partie veuillez patienter... {props.socketUrl}</div>
-                </div>
-            </>}
             {'roomSelection' in chatState && 
                 <>
                     <Header text="Salons" />
@@ -391,7 +394,7 @@ export const ChatManager = (props: {primaryColor : string, socketUrl: string, se
             {'messages' in chatState && 
                 <>
                     <ChatSection primaryColor={props.primaryColor} messages={chatState.messages} active={chatState.active} onMessageWritten={sendChatMessage} onLeaving={leaveChatSession} onClosing={closeChatSession} grid={grid} solvedWords={solvedWords} setMusic={props.setMusic}  />
-                    <Game primaryColor={props.primaryColor} soundVolume={1} grid={grid} setMusic={props.setMusic} solvedWords={solvedWords} onWordSent={sendWord} attendees={players} stats={stats} />
+                    <Game primaryColor={props.primaryColor} soundVolume={1} grid={grid} setMusic={props.setMusic} solvedWords={solvedWords} onWordSent={sendWord} attendees={players} stats={stats} duration={duration} onLeaving={leaveChatSession} onClosing={closeChatSession}/>
                 </>
                 // <ChatSession messages={chatState.messages} active={chatState.active} onMessageWritten={sendChatMessage} onLeaving={leaveChatSession} onClosing={closeChatSession} grid={grid} solvedWords={solvedWords} setMusic={props.setMusic} />
             }

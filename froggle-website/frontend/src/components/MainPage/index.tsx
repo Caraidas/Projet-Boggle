@@ -22,7 +22,7 @@ const MainPage = (props : MainPageProps) => {
         <MainLinks>
             <MainLink onMouseEnter={playSound} to={"/game"}>Jouer</MainLink>
             <MainLink onMouseEnter={playSound} to={"/carriere"}>Carrière</MainLink>
-            <MainLink onMouseEnter={playSound} to={"/test"}>Social</MainLink>
+            <MainLink onMouseEnter={playSound} to={"/social"}>Social</MainLink>
             <MainLink onMouseEnter={playSound} to={"/definitions"}>Définitions</MainLink>
         </MainLinks>
     </MainPageContainer>
