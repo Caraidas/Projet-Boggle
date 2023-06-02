@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import {BrowserRouter as Router, Routes, Route} from 'react-router-dom';
+import {useNavigate} from "react-router-dom";
 import './App.css';
 import Background from './components/Background';
 import VolumeSlider from './components/VolumeSlider';
@@ -62,7 +63,11 @@ function App() {
 
   // COuleur et avatar
   let pc = localStorage.getItem('primaryColor') ? localStorage.getItem('primaryColor') : '#F1E368';
-  let ai = localStorage.getItem('avatarIndex') ? localStorage.getItem('avatarIndex') : 1; // TODO : changer en bdd
+
+  const userDataString = localStorage.getItem('userData');
+  const userData = userDataString ? JSON.parse(userDataString) : null;
+
+  let ai = userData?.Photo_De_Profile ;
 
   const [primaryColor, setPrimaryColor] = React.useState(pc);
   const [avatarIndex, setAvatarIndex] = React.useState(ai);
