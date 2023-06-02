@@ -16,11 +16,28 @@ const Game = ({ soundVolume, grid, setMusic, solvedWords, onWordSent, attendees,
     let UppercasedWord = word.toUpperCase();
     event.target.value = UppercasedWord;
 
-    if (word !== "") {
-      if (solvedWordslst.includes(UppercasedWord) && !foundWords.includes(UppercasedWord)) {
-        console.log("oui");
-        setFoundWords([...foundWords, UppercasedWord]);
-        setWords(words + 1);
+    setWordInput(UppercasedWord);
+
+    // if (word !== "") {
+    //   if (solvedWordslst.includes(UppercasedWord) && !foundWords.includes(UppercasedWord)) {
+    //     console.log("oui");
+    //     setFoundWords([...foundWords, UppercasedWord]);
+    //     setWords(words + 1);
+    //   }
+    // }
+  }
+
+  function keyDownHandler(event) {
+    if (event.key === "Enter") {
+      let word = event.target.value;
+
+      if (word !== "") {
+        if (solvedWordslst.includes(word) && !foundWords.includes(word)) {
+          console.log("oui");
+          setFoundWords([...foundWords, word]);
+          setWords(words + 1);
+          onWordSent(word);
+        }
       }
     }
   }
@@ -65,12 +82,12 @@ const Game = ({ soundVolume, grid, setMusic, solvedWords, onWordSent, attendees,
       <div className='gameCont'>
         <div className='boardCont'>
           <div className='board'>
-            {grid.split(" ").map((letter) => (
-              <Cell letter={letter} soundVolume={soundVolume} primaryColor={primaryColor} />
+            {grid.split(" ").map((letter, index) => (
+              <Cell key={index} letter={letter} soundVolume={soundVolume} primaryColor={primaryColor} />
             ))}
           </div>
-          <input className='gameInput' type='text' onChange={(e) => setWordInput(e.target.value)} />
-          <button onClick={(e) => onWordSent(wordInput)}>Envoyer</button>
+          <input className='gameInput' type='text' onChange={(e) => changeHandler(e)} onKeyDown={(e) => keyDownHandler(e)} />
+          {/* <button onClick={(e) => onWordSent(wordInput)}>Envoyer</button> */}
           {words}
         </div>
         <div className='players'>

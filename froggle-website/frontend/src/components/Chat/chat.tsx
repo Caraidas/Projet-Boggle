@@ -142,7 +142,7 @@ interface ChattingState { startTimestamp: number, messages: Message[], active: b
 type ChatState = DisconnectedState | ConnectingState | RoomSelectionState | WaitingState | ChattingState //can be either of these
 
 
-export const ChatManager = (props: {primaryColor : string, socketUrl: string, setMusic: (music: any) => void}) => {
+export const ChatManager = (props: {primaryColor : string, socketUrl: string, setMusic: (music: any) => void, soundVolume: number }) => {
     const [chatState, setChatState] = React.useState<ChatState>({connecting: true})
     const [connected, setConnected] = React.useState(false)
     const [socket, setSocket] = React.useState<WebSocket|null>(null)
@@ -394,7 +394,7 @@ export const ChatManager = (props: {primaryColor : string, socketUrl: string, se
             {'messages' in chatState && 
                 <>
                     <ChatSection primaryColor={props.primaryColor} messages={chatState.messages} active={chatState.active} onMessageWritten={sendChatMessage} onLeaving={leaveChatSession} onClosing={closeChatSession} grid={grid} solvedWords={solvedWords} setMusic={props.setMusic}  />
-                    <Game primaryColor={props.primaryColor} soundVolume={1} grid={grid} setMusic={props.setMusic} solvedWords={solvedWords} onWordSent={sendWord} attendees={players} stats={stats} duration={duration} onLeaving={leaveChatSession} onClosing={closeChatSession}/>
+                    <Game primaryColor={props.primaryColor} soundVolume={props.soundVolume} grid={grid} setMusic={props.setMusic} solvedWords={solvedWords} onWordSent={sendWord} attendees={players} stats={stats} duration={duration} onLeaving={leaveChatSession} onClosing={closeChatSession}/>
                 </>
                 // <ChatSession messages={chatState.messages} active={chatState.active} onMessageWritten={sendChatMessage} onLeaving={leaveChatSession} onClosing={closeChatSession} grid={grid} solvedWords={solvedWords} setMusic={props.setMusic} />
             }

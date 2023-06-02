@@ -62,7 +62,7 @@ function App() {
 
   // COuleur et avatar
   let pc = localStorage.getItem('primaryColor') ? localStorage.getItem('primaryColor') : '#F1E368';
-  let ai = localStorage.getItem('avatarIndex') ? localStorage.getItem('avatarIndex') : 1;
+  let ai = localStorage.getItem('avatarIndex') ? localStorage.getItem('avatarIndex') : 1; // TODO : changer en bdd
 
   const [primaryColor, setPrimaryColor] = React.useState(pc);
   const [avatarIndex, setAvatarIndex] = React.useState(ai);
@@ -76,7 +76,7 @@ function App() {
   function selectAvatar(index) {
     setAvatarIndex(index);
     console.log(index);
-    localStorage.setItem("avatarIndex", index);
+    localStorage.setItem("avatarIndex", index); // TODO : changer en bdd
   }
   
   return (
@@ -89,9 +89,9 @@ function App() {
         <Route path='/login' element={<Login logo={logo} errorMessage="🐸 L'identifiant ou le mot de passe est incorrect 🐸" />} exact/>
         <Route path='/signup' element={<Signup logo={logo} />} exact/>
         <Route path='/definitions' element={<Definitions />} exact/>
-        <Route path='/game' element={<ChatGame setMusic={setMusic} primaryColor={primaryColor} />} exact/>
+        <Route path='/game' element={<ChatGame soundVolume={soundVolume} setMusic={setMusic} primaryColor={primaryColor} />} exact/>
         <Route path='/profile' element={<ProfilePage avatarIndex={avatarIndex} primaryColor={primaryColor} setColor={selectColor} setAvatar={selectAvatar} />} exact/>
-        <Route path='/social' element={<Social/>} exact/>
+        <Route path='/social' element={<Social />} exact/>
       </Routes>
       <VolumeSlider isSoundOpen={isSoundOpen} toggleSound={toggleSound} changeSoundVolume={changeSoundVolume} changeMusicVolume={changeMusicVolume} />
     </Router>
