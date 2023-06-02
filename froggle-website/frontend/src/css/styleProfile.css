@@ -36,6 +36,18 @@
     -webkit-text-stroke: 2px #000;
     text-shadow: 0px 2px 0px #000;
     margin-bottom: 15px;
+    animation: appearAnim 0.4s cubic-bezier(.85, 1.76, .75, .81);
+    width: fit-content;
+}
+
+.profileSection > h3 {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #000;
+    margin-bottom: 10px;
+    padding-left: 10px;
+    animation: appearAnim 0.4s cubic-bezier(.85, 1.76, .75, .81);
+    width: fit-content;
 }
 
 .profileFormCont {
@@ -61,6 +73,7 @@
     font-size: 1.5rem;
     font-weight: bold;
     padding-left: 5px;
+    animation: appearAnim 0.4s cubic-bezier(.85, 1.76, .75, .81);
 }
 
 .profileInputCont > input {
@@ -71,6 +84,7 @@
     box-shadow: 0px 1.5px 0px #000;
     outline: none;
     padding-left: 5px;
+    animation: appearAnim 0.4s cubic-bezier(.85, 1.76, .75, .81);
 }
 
 .profileInputCont > input:focus {
@@ -89,6 +103,7 @@
     box-shadow: 0px 1px 0px #000;
     font-size: 1rem;
     cursor: pointer;
+    animation: appearAnim 0.4s cubic-bezier(.85, 1.76, .75, .81);
 }
 
 .profileFormButton:hover {
@@ -104,11 +119,16 @@
 .profileColorRow {
     display: flex;
     gap: 10px;
+    width: 100%;
+    overflow-x: auto;
+    margin-bottom: 15px;
+    height: fit-content;
+    padding: 10px;
     padding-left: 5px;
 }
 
 .profileImg {
-    width: 75px;
+    width: 90px;
     aspect-ratio: 1;
     object-fit: cover;
     border-radius: 50%;
@@ -118,4 +138,24 @@
     top: 0%;
     left: 30px;
     transform: translateY(-50%);
+    animation: appearAnim2 0.4s cubic-bezier(.85, 1.76, .75, .81);
+}
+
+@keyframes appearAnim {
+    from {
+        transform-origin: center;
+        transform: scale(0);
+    }
+    to {
+        transform: scale(1);
+    }
+}
+
+@keyframes appearAnim2 {
+    from {
+        transform: scale(0) translateY(-50%);
+    }
+    to {
+        transform: scale(1) translateY(-50%);
+    }
 }

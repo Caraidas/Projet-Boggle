@@ -2,9 +2,9 @@ import React from 'react';
 import MainPage from './../components/MainPage';
 import { useNavigate} from 'react-router-dom';
 
-let img = require('../images/pfp.jpg');
-
 const Home = (props : HomeProps) => {
+
+  let img = require("../images/avatar" + props.avatarIndex + ".png");
 
   const userDataString = localStorage.getItem('userData');
   const navigate = useNavigate();
@@ -24,6 +24,7 @@ export interface HomeProps {
   setMusic : (any) => void,
   music : any,
   logo : any,
+  avatarIndex : any,
 }
 
 export default Home

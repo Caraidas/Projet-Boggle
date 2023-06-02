@@ -60,14 +60,23 @@ function App() {
     music.play();
   });
 
-  // COuleur 
+  // COuleur et avatar
   let pc = localStorage.getItem('primaryColor') ? localStorage.getItem('primaryColor') : '#F1E368';
+  let ai = localStorage.getItem('avatarIndex') ? localStorage.getItem('avatarIndex') : 1;
+
   const [primaryColor, setPrimaryColor] = React.useState(pc);
+  const [avatarIndex, setAvatarIndex] = React.useState(ai);
 
   function selectColor(color) {
     setPrimaryColor(color);
     console.log(color);
     localStorage.setItem("primaryColor", color);
+  }
+
+  function selectAvatar(index) {
+    setAvatarIndex(index);
+    console.log(index);
+    localStorage.setItem("avatarIndex", index);
   }
   
   return (
@@ -75,13 +84,13 @@ function App() {
       <audio id="music" src={bgMusic} autoPlay loop></audio>
       <Background />
       <Routes>
-        <Route path='/' element={<Home setMusic={setMusic} music={menuMusic} soundVolume={soundVolume} logo={logo} />} exact/>
-        <Route path='/carriere' element={<Carriere primaryColor={primaryColor} />} exact/>
+        <Route path='/' element={<Home avatarIndex={avatarIndex}  setMusic={setMusic} music={menuMusic} soundVolume={soundVolume} logo={logo} />} exact/>
+        <Route path='/carriere' element={<Carriere avatarIndex={avatarIndex} primaryColor={primaryColor} />} exact/>
         <Route path='/login' element={<Login logo={logo} errorMessage="🐸 L'identifiant ou le mot de passe est incorrect 🐸" />} exact/>
         <Route path='/signup' element={<Signup logo={logo} />} exact/>
         <Route path='/definitions' element={<Definitions />} exact/>
         <Route path='/game' element={<ChatGame setMusic={setMusic} primaryColor={primaryColor} />} exact/>
-        <Route path='/profile' element={<ProfilePage primaryColor={primaryColor} setColor={selectColor} />} exact/>
+        <Route path='/profile' element={<ProfilePage avatarIndex={avatarIndex} primaryColor={primaryColor} setColor={selectColor} setAvatar={selectAvatar} />} exact/>
         <Route path='/social' element={<Social/>} exact/>
       </Routes>
       <VolumeSlider isSoundOpen={isSoundOpen} toggleSound={toggleSound} changeSoundVolume={changeSoundVolume} changeMusicVolume={changeMusicVolume} />

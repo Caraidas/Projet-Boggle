@@ -3,8 +3,10 @@ import Header from "../components/Header";
 import ColorInput from "../components/ColorInput";
 import "../css/styleProfile.css";
 import pfp from "../images/pfp.jpg";
+import AvatarInput from "../components/AvatarInput";
+import avatar0 from "../images/avatar0.png";
 
-const ProfilePage = (props: { primaryColor: string, setColor: (color : string) => void }) => {
+const ProfilePage = (props: { avatarIndex : number, primaryColor: string, setColor: (color : string) => void, setAvatar : (avatar : number) => void }) => {
 
   let colors = [
     "#ED3E3E",
@@ -17,11 +19,25 @@ const ProfilePage = (props: { primaryColor: string, setColor: (color : string) =
     "#A95D9D",
   ];
 
+  let avatars = [
+    0, 1, 2, 3, 4, 5
+  ];
+
+  function setPrimaryColor(color : string) {
+    props.setColor(color);
+  }
+
+  function setAvatar(index : number) {
+    props.setAvatar(index);
+  }
+
+  let avatarProfile = require('../images/avatar' + props.avatarIndex + '.png');
+
   return (
     <>
       <Header text="Profil" />
       <div className="profileCont" style={{ background: props.primaryColor }}>
-        <img src={pfp} alt="" className="profileImg" />
+        <img src={avatarProfile} alt="" className="profileImg" />
         <div className="profileSection">
           <h2>Identité</h2>
           <form className="profileFormCont">
@@ -46,9 +62,16 @@ const ProfilePage = (props: { primaryColor: string, setColor: (color : string) =
 
         <div className="profileSection">
           <h2>Personnalisation</h2>
+          <h3>Couleur</h3>
           <div className="profileColorRow">
             {colors.map((color) => (
-                <ColorInput color={color} toggled={false} key={color} onSelect={props.setColor} />
+                <ColorInput color={color} toggled={props.primaryColor == color} key={color} onSelect={setPrimaryColor} />
+            ))}
+          </div>
+          <h3>Avatar</h3>
+          <div className="profileColorRow">
+            {avatars.map((avatar) => (
+                <AvatarInput key={avatar} imgIndex={avatar} onSelect={setAvatar} toggled={props.avatarIndex == avatar} />
             ))}
           </div>
         </div>

@@ -6,7 +6,9 @@ import CarriereCard from '../components/CarriereCard';
 
 import pic1 from '../images/pfp.jpg';
 
-const Carriere = ({ primaryColor }) => {
+const Carriere = ({ primaryColor, avatarIndex }) => {
+
+  let img = require("../images/avatar" + avatarIndex + ".png");
 
   let pics = [pic1, pic1, pic1];
 
@@ -16,7 +18,7 @@ const Carriere = ({ primaryColor }) => {
       <div className='hero'>
         <div className='heroData'>
           <div className='heroProfile'>
-            <img src={pic1} alt="photo de profil" className='heroPicture'/>
+            <img src={img} alt="photo de profil" className='heroPicture'/>
             <p className='heroName' title="xX_KypoTv_Xx chrjf vhefjvkfel vjchefkvlrfv ghefjdkscled">xX_KypoTv_Xx chrjf vhefjvkfel vjchefkvlrfv ghefjdkscled</p>
           </div>
 
