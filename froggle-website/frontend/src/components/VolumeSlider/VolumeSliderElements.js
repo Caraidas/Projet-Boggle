@@ -33,11 +33,13 @@ export const SliderToggle = styled.img`
 `
 
 export const SliderSection = styled.div`
+    position: relative;
     display: flex;
     gap: 10px;
     align-items: center;
     transition: 0.2s cubic-bezier(.85,1.76,.75,.81) ${({ animDelay }) => (animDelay ? animDelay : '0')}s;
     transform: scale(${({ isSoundOpen }) => (isSoundOpen ? '1' : '0')});
+    z-index: ${({ isSoundOpen }) => (isSoundOpen ? '999999' : '-99')};
 `
 
 export const SoundIcon = styled.img`

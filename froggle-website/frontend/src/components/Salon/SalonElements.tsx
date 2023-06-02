@@ -8,7 +8,7 @@ export const SalonContainer = styled.label`
     border-radius: 10px;
     background: ${props => props.selected? props.color : "#fff"};
     cursor: pointer;
-    height: 125px;
+    height: 200px;
 
     &:hover {
         background: ${props => props.color};
@@ -24,6 +24,7 @@ export const SalonName = styled.p`
     color: #fff;
     -webkit-text-stroke: 2px #000;
     text-shadow: 0px 3px 0px #000;
+    z-index: 99;
 `
 
 export const SalonAttendeeNumber = styled.p`
@@ -35,6 +36,14 @@ export const SalonAttendeeNumber = styled.p`
     &::after {
         content: " joueur(s)";
     }
+`
+
+export const SalonImg = styled.img`
+    width: 70%;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
 `
 
 export const SalonsDesc = styled.p``

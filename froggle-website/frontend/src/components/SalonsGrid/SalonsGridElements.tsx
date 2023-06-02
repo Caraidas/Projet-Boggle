@@ -16,7 +16,7 @@ export const SalonsGridContainer = styled.div`
   box-shadow: 0px 4px 0px #000;
   background: #fff;
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(2, 1fr);
   grid-gap: 5px;
   grid-row-gap: 20px;
   padding: 20px;

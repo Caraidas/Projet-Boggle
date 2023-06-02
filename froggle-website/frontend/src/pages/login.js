@@ -34,8 +34,8 @@ const Login = ({ logo, errorMessage }) => {
             <img src={logo} className='logo' />
             <form className='formCont' onSubmit={handleSubmit}>
                 <div className='errorContainer' style={{display: showError ? 'block' : 'none'}}>{errorMessage}</div>
-                <input type="text" className="input" placeholder="e-mail" onChange={(e) => setEmail(e.target.value)} />
-                <input type="password" className="input" placeholder="mot de passe" onChange={(e) => setPassword(e.target.value)} />
+                <input type="text" className="inputLogin" placeholder="e-mail" onChange={(e) => setEmail(e.target.value)} />
+                <input type="password" className="inputLogin" placeholder="mot de passe" onChange={(e) => setPassword(e.target.value)} />
                 <button className='submit'>S'identifier</button>
             </form>
             <div className='tosignup'>

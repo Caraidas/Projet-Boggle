@@ -36,10 +36,10 @@ function Signup({ logo }) {
             <img src={logo} className='logoSignup' />
             <form className='formCont' onSubmit={handleSubmit}>
                 <div className='errorContainer' style={{display: showError ? 'block' : 'none'}}>{errorMessage}</div>                
-                <input type="text" className="input" placeholder="nom d'utilisateur" onChange={(e) => setUsername(e.target.value)} />
-                <input type="text" className="input" placeholder="e-mail" onChange={(e) => setEmail(e.target.value)} />
-                <input type="password" className="input" placeholder="mot de passe" onChange={(e) => setPassword(e.target.value)} />
-                <input type="password" className="input" placeholder="confirmez mot de passe" onChange={(e) => setPasswordConfirm(e.target.value)} />
+                <input type="text" className="inputLogin" placeholder="nom d'utilisateur" onChange={(e) => setUsername(e.target.value)} />
+                <input type="text" className="inputLogin" placeholder="e-mail" onChange={(e) => setEmail(e.target.value)} />
+                <input type="password" className="inputLogin" placeholder="mot de passe" onChange={(e) => setPassword(e.target.value)} />
+                <input type="password" className="inputLogin" placeholder="confirmez mot de passe" onChange={(e) => setPasswordConfirm(e.target.value)} />
                 <button className='submit'>Se connecter</button>
             </form>
             <div className='tosignup'>

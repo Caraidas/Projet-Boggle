@@ -382,7 +382,7 @@ export const ChatManager = (props: {primaryColor : string, socketUrl: string, se
             {'roomSelection' in chatState && 
                 <>
                     <Header text="Salons" />
-                    <SalonsGrid primaryColor={props.primaryColor} rooms={waitingRooms} onChosenRoom={connectToWaitingRoom} />
+                    <SalonsGrid soundVolume={props.soundVolume} primaryColor={props.primaryColor} rooms={waitingRooms} onChosenRoom={connectToWaitingRoom} />
                 </>}
             {'waitingRoomName' in chatState &&
                 <>

@@ -32,7 +32,7 @@
     margin-bottom: 20px;
 }
 
-.input {
+.inputLogin {
     width: 100%;
     max-width: 500px;
     height: 60px;
@@ -48,7 +48,12 @@
     animation: appearAnim 0.4s cubic-bezier(.85, 1.76, .75, .81) forwards;
 }
 
-.input:focus {
+.inputLogin:active {
+    box-shadow: 0px 1px 0px #000;
+    transform: translateY(1px);
+}
+
+.inputLogin:focus {
     box-shadow: 0px 1px 0px #000;
     transform: translateY(1px);
 }

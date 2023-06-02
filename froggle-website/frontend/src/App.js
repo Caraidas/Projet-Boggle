@@ -81,7 +81,7 @@ function App() {
   
   return (
     <Router>
-      <audio id="music" src={bgMusic} autoPlay loop></audio>
+      <audio id="music" src={bgMusic} loop></audio>
       <Background />
       <Routes>
         <Route path='/' element={<Home avatarIndex={avatarIndex}  setMusic={setMusic} music={menuMusic} soundVolume={soundVolume} logo={logo} />} exact/>

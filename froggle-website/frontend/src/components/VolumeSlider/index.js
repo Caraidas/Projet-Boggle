@@ -30,9 +30,8 @@ const VolumeSlider = ({ isSoundOpen, toggleSound, changeSoundVolume, changeMusic
         <SoundIcon src={soundIcon2}/>
         <Slider type="range" min="0" max="100" defaultValue={localStorage.getItem('soundVolume') ? localStorage.getItem('soundVolume') : 100} onChange={e => changeSoundVolumeHandle(e)} />
       </SliderSection>
-
     </SliderContainer>
-  )
+  );
 }
 
 export default VolumeSlider
