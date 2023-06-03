@@ -81,10 +81,15 @@ if ($data['email'] && $data['password']) {
       $historique[$i][] = $photo;
     }
 
+    $statement = $pdo->prepare('SELECT COUNT(Podium) AS nbClassement, Podium FROM b_participe WHERE ID_Joueur = 4 GROUP BY Podium');
+    $statement->bindValue(':id_joueur', $user['ID_Joueur'], PDO::PARAM_STR);
+    $statement->execute();
+    $PodiumPartie = $statement->fetchAll(PDO::FETCH_ASSOC);
+
     // $sessionData = $_SESSION['user_id']; Retourne une réponse JSON avec un code de statut 200 et un message d'authentification réussie
     $sessionData = array('pseudo' => $user['pseudo'], 'XP_Actuel' => $user['XP_Actuel'], 'Photo_De_Profile' => $user['Photo_De_Profile'], 'Est_Prive' => $user['Est_Prive']);
     
-    echo json_encode(array('status' => 'success', 'message' => 'Authentification réussie','sessionData' => $sessionData, 'historique' => $historique));
+    echo json_encode(array('status' => 'success', 'message' => 'Authentification réussie','sessionData' => $sessionData, 'historique' => $historique, 'classementData' => $PodiumPartie));
     http_response_code(200);
     // Ret$sessionData = $_SESSION['user_id'];ourne une réponse JSON avec un code de statut 200 et un message d'authentification réussie
     exit();
