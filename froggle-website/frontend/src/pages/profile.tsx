@@ -1,4 +1,5 @@
-import React from "react";
+import React, {useEffect} from "react";
+import { useNavigate} from 'react-router-dom';
 import Header from "../components/Header";
 import ColorInput from "../components/ColorInput";
 import "../css/styleProfile.css";
@@ -7,6 +8,13 @@ import AvatarInput from "../components/AvatarInput";
 import avatar0 from "../images/avatar0.png";
 
 const ProfilePage = (props: { avatarIndex : number, primaryColor: string, setColor: (color : string) => void, setAvatar : (avatar : number) => void }) => {
+
+  const userDataString = localStorage.getItem('userData');
+  const userData = userDataString ? JSON.parse(userDataString) : null;
+  const navigate = useNavigate();
+  useEffect(()=>{if (userData == null){
+    navigate('/login');
+  }})
 
   let colors = [
     "#ED3E3E",

@@ -1,4 +1,5 @@
-import React from 'react';
+import React, {useEffect} from 'react';
+import { useNavigate} from 'react-router-dom';
 import "../css/styleCarriere.css";
 import Header from '../components/Header';
 import ProgressBar from '../components/ProgressBar';
@@ -7,6 +8,13 @@ import CarriereCard from '../components/CarriereCard';
 import pic1 from '../images/pfp.jpg';
 
 const Carriere = ({ primaryColor, avatarIndex }) => {
+
+  const userDataString = localStorage.getItem('userData');
+  const userData = userDataString ? JSON.parse(userDataString) : null;
+  const navigate = useNavigate();
+  useEffect(()=>{if (userData == null){
+    navigate('/login');
+  }})
 
   let img = require("../images/avatar" + avatarIndex + ".png");
 
