@@ -12,7 +12,7 @@ const Carriere = ({ primaryColor, avatarIndex }) => {
   const userDataString = localStorage.getItem('userData');
   const userData = userDataString ? JSON.parse(userDataString) : null;
   const navigate = useNavigate();
-  console.log(userData?.historique);
+  console.log(userData?.classementData);
   useEffect(()=>{if (userData == null){
     navigate('/login');
   }})
@@ -50,7 +50,7 @@ const Carriere = ({ primaryColor, avatarIndex }) => {
         nbfourth += parseInt(element['nbClassement']);
     }
   });
-
+  let gamesCount = [nbwin,nbsecond,nbthird,nbfourth];
 
   return (
     <> 
@@ -95,8 +95,8 @@ const Carriere = ({ primaryColor, avatarIndex }) => {
           {userData?.classementData.map(element => (
             <div className='place'>
             <div className='num'>{element['Podium']}</div>
-            <ProgressBar width={nbwin*100/nbgames} height="25" current={0} total={1} />
-            <p>{nbwin*100/nbgames}%</p>
+            <ProgressBar width={gamesCount[element['Podium']-1]*100/nbgames} height="25" current={0} total={1} />
+            <p>{gamesCount[element['Podium']-1]*100/nbgames}%</p>
           </div>
           ))}
         </div>
