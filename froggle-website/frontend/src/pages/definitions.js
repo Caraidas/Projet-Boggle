@@ -1,10 +1,15 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import Header from '../components/Header';
 import DefinitionCard from '../components/DefinitionCard'
 import "../css/styleDefinition.css";
 import smartFrog from "../images/smart-frog.png";
+import { useNavigate  } from 'react-router-dom';
+
 
 function getRandomSentence() {
+  
+  
+
   const sentences = [
     "Je mangerais bien un asticot pour le goûter...",
     "Hmmmm, mais où sont mes lunettes ? Ah sur mon nez ... Ah non j'ai pas de nez.",
@@ -24,6 +29,12 @@ function getRandomSentence() {
 }
 
 const Definitions = () => {
+  const userDataString = localStorage.getItem('userData');
+  const userData = userDataString ? JSON.parse(userDataString) : null;
+  const navigate = useNavigate();
+  useEffect(()=>{if (userData == null){
+    navigate('/login');
+  }})
 
   const [inputValue, setInputValue] = useState('');
   const [output, setOutput] = useState([]);

@@ -44,7 +44,7 @@ if ($data['email'] && $data['password']) {
   $pdo = new PDO('mysql:host=localhost;dbname=boggle;charset=utf8', 'user', 'password');
 
   // Prépare la requête de sélection de l'utilisateur
-  $statement = $pdo->prepare('SELECT * FROM B_JOUEUR WHERE mail = :email');
+  $statement = $pdo->prepare('SELECT *  FROM B_JOUEUR WHERE mail = :email');
 
   // Lie le paramètre :username à la valeur de l'input username
   $statement->bindValue(':email', $username, PDO::PARAM_STR);
@@ -58,13 +58,35 @@ if ($data['email'] && $data['password']) {
 
   // Vérifie si l'utilisateur a été trouvé et si le mot de passe est correct
   if ($user && (hash('sha256', $password) === $user['mdp'])) {
-    // Authentification réussie, stocke les informations d'utilisateur dans la session
     $_SESSION['user_id'] = $user['ID_Joueur'];
     $_SESSION['email'] = $user['mail'];
-    // Ret$sessionData = $_SESSION['user_id'];ourne une réponse JSON avec un code de statut 200 et un message d'authentification réussie
+
+    
+
+    // collecte historique du joueur
+
+    $statement = $pdo->prepare('SELECT ID_Partie, Podium, date, mots_trouves, score FROM b_participe NATURAL JOIN b_partie WHERE ID_Joueur = 4');
+    $statement->bindValue(':id_joueur', $user['ID_Joueur'], PDO::PARAM_STR);
+    $statement->execute();
+    $historique = $statement->fetchAll(PDO::FETCH_ASSOC);
+    
+    
+    // collecte des images des joueurs des parties de l'historique
+    $joueurs = [];
+    for ($i = 0; sizeof($historique) > $i; $i++){
+      $statement = $pdo->prepare('SELECT Photo_De_Profile FROM b_joueur NATURAL JOIN b_participe WHERE b_participe.ID_Partie = :id_partie');
+      $statement->bindValue(':id_partie', $historique[$i]['ID_Partie'], PDO::PARAM_STR);
+      $statement->execute();
+      $photo = $statement->fetchAll(PDO::FETCH_ASSOC);
+      $historique[$i][] = $photo;
+    }
+
+    // $sessionData = $_SESSION['user_id']; Retourne une réponse JSON avec un code de statut 200 et un message d'authentification réussie
     $sessionData = array('pseudo' => $user['pseudo'], 'XP_Actuel' => $user['XP_Actuel'], 'Photo_De_Profile' => $user['Photo_De_Profile'], 'Est_Prive' => $user['Est_Prive']);
-    echo json_encode(array('status' => 'success', 'message' => 'Authentification réussie','sessionData' => $sessionData));
+    
+    echo json_encode(array('status' => 'success', 'message' => 'Authentification réussie','sessionData' => $sessionData, 'historique' => $historique));
     http_response_code(200);
+    // Ret$sessionData = $_SESSION['user_id'];ourne une réponse JSON avec un code de statut 200 et un message d'authentification réussie
     exit();
   } else {
     // Retourne une réponse JSON avec un code de statut 401 et un message d'échec d'authentification
