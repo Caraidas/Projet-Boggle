@@ -15,9 +15,9 @@ const Login = ({ logo, errorMessage }) => {
         axios.post("http://localhost/boggle/php/login.php", {email, password})
         .then((response) => {
             console.log(response.data.status);
-            console.log(response.data.sessionData);
+            console.log(response.data.classementData);
             if (response.data.status === "success") {
-                const userData = {pseudo: response.data.sessionData.pseudo, XP_Actuel: response.data.sessionData.XP_Actuel, Photo_De_Profile: response.data.sessionData.Photo_De_Profile, Est_Prive:response.data.sessionData.Est_Prive};
+                const userData = {classementData: response.data.classementData, historique: response.data.historique,pseudo: response.data.sessionData.pseudo, XP_Actuel: response.data.sessionData.XP_Actuel, Photo_De_Profile: response.data.sessionData.Photo_De_Profile, Est_Prive:response.data.sessionData.Est_Prive};
                 localStorage.setItem('userData', JSON.stringify(userData));
                 navigate('/');
             } else if(response.data.status === "error") {

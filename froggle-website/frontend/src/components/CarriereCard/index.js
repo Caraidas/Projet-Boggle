@@ -1,14 +1,20 @@
 import React from 'react'
 import { CardContainer, CarriereCardDate, CarriereCardPicture, Win, WinDataCont, GameData, Num, CarriereCardPictures } from './CarriereCardElements';
 
-const CarriereCard = ({ pictures }) => {
+const CarriereCard = ({ pictures, number}) => {
 
+  const userDataString = localStorage.getItem('userData');
+  const userData = userDataString ? JSON.parse(userDataString) : null;
   let pics = [];
+
+  let win = "Victoire";
+  if (userData?.historique[number]['Podium'] != 1)
+    win = "Défaite";
+  
   
   for (let i = 0; i < pictures.length; i++) {
-    let picture = pictures[i];
-
-    pics.push(<CarriereCardPicture src={picture} index={i}></CarriereCardPicture>);
+    let avatar = require('../../images/avatar' + pictures[i]['Photo_De_Profile'] + '.png');
+    pics.push(<CarriereCardPicture src={avatar} index={i}></CarriereCardPicture>);
   }
 
   return (
@@ -18,16 +24,16 @@ const CarriereCard = ({ pictures }) => {
       </CarriereCardPictures> 
 
       <WinDataCont>
-        <Num>1</Num>
-        <Win>Victoire</Win>
+        <Num>{userData?.historique[number]['Podium']}</Num>
+        <Win>{win}</Win>
       </WinDataCont>
 
       <GameData>
-        <div>Mots trouvés : 38</div> 
-        <div>Points : 240</div>
+        <div>Mots trouvés : {userData?.historique[number]['mots_trouves']}</div> 
+        <div>Points : {userData?.historique[number]['score']}</div>
       </GameData>
 
-      <CarriereCardDate>12/12/2007</CarriereCardDate>
+      <CarriereCardDate>{userData?.historique[number]['date']}</CarriereCardDate>
     </CardContainer>
   )
 }
