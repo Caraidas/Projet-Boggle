@@ -75,21 +75,25 @@ class DefaultChatHooks(ChatHooks):
     DEFAULT_WELCOME_MESSAGE = "Welcome everybody!"
     DEFAULT_DURATION = 60
     DEFAULT_ROOMS = {
-        "Nidal": {
+        "Solo": {
             "attendee_number": 1, 
             "duration": 180, 
             "welcome_message": "Amuses toi bien !",
         },
-        },
-        "Paul": {
+        "Duo": {
             "attendee_number": 2, 
-            "duration": 3600, 
-            "welcome_message": "Welcome everybody!",
+            "duration": 180, 
+            "welcome_message": "Que le meilleur gagne !",
         },
-        "Nidal1": {
-            "attendee_number": 1, 
-            "duration": 300, 
-            "welcome_message": "Bienvenue dans la faille !",
+        "Trio": {
+            "attendee_number": 3, 
+            "duration": 180, 
+            "welcome_message": "ça va vite devenir n'importe quoi !",
+        },
+        "Quatuor": {
+            "attendee_number": 4, 
+            "duration": 180, 
+            "welcome_message": "La famille est au grand complet on dirait !",
         }
     }
 
@@ -124,14 +128,14 @@ class DefaultChatHooks(ChatHooks):
 
         #Creation grille 
         print("Hello world")
-        process = subprocess.Popen(["C:\\Users\\33768\\Documents\\GitHub\\Projet-Boggle\\froggle-website\\backend\\src\\chatac\\game-engine\\grid_build", "C:\\Users\\33768\\Documents\\GitHub\\Projet-Boggle\\froggle-website\\backend\\src\\chatac\\game-engine\\frequences.txt",'4','4'], stdout=subprocess.PIPE)
+        process = subprocess.Popen(["C:\\Users\\Nidal\\Documents\\BUT2\\Boggle\\Projet-Boggle\\froggle-website\\backend\\src\\chatac\\game-engine\\grid_build", "C:\\Users\\Nidal\\Documents\\BUT2\\Boggle\\Projet-Boggle\\froggle-website\\backend\\src\\chatac\\game-engine\\frequences.txt",'4','4'], stdout=subprocess.PIPE)
         output, error = process.communicate()
         grid = output.decode()
         grid = grid.strip()
         print(grid)
         print(type(grid))
 
-        process2 = subprocess.Popen(["C:\\Users\\33768\\Documents\\GitHub\\Projet-Boggle\\froggle-website\\backend\\src\\chatac\\game-engine\\solve", "C:\\Users\\33768\\Documents\\GitHub\\Projet-Boggle\\froggle-website\\backend\\src\\chatac\\game-engine\\dico.lex", "3", "4", "4"] + grid.split(" "), stdout=subprocess.PIPE)
+        process2 = subprocess.Popen(["C:\\Users\\Nidal\\Documents\\BUT2\\Boggle\\Projet-Boggle\\froggle-website\\backend\\src\\chatac\\game-engine\\solve", "C:\\Users\\Nidal\\Documents\\BUT2\\Boggle\\Projet-Boggle\\froggle-website\\backend\\src\\chatac\\game-engine\\dico.lex", "3", "4", "4"] + grid.split(" "), stdout=subprocess.PIPE)
         output2, error2 = process2.communicate()
         solutionsString = output2.decode()
         #solutions = solutionsString.strip().split(" ")
