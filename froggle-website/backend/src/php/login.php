@@ -81,7 +81,7 @@ if ($data['email'] && $data['password']) {
       $historique[$i][] = $photo;
     }
 
-    $statement = $pdo->prepare('SELECT COUNT(Podium) AS nbClassement, Podium FROM b_participe WHERE ID_Joueur = 4 GROUP BY Podium');
+    $statement = $pdo->prepare('SELECT COUNT(Podium) AS nbClassement, Podium FROM b_participe WHERE ID_Joueur = :id_joueur GROUP BY Podium');
     $statement->bindValue(':id_joueur', $user['ID_Joueur'], PDO::PARAM_STR);
     $statement->execute();
     $PodiumPartie = $statement->fetchAll(PDO::FETCH_ASSOC);
