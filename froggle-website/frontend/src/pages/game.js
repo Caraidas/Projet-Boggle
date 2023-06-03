@@ -48,10 +48,18 @@ const Game = ({ soundVolume, grid, setMusic, solvedWords, onWordSent, attendees,
   let [players, setPlayers] = useState([]);
   let [showPopup, setShowPopup] = useState(false);
 
+  const [me, setMe] = useState(null);
+  const userDataString = localStorage.getItem('userData');
+  const userData = userDataString ? JSON.parse(userDataString) : null;
+
   useEffect(() => {
     let p = []
     for (var i = 0; i < attendees.length; i++) {
       p.push([attendees[i], 0, 0, i + 1])
+  
+      if (attendees[i] == userData?.pseudo) {
+        setMe([attendees[i], 0, 0, i + 1]);
+      }
     }
     setPlayers(p)
   }, [])
@@ -74,7 +82,7 @@ const Game = ({ soundVolume, grid, setMusic, solvedWords, onWordSent, attendees,
         <div className="popup">
           <div className="popup-content" style={{ background: primaryColor }}>
             <img className="winLogo" src={victory}/>
-            <p>Nombre de mot trouvés: 42 <br></br>Score: 123 pts </p> 
+            <p>Nombre de mot trouvés: {me[1]} <br></br>Score: {stats[me[0]][0]} pts </p> 
             <button className="popup-btn" onClick={() => handleLeaving()}>Fermer</button>
           </div>
         </div>
@@ -88,11 +96,10 @@ const Game = ({ soundVolume, grid, setMusic, solvedWords, onWordSent, attendees,
           </div>
           <input className='gameInput' type='text' onChange={(e) => changeHandler(e)} onKeyDown={(e) => keyDownHandler(e)} />
           {/* <button onClick={(e) => onWordSent(wordInput)}>Envoyer</button> */}
-          {words}
         </div>
         <div className='players'>
           {players.map(player => (
-            <GameCard key={player[0]} picture={picture} name={player[0]} words={player[1]+"/"+solvedWords.length} points={stats[player[0]][0]} place={player[3]} />          ))}
+            <GameCard key={player[0]} picture={picture} name={player[0]} words={player[1]+"/"+solvedWords.length} points={stats[player[0]][0]} place={player[3]} />))}
         </div>
       </div>
     </>

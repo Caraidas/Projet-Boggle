@@ -28,12 +28,11 @@
 }
 
 .gameCont {
-    width: 90%;
     margin: 0 auto;
-    max-width: 1250px;
+    max-width: 950px;
     display: flex;
-    align-items: center;
-    justify-content: space-between;
+    align-items: flex-start;
+    gap: 50px;
     position: absolute;
     top: 20vh;
     left: 50%;
@@ -56,6 +55,10 @@
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     grid-gap: 15px;
+}
+
+.solo {
+    grid-template-columns: repeat(1, 1fr);
 }
 
 .gameInput {
@@ -206,6 +209,7 @@
     .gameCont {
         flex-direction: column;
         gap: 50px;
+        align-items: center;
         width: fit-content;
         padding-bottom: 50px;
     }
