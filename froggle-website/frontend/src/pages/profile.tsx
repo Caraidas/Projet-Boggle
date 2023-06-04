@@ -3,9 +3,7 @@ import { useNavigate} from 'react-router-dom';
 import Header from "../components/Header";
 import ColorInput from "../components/ColorInput";
 import "../css/styleProfile.css";
-import pfp from "../images/pfp.jpg";
 import AvatarInput from "../components/AvatarInput";
-import avatar0 from "../images/avatar0.png";
 
 const ProfilePage = (props: { avatarIndex : number, primaryColor: string, setColor: (color : string) => void, setAvatar : (avatar : number) => void }) => {
 
@@ -53,11 +51,6 @@ const ProfilePage = (props: { avatarIndex : number, primaryColor: string, setCol
               <div className="profileInputCont">
                 <label htmlFor="pseudo">Pseudo</label>
                 <input type="text" name="pseudo" id="pseudo" />
-              </div>
-
-              <div className="profileInputCont">
-                <label htmlFor="email">Email</label>
-                <input type="email" name="email" id="email" />
               </div>
             </div>
             <input
