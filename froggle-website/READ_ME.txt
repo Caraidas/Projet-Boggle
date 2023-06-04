@@ -28,6 +28,8 @@ Pour notre part nous utilisons laragon pour exécuter nos fichiers en localhost.
 Récupérer dans le dossier /backend/src/php du projet l'ensemble des fichiers php et autres fichiers et les mettres dans le dossier /www/boggle/php créer précédemment dans le serveur web. 
 Il faut penser à changer dans les fichier login.php, register.php et insertGameData.api.php les variable de connexion à la base de données.
 
+Ne pas oublier de récuperer l'archive zip java dansle dossier /backend/src/php/java.zip et de l'extraire dans le serveur web à /www/boggle/php/
+
 ATTENTION: 
 
 Les nodes_modules utilisé dans le projet ne sont pas fournit dans l'archive zip.
