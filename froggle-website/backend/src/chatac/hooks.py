@@ -138,8 +138,13 @@ class DefaultChatHooks(ChatHooks):
         process2 = subprocess.Popen([".\\src\\chatac\\game-engine\\solve", ".\\src\\chatac\\game-engine\\dico.lex", "3", "4", "4"] + grid.split(" "), stdout=subprocess.PIPE)
         output2, error2 = process2.communicate()
         solutionsString = output2.decode()
-        #solutions = solutionsString.strip().split(" ")
+        word_list = solutionsString.split(" ")  # Sépare la chaîne de caractères en une liste de mots
+
+        # Crée une nouvelle liste en retirant les doublons
+        unique_words = list(set(word_list))
+        solutionsString = " ".join(unique_words);
         print(solutionsString)
+
         print("end")
 
         return {

@@ -160,3 +160,12 @@
         transform: scale(1) translateY(-50%);
     }
 }
+
+
+@media screen and (max-width: 675px) {
+    .profileInputRow {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+}
