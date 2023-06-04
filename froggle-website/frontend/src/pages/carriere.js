@@ -31,26 +31,23 @@ const Carriere = ({ primaryColor, avatarIndex }) => {
   let img = require("../images/avatar" + avatarIndex + ".png");
 
   let nbgames = 0;
-  let nbwin = 0;
   let nblose = 0;
-  let nbsecond = 0;
-  let nbthird = 0;
-  let nbfourth = 0;
+  let gamesCount = [0,0,0,0];
   userData?.classementData.forEach(element => {
     nbgames += parseInt(element['nbClassement']);
     if (element['Podium'] == 1){
-      nbwin += parseInt(element['nbClassement']);
+      gamesCount[0] += parseInt(element['nbClassement']);
     }else{
       nblose += parseInt(element['nbClassement']);
       if (element['Podium'] == 2)
-        nbsecond += parseInt(element['nbClassement']);
+        gamesCount[1] += parseInt(element['nbClassement']);
       else if (element['Podium'] == 3)
-        nbthird += parseInt(element['nbClassement']);
+        gamesCount[2] += parseInt(element['nbClassement']);
       else
-        nbfourth += parseInt(element['nbClassement']);
+        gamesCount[3] += parseInt(element['nbClassement']);
     }
   });
-  let gamesCount = [nbwin,nbsecond,nbthird,nbfourth];
+  
 
   return (
     <> 
@@ -81,7 +78,7 @@ const Carriere = ({ primaryColor, avatarIndex }) => {
               <div className='statName'>parties jouées</div>
             </div>
             <div>
-              <div className='statNumber'>{nbwin}</div>
+              <div className='statNumber'>{gamesCount[0]}</div>
               <div className='statName'>parties Gagné</div>
             </div>
             <div>
