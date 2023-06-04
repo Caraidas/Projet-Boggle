@@ -39,7 +39,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $host = 'localhost';
     $dbname = 'boggle';
     $usernamebdd = 'root';
-    $pass = '';
+    $pass = '090515Paullucas!';
 
     try {
         $db = new PDO("mysql:host=$host;dbname=$dbname", $usernamebdd, $pass);
@@ -66,7 +66,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $qryGame = $db->prepare("INSERT INTO B_PARTIE (grille, Nb_Joueur, date) VALUES (:grid, :nb_players, :todaysDate)");
 
                 $nb_players =  count($stats);
-                $date = date('Y-m-d');
+                $date = date('d-m-Y');
                 $qryGame->bindParam(':grid', $grid);
                 $qryGame->bindParam(':nb_players',$nb_players);
                 $qryGame->bindParam(':todaysDate',$date );
@@ -96,7 +96,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $query->execute();
 
                     
-                    $query = $db->prepare("UPDATE b_joueur SET XP_Actuel = ':score' WHERE b_joueur.ID_Joueur = :id_joueur");
+                    $query = $db->prepare("UPDATE b_joueur SET XP_Actuel = :score WHERE b_joueur.ID_Joueur = :id_joueur");
                     $query->bindParam(':id_joueur', $id_joueur);
                     $query->bindParam(':score', $xp_Actu);
                     $query->execute();
@@ -112,7 +112,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 
 
-    $statement = $db->prepare('SELECT ID_Partie, Podium, date, mots_trouves, score FROM b_participe NATURAL JOIN b_partie WHERE ID_Joueur = :id_joueur ORDER by date DESC LIMIT 10');
+    $statement = $db->prepare('SELECT ID_Partie, Podium, date, mots_trouves, score FROM b_participe NATURAL JOIN b_partie WHERE ID_Joueur = :id_joueur ORDER by ID_Partie DESC LIMIT 10');
     $statement->bindValue(':id_joueur', $id_local_player);
     $statement->execute();
     $historique = $statement->fetchAll(PDO::FETCH_ASSOC);

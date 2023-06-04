@@ -65,7 +65,7 @@ if ($data['email'] && $data['password']) {
 
     // collecte historique du joueur
 
-    $statement = $pdo->prepare('SELECT ID_Partie, Podium, date, mots_trouves, score FROM b_participe NATURAL JOIN b_partie WHERE ID_Joueur = :id_joueur ORDER by date DESC LIMIT 10');
+    $statement = $pdo->prepare('SELECT ID_Partie, Podium, date, mots_trouves, score FROM b_participe NATURAL JOIN b_partie WHERE ID_Joueur = :id_joueur ORDER by ID_Partie DESC LIMIT 10');
     $statement->bindValue(':id_joueur', $user['ID_Joueur'], PDO::PARAM_STR);
     $statement->execute();
     $historique = $statement->fetchAll(PDO::FETCH_ASSOC);

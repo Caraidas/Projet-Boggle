@@ -22,6 +22,22 @@ const ProfilePage = (props: { avatarIndex : number, primaryColor: string, setCol
       localStorage.setItem('userData', JSON.stringify(test));
     }
   }
+  const [anicenMdp,mdp] = useState("");
+  function handlemdp(str:string){
+    mdp (str);
+  }
+  const [nouveauMdp,setmdp] = useState("");
+  function handlemdpChange(str:string){
+    setmdp (str);
+  }
+  function changeMdp(mdplast:string,mdpnew:string){
+    if (mdplast != "" && mdpnew != ""){
+      axios.post("http://localhost/boggle/php/updatePassword.php", {anicenMdp,nouveauMdp,id_joueur}).then((response)=>{
+        console.log(response);
+      })
+
+    }
+  }
 
 
   const userDataString = localStorage.getItem('userData');
@@ -77,7 +93,26 @@ const ProfilePage = (props: { avatarIndex : number, primaryColor: string, setCol
               type="submit"
               className="profileFormButton"
               onClick={()=>changePseudo(pseudo)}
-            >Confirmer</button>
+            >Changer de pseudo</button>
+          </div>
+          <div className="profileFormCont">
+            <div className="profileInputRow">
+              <div className="profileInputCont">
+                <label htmlFor="pseudo">Ancien mot de passe</label>
+                <input type="password" name="pseudo" id="pseudo" onChange={(e)=>handlemdp(e.target.value)}/>
+              </div>
+            </div>
+            <div className="profileInputRow">
+              <div className="profileInputCont">
+                <label htmlFor="pseudo">Nouveau mot de passe</label>
+                <input type="password" name="pseudo" id="pseudo" onChange={(e)=>handlemdpChange(e.target.value)}/>
+              </div>
+            </div>
+            <button
+              type="submit"
+              className="profileFormButton"
+              onClick={()=>changeMdp(anicenMdp,nouveauMdp)}
+            >Changer de mot de passe</button>
           </div>
         </div>
 

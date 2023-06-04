@@ -27,7 +27,8 @@ function cors() {
   if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $data = json_decode(file_get_contents('php://input'), true);
 
-    $pseudo = $data['pseudo'];
+    $ancienmdp = $data['anicenMdp'];
+    $nouveaumdp = $data['nouveauMdp'];
     $id_joueur = $data['id_joueur'];
 
     //database connexion
@@ -42,19 +43,21 @@ function cors() {
         die("Erreur de connexion à la base de données: " . $e->getMessage());
     }
 
-    if($pseudo != ""){
-        $query = $db->prepare("SELECT COUNT(*) AS s from b_joueur WHERE pseudo = :pseudo");
-        $query->bindParam(':pseudo', $pseudo);
+
+    $ancienmdp = hash('sha256',$ancienmdp);
+    $query = $db->prepare("SELECT COUNT(*) AS s from b_joueur WHERE ID_Joueur = :id_joueur AND mdp = :mdp");
+    $query->bindParam(':id_joueur', $id_joueur);
+    $query->bindParam(':mdp', $ancienmdp);
+    $query->execute();
+    $result = $query->fetch();
+    echo $result['s'];
+    if ($result['s'] == 1){
+        echo "euilzief";
+        $nouveaumdp = hash('sha256',$nouveaumdp);
+        $query = $db->prepare("UPDATE b_joueur SET mdp = :mdp WHERE ID_Joueur = :id_joueur");
+        $query->bindParam(':mdp', $nouveaumdp);
+        $query->bindParam(':id_joueur', $id_joueur);
         $query->execute();
-        $result = $query->fetch();
-        echo "AAAA";
-        if ($result['s'] == 0){
-            echo "ouysfsv";
-            $query = $db->prepare("UPDATE b_joueur SET pseudo = :pseudo WHERE ID_Joueur = :id_joueur");
-            $query->bindParam(':pseudo', $pseudo);
-            $query->bindParam(':id_joueur', $id_joueur);
-            $query->execute();
-        }
     }
   }
 
