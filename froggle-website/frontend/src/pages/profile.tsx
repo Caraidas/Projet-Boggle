@@ -5,6 +5,7 @@ import ColorInput from "../components/ColorInput";
 import "../css/styleProfile.css";
 import AvatarInput from "../components/AvatarInput";
 import axios from 'axios';
+import { response } from "express";
 
 const ProfilePage = (props: { avatarIndex : number, primaryColor: string, setColor: (color : string) => void, setAvatar : (avatar : number) => void }) => {
 
@@ -13,9 +14,13 @@ const ProfilePage = (props: { avatarIndex : number, primaryColor: string, setCol
     setPseudo (str);
   }
   function changePseudo(str:string){
-    axios.post("http://localhost/boggle/php/updateSettings.php", {str,id_joueur})
-    const test = {ID_Joueur: userData?.ID_Joueur, classementData: userData?.classementData, historique: userData?.historique, pseudo: str, XP_Actuel: userData?.XP_Actuel, Photo_De_Profile: userData?.Photo_De_Profile, Est_Prive:userData?.Est_Prive};
-    localStorage.setItem('userData', JSON.stringify(test));
+    if (str != ""){
+      axios.post("http://localhost/boggle/php/updateSettings.php", {pseudo,id_joueur}).then((response)=>{
+        console.log(response);
+      })
+      const test = {ID_Joueur: userData?.ID_Joueur, classementData: userData?.classementData, historique: userData?.historique, pseudo: str, XP_Actuel: userData?.XP_Actuel, Photo_De_Profile: userData?.Photo_De_Profile, Est_Prive:userData?.Est_Prive};
+      localStorage.setItem('userData', JSON.stringify(test));
+    }
   }
 
 
@@ -49,9 +54,9 @@ const ProfilePage = (props: { avatarIndex : number, primaryColor: string, setCol
 
   function selectAvatar(index : number) {
     props.setAvatar(index);
-    axios.post("http://localhost/boggle/php/updatePP.php", {index,id_joueur}).then((response) => {
-      console.log(response.data);
-  });
+    axios.post("http://localhost/boggle/php/updatePP.php", {index,id_joueur})
+    const test = {ID_Joueur: userData?.ID_Joueur, classementData: userData?.classementData, historique: userData?.historique, pseudo: userData?.pseudo, XP_Actuel: userData?.XP_Actuel, Photo_De_Profile: index, Est_Prive:userData?.Est_Prive};
+    localStorage.setItem('userData', JSON.stringify(test));
   }
 
   let avatarProfile = require('../images/avatar' + props.avatarIndex + '.png');
