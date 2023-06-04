@@ -38,8 +38,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     //database connexion
     $host = 'localhost';
     $dbname = 'boggle';
-    $usernamebdd = 'root';
-    $pass = '090515Paullucas!';
+    $usernamebdd = 'user';
+    $pass = 'password';
 
     try {
         $db = new PDO("mysql:host=$host;dbname=$dbname", $usernamebdd, $pass);
@@ -61,12 +61,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $xp_Actu += $value[0]*10;
         if ($id_joueur == $id_local_player){
             $XP_Joueur = $xp_Actu;
-            
             if ($rank[$key] == 1){
                 $qryGame = $db->prepare("INSERT INTO B_PARTIE (grille, Nb_Joueur, date) VALUES (:grid, :nb_players, :todaysDate)");
 
                 $nb_players =  count($stats);
-                $date = date('d-m-Y');
+                $date = date('Y-m-d');
                 $qryGame->bindParam(':grid', $grid);
                 $qryGame->bindParam(':nb_players',$nb_players);
                 $qryGame->bindParam(':todaysDate',$date );
@@ -109,7 +108,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     
 
     // collecte historique du joueur
-
 
 
     $statement = $db->prepare('SELECT ID_Partie, Podium, date, mots_trouves, score FROM b_participe NATURAL JOIN b_partie WHERE ID_Joueur = :id_joueur ORDER by ID_Partie DESC LIMIT 10');
