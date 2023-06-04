@@ -350,12 +350,16 @@ class ChatServer(object):
                                 await client.send_message('not_chatting')
                         elif msg_kind == 'send_word':
                             content = decoded_msg.get('content')
+                            
                             if content:
                                 process = subprocess.Popen([".\\src\\chatac\\game-engine\\score", ""+content.upper()], stdout=subprocess.PIPE)
                                 output, error = process.communicate()
                                 score = output.decode()
                                 score = score.strip()
-                                await client.send_message('word_found', score=score,sender=client.identity.get('name'), word=content.upper())
+                                to_send = await self.hooks.on_chat_message(client.chat_session.id, client.id, score)
+                                for (addressee_id, body) in to_send.items():
+                                    await client.chat_session.put_in_message_queue([addressee_id], 'word_found', sender=client.identity.get('name'), score=body,word=content.upper())
+
                                 logger.info(f"Mot: {score}")
                         
                         elif msg_kind == 'leave_chat_session':

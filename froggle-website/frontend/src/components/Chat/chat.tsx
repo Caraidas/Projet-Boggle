@@ -241,7 +241,6 @@ export const ChatManager = (props: {primaryColor : string, socketUrl: string, se
                 console.log(content.sender)
                 console.log(stats)
                 let player = stats[content.sender]
-                console.log("AAAAAAAAAAAAA : " + player)
                 let score = parseInt(content.score);
                 let words = [content.word];
 

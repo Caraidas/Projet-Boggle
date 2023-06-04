@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate  } from 'react-router-dom';
 import Cell from '../components/Cell';
 import "../css/styleGame.css";
 import GameCard from '../components/GameCard';
@@ -6,6 +7,8 @@ import picture from "../images/pfp.jpg";
 import gameMusic from "../sound/kirby.mp3";
 import Countdown from '../components/Countdown';
 import victory from "../images/victoire.png";
+import defeat from "../images/defaite.png";
+import axios from 'axios'
 
 const Game = ({ soundVolume, grid, setMusic, solvedWords, onWordSent, attendees, primaryColor, stats, duration, onLeaving, onClosing }) => {
   setMusic(gameMusic);
@@ -47,7 +50,10 @@ const Game = ({ soundVolume, grid, setMusic, solvedWords, onWordSent, attendees,
   let [wordInput, setWordInput] = useState("");
   let [players, setPlayers] = useState([]);
   let [showPopup, setShowPopup] = useState(false);
+  let [ranks,  setRanks] = useState([]);
+  let [popupLogo, setPopupLogo] = useState(defeat);
 
+  const navigate = useNavigate();
   const [me, setMe] = useState(null);
   const userDataString = localStorage.getItem('userData');
   const userData = userDataString ? JSON.parse(userDataString) : null;
@@ -73,6 +79,52 @@ const Game = ({ soundVolume, grid, setMusic, solvedWords, onWordSent, attendees,
       onClosing()
   }
 
+  const updateRanks = (stats) => {
+    // Copie de l'array stats pour éviter les mutations directes
+    const statsCopy = { ...stats };
+  
+    // Trier les joueurs en fonction de leur score
+    const sortedPlayers = Object.keys(statsCopy).sort(
+      (a, b) => statsCopy[b][0] - statsCopy[a][0]
+    );
+  
+    // Mettre à jour les positions dans le classement
+    const updatedRanks = sortedPlayers.reduce((acc, player, index) => {
+      acc[player] = index + 1;
+      return acc;
+    }, {});
+  
+    // Mettre à jour la variable d'état ranks
+    setRanks(updatedRanks);
+  };
+
+  useEffect(() => {
+    updateRanks(stats);
+    if(ranks[userData?.pseudo] == 1){
+      setPopupLogo(victory)
+    }else setPopupLogo(defeat)
+  }, [stats]);
+
+
+  function insertGameData() {
+    axios.post("http://localhost/boggle/php/insertGameData.api.php", {stats,grid})
+    .then((response) => {
+        console.log(response.data);
+        if (response.data.status === "success") {
+            console.log("success")
+            navigate('/game');
+        } else if(response.data.status === "error") {
+            console.log("error")
+        }
+    })
+    .catch(error => console.log(error));
+  }  
+  console.log("STATS")
+  console.log(stats)
+  console.log("RANKS")
+  console.log(ranks)
+  console.log(userData?.pseudo)
+
   return (
     <>
       <div className='timer' style={{ background: primaryColor }}>
@@ -81,9 +133,9 @@ const Game = ({ soundVolume, grid, setMusic, solvedWords, onWordSent, attendees,
       {showPopup && (
         <div className="popup">
           <div className="popup-content" style={{ background: primaryColor }}>
-            <img className="winLogo" src={victory}/>
-            <p>Nombre de mot trouvés: {me[1]} <br></br>Score: {stats[me[0]][0]} pts </p> 
-            <button className="popup-btn" onClick={() => handleLeaving()}>Fermer</button>
+            <img className="winLogo" src={popupLogo}/>
+            <p>Nombre de mot trouvés: {stats[me[0]][1].length} <br></br>Score: {stats[me[0]][0]} pts </p> 
+            <button className="popup-btn" onClick={() => { handleLeaving(); insertGameData(); }}>Fermer</button>
           </div>
         </div>
       )}
@@ -95,11 +147,10 @@ const Game = ({ soundVolume, grid, setMusic, solvedWords, onWordSent, attendees,
             ))}
           </div>
           <input className='gameInput' type='text' onChange={(e) => changeHandler(e)} onKeyDown={(e) => keyDownHandler(e)} />
-          {/* <button onClick={(e) => onWordSent(wordInput)}>Envoyer</button> */}
         </div>
         <div className='players'>
           {players.map(player => (
-            <GameCard key={player[0]} picture={picture} name={player[0]} words={player[1]+"/"+solvedWords.length} points={stats[player[0]][0]} place={player[3]} />))}
+            <GameCard key={player[0]} picture={picture} name={player[0]} words={stats[me[0]][1].length+"/"+solvedWords.length} points={stats[player[0]][0]} place={ranks[userData?.pseudo]} />))}
         </div>
       </div>
     </>

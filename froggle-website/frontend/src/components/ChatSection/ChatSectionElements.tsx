@@ -45,7 +45,7 @@ export const ChatContainer = styled.div`
     }
 `
 export const QuitButton = styled.button`
-    width: 100px;
+    width: 180px;
     height: 50px;
     background: #ff6262;
     display: flex;

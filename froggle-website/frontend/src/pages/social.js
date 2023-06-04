@@ -17,6 +17,7 @@ const Social = () => {
     axios.get('http://localhost/boggle/php/social.php')
       .then(response => {
         const data = response.data;
+        console.log(response)
         console.log(data)
         setAmis(data);
       })

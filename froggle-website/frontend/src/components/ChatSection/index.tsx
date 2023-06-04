@@ -26,7 +26,7 @@ const ChatSection = (props: {messages: Message[], active: boolean, onMessageWrit
             <ChatContainer toggled={isChatToggled}>
                 <Messages primaryColor={props.primaryColor} messages={props.messages} />
                 {props.active && <MessageSenderInput primaryColor={props.primaryColor} onMessageWritten={props.onMessageWritten} />}
-                <QuitButton onClick={() => handleLeaving()}>Quitter</QuitButton>
+                <QuitButton onClick={() => handleLeaving()}>Quitter la partie</QuitButton>
             </ChatContainer>
         </>
     );
