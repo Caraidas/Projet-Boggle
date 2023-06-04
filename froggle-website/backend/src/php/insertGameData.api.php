@@ -47,15 +47,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         die("Erreur de connexion à la base de données: " . $e->getMessage());
     }
 
-    $qryGame = $db->prepare("INSERT INTO B_PARTIE (grille, Nb_Joueur, date) VALUES (:grid, :nb_players, :todaysDate)");
-    $nb_players =  count($stats);
-    $date = date('Y-m-d');
-    $qryGame->bindParam(':grid', $grid);
-    $qryGame->bindParam(':nb_players',$nb_players);
-    $qryGame->bindParam(':todaysDate',$date );
-    $qryGame->execute();
-    $idGame = $db->lastInsertId();
-
     foreach($stats as $key => $value){
         // get player id by username
         $id_joueur = null;
@@ -67,26 +58,55 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($result) {
             $id_joueur = $result['ID_joueur'];
         }
-
-        $nbrWords = count($value[1]);
-        
-        $query = $db->prepare("INSERT INTO B_PARTICIPE (ID_Joueur, ID_Partie, score, Podium, mots_trouves) VALUES (:idPlayer, :idGame, :score, :rank, :foundWords)");
-        $query->bindParam(':idPlayer', $id_joueur);
-        $query->bindParam(':idGame', $idGame);
-        $query->bindParam(':score', $value[0]);
-        $query->bindParam(':rank', $rank[$key]);
-        $query->bindParam(':foundWords',$nbrWords);
-        $query->execute();
-
         $xp_Actu += $value[0]*10;
-        $query = $db->prepare("UPDATE b_joueur SET XP_Actuel = ':score' WHERE b_joueur.ID_Joueur = $id_joueur");
-        $query->bindParam(':score', $xp_Actu);
-        $query->execute();
-
         if ($id_joueur == $id_local_player){
             $XP_Joueur = $xp_Actu;
+            
+            if ($rank[$key] == 1){
+                $qryGame = $db->prepare("INSERT INTO B_PARTIE (grille, Nb_Joueur, date) VALUES (:grid, :nb_players, :todaysDate)");
+
+                $nb_players =  count($stats);
+                $date = date('Y-m-d');
+                $qryGame->bindParam(':grid', $grid);
+                $qryGame->bindParam(':nb_players',$nb_players);
+                $qryGame->bindParam(':todaysDate',$date );
+                $qryGame->execute();
+                $idGame = $db->lastInsertId();
+
+                foreach($stats as $key => $value){
+                    // get player id by username
+                    $id_joueur = null;
+                    $qry = $db->prepare("SELECT ID_joueur FROM B_JOUEUR WHERE pseudo = :pseudo");
+                    $qry->bindParam(':pseudo', $key);
+                    $qry->execute();
+
+                    $result = $qry->fetch();
+                    if ($result) {
+                        $id_joueur = $result['ID_joueur'];
+                    }
+
+                    $nbrWords = count($value[1]);
+                    
+                    $query = $db->prepare("INSERT INTO B_PARTICIPE (ID_Joueur, ID_Partie, score, Podium, mots_trouves) VALUES (:idPlayer, :idGame, :score, :rank, :foundWords)");
+                    $query->bindParam(':idPlayer', $id_joueur);
+                    $query->bindParam(':idGame', $idGame);
+                    $query->bindParam(':score', $value[0]);
+                    $query->bindParam(':rank', $rank[$key]);
+                    $query->bindParam(':foundWords',$nbrWords);
+                    $query->execute();
+
+                    
+                    $query = $db->prepare("UPDATE b_joueur SET XP_Actuel = ':score' WHERE b_joueur.ID_Joueur = :id_joueur");
+                    $query->bindParam(':id_joueur', $id_joueur);
+                    $query->bindParam(':score', $xp_Actu);
+                    $query->execute();
+                }
+            }
         }
     }
+    
+
+    
 
     // collecte historique du joueur
 
