@@ -30,8 +30,6 @@ function cors() {
     $avatar = $data['index'];
     $id_joueur = $data['id_joueur'];
 
-    echo "fligvuherouivheriog ".$avatar;
-    echo "zeriufbzoieubgzf".$id_joueur;
     //database connexion
     $host = 'localhost';
     $dbname = 'boggle';
