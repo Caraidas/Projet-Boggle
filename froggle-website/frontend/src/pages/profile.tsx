@@ -44,9 +44,7 @@ const ProfilePage = (props: { avatarIndex : number, primaryColor: string, setCol
     "#A95D9D",
   ];
 
-  let avatars = [
-    0, 1, 2, 3, 4, 5
-  ];
+  let avatars = [0, 1, 2, 3, 4, 5, 6, 7];
 
   function setPrimaryColor(color : string) {
     props.setColor(color);
@@ -94,7 +92,7 @@ const ProfilePage = (props: { avatarIndex : number, primaryColor: string, setCol
           <h3>Avatar</h3>
           <div className="profileColorRow">
             {avatars.map((avatar) => (
-                <AvatarInput key={avatar} imgIndex={avatar} onSelect={selectAvatar} toggled={props.avatarIndex == avatar} />
+                <AvatarInput requiredLevel={avatar * 2} key={avatar} imgIndex={avatar} onSelect={selectAvatar} toggled={props.avatarIndex == avatar} />
             ))}
           </div>
         </div>
