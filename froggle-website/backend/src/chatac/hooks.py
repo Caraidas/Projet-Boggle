@@ -77,12 +77,12 @@ class DefaultChatHooks(ChatHooks):
     DEFAULT_ROOMS = {
         "Solo": {
             "attendee_number": 1, 
-            "duration": 30, 
+            "duration": 60, 
             "welcome_message": "Amuses toi bien !",
         },
         "Duo": {
             "attendee_number": 2, 
-            "duration": 30, 
+            "duration": 90, 
             "welcome_message": "Que le meilleur gagne !",
         },
         "Trio": {
