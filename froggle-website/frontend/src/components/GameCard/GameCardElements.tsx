@@ -1,5 +1,11 @@
 import styled, { keyframes } from "styled-components";
 
+const appearAnim = keyframes`
+    from {
+        transform: scale(0);
+    }
+`
+
 export const GameCardCont = styled.div` 
     width: 240px;
     height: 165px;
@@ -10,10 +16,6 @@ export const GameCardCont = styled.div`
     background: #fff;
     position: relative;
     color: #000;
-
-    @media screen and (max-width: 550px) {
-        
-    }
 `
 
 export const Picture = styled.img`
@@ -44,6 +46,7 @@ export const Points = styled.p`
     left: 15px;
     font-size: 1.5rem;
     font-weight: 900;
+    animation: ${appearAnim} 0.25s cubic-bezier(.85,1.76,.75,.81);
 `
 
 export const Place = styled.p`
@@ -56,6 +59,7 @@ export const Place = styled.p`
     -webkit-text-stroke: 3px #000;
     text-shadow: 0px 3px 0px #000;
     transform: rotate(10deg);
+    animation: ${appearAnim} 0.25s cubic-bezier(.85,1.76,.75,.81);
 `
 
 export const Name = styled.p`

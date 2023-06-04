@@ -82,7 +82,7 @@ class DefaultChatHooks(ChatHooks):
         },
         "Duo": {
             "attendee_number": 2, 
-            "duration": 180, 
+            "duration": 30, 
             "welcome_message": "Que le meilleur gagne !",
         },
         "Trio": {

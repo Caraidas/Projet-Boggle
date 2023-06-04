@@ -62,7 +62,6 @@ export const LoginInput = styled.input`
     &:focus{
         outline:none !important;
     }
-}
 `
 
 export const Submit = styled.button`
@@ -84,5 +83,4 @@ export const Submit = styled.button`
     &:focus{
         outline:none !important;
     }
-}
 `

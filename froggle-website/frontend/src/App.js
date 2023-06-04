@@ -33,7 +33,7 @@ function App() {
   // pour ouvrir et fermer le slider
   const [isSoundOpen, setIsOpen] = useState(false);
   // pour le volume du son
-  const [soundVolume, setVolume] = useState(localStorage.getItem('soundVolume') ? localStorage.getItem('soundVolume') : 100);
+  const [soundVolume, setVolume] = useState(localStorage.getItem('soundVolume') ? localStorage.getItem('soundVolume') : 50);
 
   // ---------------------------------
   const toggleSound = () => {

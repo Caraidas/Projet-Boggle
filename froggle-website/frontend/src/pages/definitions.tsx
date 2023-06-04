@@ -4,13 +4,9 @@ import DefinitionCard from '../components/DefinitionCard'
 import "../css/styleDefinition.css";
 import smartFrog from "../images/smart-frog.png";
 import { useNavigate  } from 'react-router-dom';
-import Background from '../components/Background';
-
 
 function getRandomSentence() {
   
-  
-
   const sentences = [
     "Je mangerais bien un asticot pour le goûter...",
     "Hmmmm, mais où sont mes lunettes ? Ah sur mon nez ... Ah non j'ai pas de nez.",
@@ -29,7 +25,7 @@ function getRandomSentence() {
   return sentence
 }
 
-const Definitions = ({primaryColor}) => {
+const Definitions = (props : {primaryColor : any}) => {
   const userDataString = localStorage.getItem('userData');
   const userData = userDataString ? JSON.parse(userDataString) : null;
   const navigate = useNavigate();
@@ -38,7 +34,7 @@ const Definitions = ({primaryColor}) => {
   }})
 
   const [inputValue, setInputValue] = useState('');
-  const [output, setOutput] = useState([]);
+  const [output, setOutput] : any[] = useState([]);
   const[sentence, setSentence] = useState(getRandomSentence())
 
   const handleInputChange = (event) => {
@@ -58,24 +54,24 @@ const Definitions = ({primaryColor}) => {
     <>
       <Header text="Définitions" />
       <div className="container-def">
-        <div class="definitionsContainer">
+        <div className="definitionsContainer">
             <form onSubmit={handleSubmit}>
                 <div className="search">
                   <input className="definitionInput" type="text" value={inputValue} onChange={handleInputChange} />
-                  <button className="definitionSubmit" type="submit" style={{ background: primaryColor }}>Rechercher</button>
+                  <button className="definitionSubmit" type="submit" style={{ background: props.primaryColor }}>Rechercher</button>
                 </div>
             </form>
             { output == "" &&
             <p className="defMessage">Vous n'avez pas encore fait de recherche 🐸</p>}
             {output.map((word, index) => (
-                <DefinitionCard key={index} title={word.title} definitions={word.définitions} primaryColor={primaryColor}/>
+                <DefinitionCard key={index} title={word.title} definitions={word.définitions} primaryColor={props.primaryColor}/>
             ))}
         </div>
         <div className="sideContainer">
           <div className="bubble" >
             { output == "" &&
             <p>Vous ne connaissez pas la signification d'un mot? Cherchez le dans le dico du Froggesseur René.</p>}
-             { output != "" &&
+            { output != "" &&
             sentence}
             
           </div>

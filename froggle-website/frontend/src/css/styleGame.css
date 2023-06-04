@@ -140,30 +140,30 @@
     justify-content: center;
     align-items: center;
     z-index: 100000;
-  }
-  
-  .popup-content {
-    color:white;
+}
+
+.popup-content {
+    color: white;
     padding: 20px;
     border-radius: 8px;
     max-width: 400px;
-    border:solid 4px black;
+    border: solid 4px black;
     text-align: center;
     box-shadow: 0px 5px 0px #000;
     animation: appear 0.4s cubic-bezier(.85, 1.76, .75, .81);
-  }
-  
-  .popup h2 {
+}
+
+.popup h2 {
     font-size: 24px;
     margin-bottom: 10px;
-  }
-  
-  .popup p {
+}
+
+.popup p {
     font-size: 18px;
     margin-bottom: 20px;
-  }
-  
-  .popup button {
+}
+
+.popup button {
     background-color: #ffffff;
     color: #000000;
     padding: 8px 16px;
@@ -171,13 +171,21 @@
     border: none;
     cursor: pointer;
     font-size: 16px;
-  }
-  
-  .popup button:hover {
-    background-color: #e7e7e7;
-  }
+    border: 3px solid #000;
+    box-shadow: 0px 3px 0px #000;
+}
 
-  .popup-btn{
+.popup button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0px 5px 0px #000;
+}
+
+.popup button:active {
+    transform: translateY(2px);
+    box-shadow: 0px 1px 0px #000;
+}
+
+.popup-btn {
     padding: 15px;
     margin: 30px 0px;
     width: 50%;
@@ -185,15 +193,15 @@
     background: #7b4397;
     border-radius: 30px;
     font-weight: 800;
-    box-shadow: 5px 5px 0px 0px #000;
+    box-shadow: 0px 3px 0px 0px #000;
 }
 
-.winLogo{
+.winLogo {
     width: 100%;
 }
-  
-  /* ... Vos autres styles ... */
-  
+
+/* ... Vos autres styles ... */
+
 
 @keyframes appear {
     from {

@@ -32,14 +32,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $stats = $data['stats'];
     $grid = $data['grid'];
     $id_local_player = $data['id'];
-    $rank = $data['podium'];
+    $rank = $data['ranks'];
     $xp_Actu = $data['xp'];
 
     //database connexion
     $host = 'localhost';
     $dbname = 'boggle';
-    $usernamebdd = 'user';
-    $pass = 'password';
+    $usernamebdd = 'root';
+    $pass = '';
 
     try {
         $db = new PDO("mysql:host=$host;dbname=$dbname", $usernamebdd, $pass);

@@ -5,7 +5,7 @@ const CarriereCard = ({ pictures, number}) => {
 
   const userDataString = localStorage.getItem('userData');
   const userData = userDataString ? JSON.parse(userDataString) : null;
-  let pics = [];
+  let pics : any = [];
 
   let win = "Victoire";
   if (userData?.historique[number]['Podium'] != 1)

@@ -79,7 +79,7 @@ int main(int argc, char *argv[])
     int numberCount = 0;
 
     // liste de l'alphabet
-    char lettres[] = {'9','A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'};
+    char lettres[] = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'};
 
     FILE *file = fopen(fileName, "r");
 
@@ -113,8 +113,8 @@ int main(int argc, char *argv[])
     for (int j = 0; j < total; j++)
     {
         num = rand() % 32001;
-        // regarde parmis les 27 (& pour qu) lettres de l'alphabet quelle est la lettre qui a la fréquence supérieur ou égale au numéro aléatoire
-        for (int i = 0; i < 27; i++)
+        // regarde parmis les 26 lettres de l'alphabet quelle est la lettre qui a la fréquence supérieur ou égale au numéro aléatoire
+        for (int i = 0; i < 26; i++)
         {
             freq = numberlist[i];
             

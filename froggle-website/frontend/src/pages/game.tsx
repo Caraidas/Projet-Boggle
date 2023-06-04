@@ -10,9 +10,9 @@ import victory from "../images/victoire.png";
 import defeat from "../images/defaite.png";
 import axios from 'axios'
 
-const Game = ({ soundVolume, grid, setMusic, solvedWords, onWordSent, attendees, primaryColor, stats, duration, onLeaving, onClosing }) => {
-  setMusic(gameMusic);
-  let solvedWordslst = solvedWords.split(" ");
+const Game = (props : { soundVolume : any, grid : any, setMusic : any, solvedWords : any, onWordSent : any, attendees : any, primaryColor : any, stats : any, duration : any, onLeaving : any, onClosing : any }) => {
+  props.setMusic(gameMusic);
+  let solvedWordslst = props.solvedWords.split(" ");
 
   function changeHandler(event) {
     let word = event.target.value;
@@ -20,14 +20,6 @@ const Game = ({ soundVolume, grid, setMusic, solvedWords, onWordSent, attendees,
     event.target.value = UppercasedWord;
 
     setWordInput(UppercasedWord);
-
-    // if (word !== "") {
-    //   if (solvedWordslst.includes(UppercasedWord) && !foundWords.includes(UppercasedWord)) {
-    //     console.log("oui");
-    //     setFoundWords([...foundWords, UppercasedWord]);
-    //     setWords(words + 1);
-    //   }
-    // }
   }
 
   function keyDownHandler(event) {
@@ -36,35 +28,34 @@ const Game = ({ soundVolume, grid, setMusic, solvedWords, onWordSent, attendees,
 
       if (word !== "") {
         if (solvedWordslst.includes(word) && !foundWords.includes(word)) {
-          console.log("oui");
           setFoundWords([...foundWords, word]);
           setWords(words + 1);
-          onWordSent(word);
+          props.onWordSent(word);
         }
       }
     }
   }
 
-  let [foundWords, setFoundWords] = useState([]);
-  let [words, setWords] = useState(0);
-  let [wordInput, setWordInput] = useState("");
-  let [players, setPlayers] = useState([]);
-  let [showPopup, setShowPopup] = useState(false);
-  let [ranks,  setRanks] = useState([]);
-  let [popupLogo, setPopupLogo] = useState(defeat);
+  const [foundWords, setFoundWords] : any[] = useState([]);
+  const [words, setWords] = useState(0);
+  const [wordInput, setWordInput] = useState("");
+  const [players, setPlayers] : any[] = useState([]);
+  const [showPopup, setShowPopup] = useState(false);
+  const [ranks,  setRanks] : any[] = useState([]);
+  const [popupLogo, setPopupLogo] = useState(defeat);
 
   const navigate = useNavigate();
-  const [me, setMe] = useState(null);
+  const [me, setMe] : any[] = useState([]);
   const userDataString = localStorage.getItem('userData');
   const userData = userDataString ? JSON.parse(userDataString) : null;
 
   useEffect(() => {
-    let p = []
-    for (var i = 0; i < attendees.length; i++) {
-      p.push([attendees[i], 0, 0, i + 1])
+    let p : any[] = []
+    for (var i = 0; i < props.attendees.length; i++) {
+      p.push([props.attendees[i], 0, 0, i + 1])
   
-      if (attendees[i] == userData?.pseudo) {
-        setMe([attendees[i], 0, 0, i + 1]);
+      if (props.attendees[i] == userData?.pseudo) {
+        setMe([props.attendees[i], 0, 0, i + 1]);
       }
     }
     setPlayers(p)
@@ -75,8 +66,8 @@ const Game = ({ soundVolume, grid, setMusic, solvedWords, onWordSent, attendees,
   };
 
   function handleLeaving() {
-      onLeaving()
-      onClosing()
+      props.onLeaving()
+      props.onClosing()
   }
 
   const updateRanks = (stats) => {
@@ -99,48 +90,46 @@ const Game = ({ soundVolume, grid, setMusic, solvedWords, onWordSent, attendees,
   };
 
   useEffect(() => {
-    updateRanks(stats);
+    updateRanks(props.stats);
     if(ranks[userData?.pseudo] == 1){
       setPopupLogo(victory)
     }else setPopupLogo(defeat)
-  }, [stats]);
+  }, [props.stats]);
 
 
   function insertGameData() {
     let id = userData?.ID_Joueur;
-    let podium = ranks;
     let xp = userData?.XP_Actuel;
-    console.log(userData);
-    console.log(id);
-    axios.post("http://localhost/boggle/php/insertGameData.api.php", {stats,grid,id,podium,xp})
-    .then((response) => {
-        if (response.data.status === "success") {
-          const test = {ID_Joueur: id, classementData: response.data.classementData, historique: response.data.historique, pseudo: userData?.pseudo, XP_Actuel: response.data.XP_Actuel, Photo_De_Profile: userData?.Photo_De_Profile, Est_Prive:userData?.Est_Prive};
-          localStorage.setItem('userData', JSON.stringify(test));
-          console.log("success")
-          navigate('/game');
-        } else if(response.data.status === "error") {
-            console.log("error")
-        }
-    })
-    .catch(error => console.log(error));
-  }  
-  console.log("STATS")
-  console.log(stats)
-  console.log("RANKS")
-  console.log(ranks)
-  console.log(userData?.pseudo)
+    let stats = props.stats;
+    let grid = props.grid;
+
+    if (Object.keys(ranks).length > 1) {
+      axios.post("http://localhost/boggle/php/insertGameData.api.php", {stats, grid,id,ranks,xp})
+      .then((response) => {
+          if (response.data.status === "success") {
+            const test = {ID_Joueur: id, classementData: response.data.classementData, historique: response.data.historique, pseudo: userData?.pseudo, XP_Actuel: response.data.XP_Actuel, Photo_De_Profile: userData?.Photo_De_Profile, Est_Prive:userData?.Est_Prive};
+            localStorage.setItem('userData', JSON.stringify(test));
+            console.log("success")
+          } else if(response.data.status === "error") {
+              console.log("error")
+          }
+      })
+      .catch(error => console.log(error));
+    }
+
+    navigate('/');
+  }
 
   return (
     <>
-      <div className='timer' style={{ background: primaryColor }}>
-        <Countdown duration={duration} onCountdownFinished={handleCountdownFinished} />
+      <div className='timer' style={{ background: props.primaryColor }}>
+        <Countdown duration={props.duration} onCountdownFinished={handleCountdownFinished} />
       </div>
       {showPopup && (
         <div className="popup">
-          <div className="popup-content" style={{ background: primaryColor }}>
+          <div className="popup-content" style={{ background: props.primaryColor }}>
             <img className="winLogo" src={popupLogo}/>
-            <p>Nombre de mot trouvés: {stats[me[0]][1].length} <br></br>Score: {stats[me[0]][0]} pts </p> 
+            <p>Nombre de mot trouvés: {props.stats[me[0]][1].length} <br></br>Score: {props.stats[me[0]][0]} pts </p> 
             <button className="popup-btn" onClick={() => { handleLeaving(); insertGameData(); }}>Fermer</button>
           </div>
         </div>
@@ -148,15 +137,15 @@ const Game = ({ soundVolume, grid, setMusic, solvedWords, onWordSent, attendees,
       <div className='gameCont'>
         <div className='boardCont'>
           <div className='board'>
-            {grid.split(" ").map((letter, index) => (
-              <Cell key={index} letter={letter} soundVolume={soundVolume} primaryColor={primaryColor} />
+            {props.grid.split(" ").map((letter, index) => (
+              <Cell key={index} letter={letter} soundVolume={props.soundVolume} primaryColor={props.primaryColor} />
             ))}
           </div>
           <input className='gameInput' type='text' onChange={(e) => changeHandler(e)} onKeyDown={(e) => keyDownHandler(e)} />
         </div>
         <div className='players'>
           {players.map(player => (
-            <GameCard key={player[0]} picture={picture} name={player[0]} words={stats[me[0]][1].length+"/"+solvedWords.length} points={stats[player[0]][0]} place={ranks[userData?.pseudo]} />))}
+            <GameCard key={player[0]} picture={picture} name={player[0]} words={props.stats[player[0]][1].length + "/" + props.solvedWords.length} points={props.stats[player[0]][0]} place={ranks[player[0]]} />))}
         </div>
       </div>
     </>
