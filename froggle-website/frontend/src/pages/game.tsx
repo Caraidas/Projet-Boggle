@@ -9,6 +9,11 @@ import Countdown from '../components/Countdown';
 import victory from "../images/victoire.png";
 import defeat from "../images/defaite.png";
 import axios from 'axios'
+import frogAngry from "../images/gifFrogAngry.gif"
+import frogHappy from "../images/gifFrogHappy.gif"
+import frogThink from "../images/gifFrogThink.gif"
+import frogFight from "../images/gifFrogFight.gif"
+
 
 const Game = (props : { soundVolume : any, grid : any, setMusic : any, solvedWords : any, onWordSent : any, attendees : any, primaryColor : any, stats : any, duration : any, onLeaving : any, onClosing : any }) => {
   props.setMusic(gameMusic);
@@ -31,6 +36,7 @@ const Game = (props : { soundVolume : any, grid : any, setMusic : any, solvedWor
           setFoundWords([...foundWords, word]);
           setWords(words + 1);
           props.onWordSent(word);
+          event.target.value = "";
         }
       }
     }
@@ -97,6 +103,21 @@ const Game = (props : { soundVolume : any, grid : any, setMusic : any, solvedWor
   }, [props.stats]);
 
 
+  function getPictureFromRank(rank : number) {
+    if (rank === 1) {
+      return frogHappy;
+    }
+    if (rank === 2) {
+      return frogFight;
+    }
+    if (rank === 3) {
+      return frogThink;
+    }
+    if (rank === 4) {
+      return frogAngry;
+    }
+  }
+
   function insertGameData() {
     let id = userData?.ID_Joueur;
     let xp = userData?.XP_Actuel;
@@ -145,7 +166,7 @@ const Game = (props : { soundVolume : any, grid : any, setMusic : any, solvedWor
         </div>
         <div className='players'>
           {players.map(player => (
-            <GameCard key={player[0]} picture={picture} name={player[0]} words={props.stats[player[0]][1].length + "/" + props.solvedWords.length} points={props.stats[player[0]][0]} place={ranks[player[0]]} />))}
+            <GameCard key={player[0]} picture={getPictureFromRank(ranks[player[0]])} name={player[0]} words={props.stats[player[0]][1].length + "/" + props.solvedWords.length} points={props.stats[player[0]][0]} place={ranks[player[0]]} />))}
         </div>
       </div>
     </>

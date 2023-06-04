@@ -16,7 +16,8 @@ function getRandomSentence() {
     "Crôôaaaaa, Crôaaaaaaaaaaa ♪♫♫ CRÔA, crôaaaaaaaa ♫, CRÔAAAAA ♪	♪	♪	♪	!!!! Ah pardon je m'entrainais à séduire Bernadette.",
     "J'adore chanter les jours de pluies ♪",
     "Tout à l'heure j'ai mangé une mouche bien croustillante.",
-    "Berdanette est vraiment trop crôaquante...."
+    "Berdanette est vraiment trop crôaquante....",
+    "Croâcoubeh !"
   ];
 
   
