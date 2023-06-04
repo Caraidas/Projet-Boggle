@@ -31,9 +31,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Get the react form data
     $stats = $data['stats'];
     $grid = $data['grid'];
-    $id_local_player = ['id'];
+    $id_local_player = $data['id'];
+    $rank = $data['podium'];
+    $xp_Actu = $data['xp'];
 
-    var_dump($stats);
     //database connexion
     $host = 'localhost';
     $dbname = 'boggle';
@@ -52,10 +53,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $qryGame->bindParam(':grid', $grid);
     $qryGame->bindParam(':nb_players',$nb_players);
     $qryGame->bindParam(':todaysDate',$date );
-    if($qryGame->execute()){
-        echo "SUCCESS GAME";
-    }
-
+    $qryGame->execute();
     $idGame = $db->lastInsertId();
 
     foreach($stats as $key => $value){
@@ -68,29 +66,34 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $result = $qry->fetch();
         if ($result) {
             $id_joueur = $result['ID_joueur'];
-        } else {
-            echo "Aucun joueur trouvé avec ce pseudo.";
         }
 
-        $rank = 2;
         $nbrWords = count($value[1]);
-
+        
         $query = $db->prepare("INSERT INTO B_PARTICIPE (ID_Joueur, ID_Partie, score, Podium, mots_trouves) VALUES (:idPlayer, :idGame, :score, :rank, :foundWords)");
         $query->bindParam(':idPlayer', $id_joueur);
         $query->bindParam(':idGame', $idGame);
         $query->bindParam(':score', $value[0]);
-        $query->bindParam(':rank', $rank);
+        $query->bindParam(':rank', $rank[$key]);
         $query->bindParam(':foundWords',$nbrWords);
+        $query->execute();
 
-        if($query->execute()){
-            echo "SUCCESS PARTICIPE";
+        $xp_Actu += $value[0]*10;
+        $query = $db->prepare("UPDATE b_joueur SET XP_Actuel = ':score' WHERE b_joueur.ID_Joueur = $id_joueur");
+        $query->bindParam(':score', $xp_Actu);
+        $query->execute();
+
+        if ($id_joueur == $id_local_player){
+            $XP_Joueur = $xp_Actu;
         }
     }
 
     // collecte historique du joueur
 
-    $statement = $pdo->prepare('SELECT ID_Partie, Podium, date, mots_trouves, score FROM b_participe NATURAL JOIN b_partie WHERE ID_Joueur = :id_joueur');
-    $statement->bindValue(':id_joueur', $user['ID_Joueur'], PDO::PARAM_STR);
+
+
+    $statement = $db->prepare('SELECT ID_Partie, Podium, date, mots_trouves, score FROM b_participe NATURAL JOIN b_partie WHERE ID_Joueur = :id_joueur ORDER by date DESC LIMIT 10');
+    $statement->bindValue(':id_joueur', $id_local_player);
     $statement->execute();
     $historique = $statement->fetchAll(PDO::FETCH_ASSOC);
     
@@ -98,20 +101,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // collecte des images des joueurs des parties de l'historique
     $joueurs = [];
     for ($i = 0; sizeof($historique) > $i; $i++){
-      $statement = $pdo->prepare('SELECT Photo_De_Profile FROM b_joueur NATURAL JOIN b_participe WHERE b_participe.ID_Partie = :id_partie');
-      $statement->bindValue(':id_partie', $historique[$i]['ID_Partie'], PDO::PARAM_STR);
+      $statement = $db->prepare('SELECT Photo_De_Profile FROM b_joueur NATURAL JOIN b_participe WHERE b_participe.ID_Partie = :id_partie');
+      $statement->bindValue(':id_partie', $historique[$i]['ID_Partie']);
       $statement->execute();
       $photo = $statement->fetchAll(PDO::FETCH_ASSOC);
       $historique[$i][] = $photo;
     }
 
-    $statement = $pdo->prepare('SELECT COUNT(Podium) AS nbClassement, Podium FROM b_participe WHERE ID_Joueur = :id_joueur GROUP BY Podium');
-    $statement->bindValue(':id_joueur', $user['ID_Joueur'], PDO::PARAM_STR);
+    $statement = $db->prepare('SELECT COUNT(Podium) AS nbClassement, Podium FROM b_participe WHERE ID_Joueur = :id_joueur GROUP BY Podium ORDER BY Podium');
+    $statement->bindValue(':id_joueur', $id_local_player);
     $statement->execute();
     $PodiumPartie = $statement->fetchAll(PDO::FETCH_ASSOC);
 
-    // $sessionData = $_SESSION['user_id']; Retourne une réponse JSON avec un code de statut 200 et un message d'authentification réussie
-    $sessionData = array('ID_Joueur' => $user['ID_Joueur'],'pseudo' => $user['pseudo'], 'XP_Actuel' => $user['XP_Actuel'], 'Photo_De_Profile' => $user['Photo_De_Profile'], 'Est_Prive' => $user['Est_Prive']);
-    
-    echo json_encode(array('status' => 'success', 'historique' => $historique, 'classementData' => $PodiumPartie));
+
+    echo json_encode(array('status' => 'success', 'historique' => $historique, 'classementData' => $PodiumPartie, 'XP_Actuel' => $xp_Actu));
+    exit();
 }
