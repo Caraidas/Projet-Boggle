@@ -351,7 +351,7 @@ class ChatServer(object):
                         elif msg_kind == 'send_word':
                             content = decoded_msg.get('content')
                             if content:
-                                process = subprocess.Popen(["C:\\Users\\Nidal\\Documents\\BUT2\\Boggle\\Projet-Boggle\\froggle-website\\backend\\src\\chatac\\game-engine\\score", ""+content.upper()], stdout=subprocess.PIPE)
+                                process = subprocess.Popen([".\\src\\chatac\\game-engine\\score", ""+content.upper()], stdout=subprocess.PIPE)
                                 output, error = process.communicate()
                                 score = output.decode()
                                 score = score.strip()
