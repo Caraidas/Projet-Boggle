@@ -67,7 +67,7 @@ function App() {
   const userDataString = localStorage.getItem('userData');
   const userData = userDataString ? JSON.parse(userDataString) : null;
 
-  let ai = userData?.Photo_De_Profile ;
+  let ai = userData?.Photo_De_Profile || 0;
 
   const [primaryColor, setPrimaryColor] = React.useState(pc);
   const [avatarIndex, setAvatarIndex] = React.useState(ai);
@@ -81,7 +81,7 @@ function App() {
   function selectAvatar(index) {
     setAvatarIndex(index);
     console.log(index);
-    localStorage.setItem("avatarIndex", index); // TODO : changer en bdd
+    localStorage.setItem("avatarIndex", index);
   }
   
   return (

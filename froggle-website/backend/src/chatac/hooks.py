@@ -142,7 +142,7 @@ class DefaultChatHooks(ChatHooks):
 
         # Crée une nouvelle liste en retirant les doublons
         unique_words = list(set(word_list))
-        solutionsString = " ".join(unique_words);
+        solutionsString = " ".join(unique_words)
         print(solutionsString)
 
         print("end")
