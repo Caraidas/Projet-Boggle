@@ -20,13 +20,15 @@ export const AvatarInputCont = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
-    cursor: pointer;
+    cursor: ${props => props.available ? "pointer" : "" };
+    filter: ${props => props.available ? "none" : "grayscale(100%)" };
     transition: all 0.25s cubic-bezier(.85,1.76,.75,.81);
     animation: ${appearAnim} 0.4s cubic-bezier(.85,1.76,.75,.81);
+    
 
     &:hover {
-        box-shadow: ${props => props.toggled ? "none" : "0px 5px 0px #000"};
-        transform: ${props => props.toggled ? "translateY(3px)" : "translateY(-2px)"}
+        box-shadow: ${props => props.available ? props.toggled ? "none" : "0px 5px 0px #000" : "0px 3px 0px #000"};
+        transform: ${props => props.available ? props.toggled ? "translateY(3px)" : "translateY(-2px)" : "translateY(0px)" }
     }
 `
 

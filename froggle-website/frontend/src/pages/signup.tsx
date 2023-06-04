@@ -63,7 +63,7 @@ function Signup(props : { logo : any }) {
         console.log(passwordStrength);
             
 
-          setPasswordStrength(strength);
+        setPasswordStrength(strength);
       };
 
   return (
