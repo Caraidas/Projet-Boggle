@@ -47,4 +47,5 @@ Pour cela prennez un des email de la table B_JOUEUR. Le mot de passe pour chacun
 
 Certaines de nos variables utilise le localstorage de react. Les données étant en cache, certaines actualisation ne se font pas comme espéré.
 Le background du site peut parfois être décalé selon le format de l'appareil (très rare)
+Actuellement la grille peut prendre n'importe quelle taille, mais le front-end est codé de façon à ce que seul une grille de 4 x 4 soit esthétiquement joli, ,nous avons donc choisit de ne pas laisser le joueur choisir la taille de la grille
 
