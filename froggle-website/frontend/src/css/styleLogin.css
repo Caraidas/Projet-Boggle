@@ -25,10 +25,10 @@
 .formCont {
     display: flex;
     flex-direction: column;
+    align-items: center;
     gap: 15px;
     width: 60%;
     max-width: 750px;
-    align-items: center;
     margin-bottom: 20px;
 }
 
@@ -69,7 +69,15 @@
     font-size: 1.1rem;
     font-weight: bold;
     cursor: pointer;
-    animation: appearAnim 0.4s cubic-bezier(.85, 1.76, .75, .81) forwards;
+    align-self: center;
+    transition: all 0.25s cubic-bezier(.85, 1.76, .75, .81);
+    animation: appearAnim 0.4s cubic-bezier(.85, 1.76, .75, .81);
+}
+
+.passwordEye {
+   width: 40px;
+   cursor: pointer;
+   align-self: center;
 }
 
 .submit:hover {
@@ -112,6 +120,11 @@
     padding-top: 5vh;
     align-items: center;
     flex-direction: column;
+}
+
+.submit:disabled,
+.submit[disabled] {
+    transform: scale(0);
 }
 
 

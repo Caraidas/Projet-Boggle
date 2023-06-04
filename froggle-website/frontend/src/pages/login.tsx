@@ -2,12 +2,15 @@ import React, { useState } from 'react'
 import "../css/styleLogin.css"
 import { useNavigate, Link  } from 'react-router-dom';
 import axios from 'axios'
+import eyeOpen from "../images/eyeOpen.png";
+import eyeClose from "../images/eyeClose.png";
 
-const Login = ({ logo, errorMessage }) => {
+const Login = (props :{ logo : any, errorMessage : any }) => {
 
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [showError, setShowError] = useState(false); //Ajout de l'état showError
+    const [mdpToggled, setMdpToggled] = useState(false);
     const navigate = useNavigate();
 
     function handleSubmit(event) {
@@ -31,11 +34,12 @@ const Login = ({ logo, errorMessage }) => {
   return (
     <>
         <div className='loginCont'>
-            <img src={logo} className='logo' />
+            <img src={props.logo} className='logo' />
             <form className='formCont' onSubmit={handleSubmit}>
-                <div className='errorContainer' style={{display: showError ? 'block' : 'none'}}>{errorMessage}</div>
+                <div className='errorContainer' style={{display: showError ? 'block' : 'none'}}>{props.errorMessage}</div>
                 <input type="text" className="inputLogin" placeholder="e-mail" onChange={(e) => setEmail(e.target.value)} />
-                <input type="password" className="inputLogin" placeholder="mot de passe" onChange={(e) => setPassword(e.target.value)} />
+                <input type={mdpToggled ? "text" : "password" } className="inputLogin" placeholder="mot de passe" onChange={(e) => setPassword(e.target.value)} />
+                <img src={mdpToggled ? eyeClose : eyeOpen} alt="" className='passwordEye' onClick={() => setMdpToggled(!mdpToggled)} />
                 <button className='submit'>S'identifier</button>
             </form>
             <div className='tosignup'>
