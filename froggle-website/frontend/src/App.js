@@ -93,7 +93,7 @@ function App() {
         <Route path='/carriere' element={<Carriere avatarIndex={avatarIndex} primaryColor={primaryColor} />} exact/>
         <Route path='/login' element={<Login logo={logo} errorMessage="🐸 L'identifiant ou le mot de passe est incorrect 🐸" />} exact/>
         <Route path='/signup' element={<Signup logo={logo} />} exact/>
-        <Route path='/definitions' element={<Definitions />} exact/>
+        <Route path='/definitions' element={<Definitions  primaryColor={primaryColor}/>} exact/>
         <Route path='/game' element={<ChatGame soundVolume={soundVolume} setMusic={setMusic} primaryColor={primaryColor} />} exact/>
         <Route path='/profile' element={<ProfilePage avatarIndex={avatarIndex} primaryColor={primaryColor} setColor={selectColor} setAvatar={selectAvatar} />} exact/>
         <Route path='/social' element={<Social />} exact/>

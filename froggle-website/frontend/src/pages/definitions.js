@@ -4,6 +4,7 @@ import DefinitionCard from '../components/DefinitionCard'
 import "../css/styleDefinition.css";
 import smartFrog from "../images/smart-frog.png";
 import { useNavigate  } from 'react-router-dom';
+import Background from '../components/Background';
 
 
 function getRandomSentence() {
@@ -28,7 +29,7 @@ function getRandomSentence() {
   return sentence
 }
 
-const Definitions = () => {
+const Definitions = ({primaryColor}) => {
   const userDataString = localStorage.getItem('userData');
   const userData = userDataString ? JSON.parse(userDataString) : null;
   const navigate = useNavigate();
@@ -61,13 +62,13 @@ const Definitions = () => {
             <form onSubmit={handleSubmit}>
                 <div className="search">
                   <input className="definitionInput" type="text" value={inputValue} onChange={handleInputChange} />
-                  <button className="definitionSubmit" type="submit">Rechercher</button>
+                  <button className="definitionSubmit" type="submit" style={{ background: primaryColor }}>Rechercher</button>
                 </div>
             </form>
             { output == "" &&
             <p className="defMessage">Vous n'avez pas encore fait de recherche 🐸</p>}
             {output.map((word, index) => (
-                <DefinitionCard key={index} title={word.title} definitions={word.définitions}/>
+                <DefinitionCard key={index} title={word.title} definitions={word.définitions} primaryColor={primaryColor}/>
             ))}
         </div>
         <div className="sideContainer">

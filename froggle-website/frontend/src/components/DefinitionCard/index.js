@@ -1,11 +1,11 @@
 import React from 'react';
 import {DefinitionBox, DefinitionTitle} from './DefinitionCardElements';
 
-const DefinitionCard = ({title, type, definitions}) => {
+const DefinitionCard = ({title, type, definitions, primaryColor}) => {
 
   return (
      
-              <DefinitionBox>
+              <DefinitionBox style={{ background: primaryColor }}>
                     <DefinitionTitle>{title}</DefinitionTitle>
                     {Object.entries(definitions).map(([type, defs]) => (
                       <div key={type}>
