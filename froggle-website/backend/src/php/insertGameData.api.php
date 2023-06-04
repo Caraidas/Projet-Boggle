@@ -31,12 +31,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Get the react form data
     $stats = $data['stats'];
     $grid = $data['grid'];
+    $id_local_player = ['id'];
 
     var_dump($stats);
     //database connexion
     $host = 'localhost';
     $dbname = 'boggle';
-    $usernamebdd = 'username';
+    $usernamebdd = 'user';
     $pass = 'password';
 
     try {
@@ -85,4 +86,32 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             echo "SUCCESS PARTICIPE";
         }
     }
+
+    // collecte historique du joueur
+
+    $statement = $pdo->prepare('SELECT ID_Partie, Podium, date, mots_trouves, score FROM b_participe NATURAL JOIN b_partie WHERE ID_Joueur = :id_joueur');
+    $statement->bindValue(':id_joueur', $user['ID_Joueur'], PDO::PARAM_STR);
+    $statement->execute();
+    $historique = $statement->fetchAll(PDO::FETCH_ASSOC);
+    
+    
+    // collecte des images des joueurs des parties de l'historique
+    $joueurs = [];
+    for ($i = 0; sizeof($historique) > $i; $i++){
+      $statement = $pdo->prepare('SELECT Photo_De_Profile FROM b_joueur NATURAL JOIN b_participe WHERE b_participe.ID_Partie = :id_partie');
+      $statement->bindValue(':id_partie', $historique[$i]['ID_Partie'], PDO::PARAM_STR);
+      $statement->execute();
+      $photo = $statement->fetchAll(PDO::FETCH_ASSOC);
+      $historique[$i][] = $photo;
+    }
+
+    $statement = $pdo->prepare('SELECT COUNT(Podium) AS nbClassement, Podium FROM b_participe WHERE ID_Joueur = :id_joueur GROUP BY Podium');
+    $statement->bindValue(':id_joueur', $user['ID_Joueur'], PDO::PARAM_STR);
+    $statement->execute();
+    $PodiumPartie = $statement->fetchAll(PDO::FETCH_ASSOC);
+
+    // $sessionData = $_SESSION['user_id']; Retourne une réponse JSON avec un code de statut 200 et un message d'authentification réussie
+    $sessionData = array('ID_Joueur' => $user['ID_Joueur'],'pseudo' => $user['pseudo'], 'XP_Actuel' => $user['XP_Actuel'], 'Photo_De_Profile' => $user['Photo_De_Profile'], 'Est_Prive' => $user['Est_Prive']);
+    
+    echo json_encode(array('status' => 'success', 'historique' => $historique, 'classementData' => $PodiumPartie));
 }

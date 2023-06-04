@@ -107,12 +107,15 @@ const Game = ({ soundVolume, grid, setMusic, solvedWords, onWordSent, attendees,
 
 
   function insertGameData() {
-    axios.post("http://localhost/boggle/php/insertGameData.api.php", {stats,grid})
+    let id = userData?.ID_joueur;
+    axios.post("http://localhost/boggle/php/insertGameData.api.php", {stats,grid,id})
     .then((response) => {
         console.log(response.data);
         if (response.data.status === "success") {
-            console.log("success")
-            navigate('/game');
+          const userData = {ID_Joueur: id, classementData: response.data.classementData, historique: response.data.historique, pseudo: userData?.pseudo, XP_Actuel: userData?.XP_Actuel, Photo_De_Profile: userData?.Photo_De_Profile, Est_Prive:userData?.Est_Prive};
+          localStorage.setItem('userData', JSON.stringify(userData));
+          console.log("success")
+          navigate('/game');
         } else if(response.data.status === "error") {
             console.log("error")
         }
