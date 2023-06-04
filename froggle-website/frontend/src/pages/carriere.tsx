@@ -7,7 +7,7 @@ import CarriereCard from '../components/CarriereCard';
 
 import pic1 from '../images/pfp.jpg';
 
-const Carriere = ({ primaryColor, avatarIndex }) => {
+const Carriere = (props : { primaryColor : string, avatarIndex :any }) => {
 
   const userDataString = localStorage.getItem('userData');
   const userData = userDataString ? JSON.parse(userDataString) : null;
@@ -28,7 +28,7 @@ const Carriere = ({ primaryColor, avatarIndex }) => {
   let xpRestant = pointsXPNiveau - xp_joueur;
 
   
-  let img = require("../images/avatar" + avatarIndex + ".png");
+  let img = require("../images/avatar" + props.avatarIndex + ".png");
 
   let nbgames = 0;
   let nblose = 0;
@@ -61,7 +61,7 @@ const Carriere = ({ primaryColor, avatarIndex }) => {
 
           <div className='heroLevel'>
             <div className='level'>Niv : {niveau}</div>
-            <ProgressBar width="100" height="35" total={Math.round(pointsXPNiveau)} current={Math.round(pointsXPNiveau - xpRestant)} color={primaryColor} />
+            <ProgressBar width="100" height="35" total={Math.round(pointsXPNiveau)} current={Math.round(pointsXPNiveau - xpRestant)} color={props.primaryColor} />
             <div className='exp'>{Math.round(pointsXPNiveau - xpRestant)}/{Math.round(pointsXPNiveau)}</div>
           </div>
         </div>
@@ -69,7 +69,7 @@ const Carriere = ({ primaryColor, avatarIndex }) => {
 
       <div className='gamesBgCont'>
 
-        <div className='gamesCont' style={{background: primaryColor}}>
+        <div className='gamesCont' style={{background: props.primaryColor}}>
           <h2 className='bigTitle'>Statistiques des parties</h2>
           
           <div className='statCont1'> 
@@ -89,10 +89,10 @@ const Carriere = ({ primaryColor, avatarIndex }) => {
 
         <h3 className='mediumTitle'>Classements moyens</h3>
         <div className='statCont2'>
-          {userData?.classementData.map(element => (
+          {userData?.classementData.map((element, index) => (
             <div className='place'>
             <div className='num'>{element['Podium']}</div>
-            <ProgressBar width={gamesCount[element['Podium']-1]*100/nbgames} height="25" current={0} total={1} />
+            <ProgressBar key={index} color="#fff" width={gamesCount[element['Podium']-1]*100/nbgames} height="25" current={0} total={1} />
             <p>{gamesCount[element['Podium']-1]*100/nbgames}%</p>
           </div>
           ))}
@@ -100,8 +100,8 @@ const Carriere = ({ primaryColor, avatarIndex }) => {
 
         <h3 className='mediumTitle'>Historiques des parties</h3>
         <div className='historique'>
-          {userData?.historique.map((histoData,index)=>(
-              <CarriereCard pictures={userData?.historique[index][0]} number={index}/>
+          {userData?.historique.map((histoData : any, index : number)=>(
+              <CarriereCard key={index} pictures={userData?.historique[index][0]} number={index}/>
             ))
           }
         </div>

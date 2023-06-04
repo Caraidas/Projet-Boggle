@@ -14,7 +14,7 @@ const CarriereCard = ({ pictures, number}) => {
   
   for (let i = 0; i < pictures.length; i++) {
     let avatar = require('../../images/avatar' + pictures[i]['Photo_De_Profile'] + '.png');
-    pics.push(<CarriereCardPicture src={avatar} index={i}></CarriereCardPicture>);
+    pics.push(<CarriereCardPicture key={i} src={avatar} index={i}></CarriereCardPicture>);
   }
 
   return (
