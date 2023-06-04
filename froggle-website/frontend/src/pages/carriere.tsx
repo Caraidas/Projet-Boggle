@@ -93,7 +93,7 @@ const Carriere = (props : { primaryColor : string, avatarIndex :any }) => {
             <div className='place'>
             <div className='num'>{element['Podium']}</div>
             <ProgressBar key={index} color="#fff" width={gamesCount[element['Podium']-1]*100/nbgames} height="25" current={0} total={1} />
-            <p>{gamesCount[element['Podium']-1]*100/nbgames}%</p>
+            <p>{Math.round(gamesCount[element['Podium']-1]*100/nbgames)}%</p>
           </div>
           ))}
         </div>

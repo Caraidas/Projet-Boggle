@@ -31,7 +31,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Get the react form data
     $stats = $data['stats'];
     $grid = $data['grid'];
-    $id_local_player = ['id'];
+    $id_local_player = $data['id'];
+    echo $data;
 
     var_dump($stats);
     //database connexion
@@ -89,8 +90,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // collecte historique du joueur
 
-    $statement = $pdo->prepare('SELECT ID_Partie, Podium, date, mots_trouves, score FROM b_participe NATURAL JOIN b_partie WHERE ID_Joueur = :id_joueur');
-    $statement->bindValue(':id_joueur', $user['ID_Joueur'], PDO::PARAM_STR);
+
+
+    echo $id_local_player;
+    $statement = $db->prepare('SELECT ID_Partie, Podium, date, mots_trouves, score FROM b_participe NATURAL JOIN b_partie WHERE ID_Joueur = :id_joueur ORDER by date DESC LIMIT 10');
+    $statement->bindValue(':id_joueur', $id_local_player);
     $statement->execute();
     $historique = $statement->fetchAll(PDO::FETCH_ASSOC);
     
@@ -98,20 +102,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // collecte des images des joueurs des parties de l'historique
     $joueurs = [];
     for ($i = 0; sizeof($historique) > $i; $i++){
-      $statement = $pdo->prepare('SELECT Photo_De_Profile FROM b_joueur NATURAL JOIN b_participe WHERE b_participe.ID_Partie = :id_partie');
-      $statement->bindValue(':id_partie', $historique[$i]['ID_Partie'], PDO::PARAM_STR);
+      $statement = $db->prepare('SELECT Photo_De_Profile FROM b_joueur NATURAL JOIN b_participe WHERE b_participe.ID_Partie = :id_partie');
+      $statement->bindValue(':id_partie', $historique[$i]['ID_Partie']);
       $statement->execute();
       $photo = $statement->fetchAll(PDO::FETCH_ASSOC);
       $historique[$i][] = $photo;
     }
 
-    $statement = $pdo->prepare('SELECT COUNT(Podium) AS nbClassement, Podium FROM b_participe WHERE ID_Joueur = :id_joueur GROUP BY Podium');
-    $statement->bindValue(':id_joueur', $user['ID_Joueur'], PDO::PARAM_STR);
+    $statement = $db->prepare('SELECT COUNT(Podium) AS nbClassement, Podium FROM b_participe WHERE ID_Joueur = :id_joueur GROUP BY Podium');
+    $statement->bindValue(':id_joueur', $id_local_player);
     $statement->execute();
     $PodiumPartie = $statement->fetchAll(PDO::FETCH_ASSOC);
 
     // $sessionData = $_SESSION['user_id']; Retourne une réponse JSON avec un code de statut 200 et un message d'authentification réussie
-    $sessionData = array('ID_Joueur' => $user['ID_Joueur'],'pseudo' => $user['pseudo'], 'XP_Actuel' => $user['XP_Actuel'], 'Photo_De_Profile' => $user['Photo_De_Profile'], 'Est_Prive' => $user['Est_Prive']);
+    $sessionData = array('ID_Joueur' => $id_local_player,'pseudo' => $user['pseudo'], 'XP_Actuel' => $user['XP_Actuel'], 'Photo_De_Profile' => $user['Photo_De_Profile'], 'Est_Prive' => $user['Est_Prive']);
     
     echo json_encode(array('status' => 'success', 'historique' => $historique, 'classementData' => $PodiumPartie));
 }
