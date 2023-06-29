@@ -14,7 +14,8 @@ Froggle is built using React and TypeScript, utilizing styled components for sty
 
 ## Getting Started
 Setting up Froggle for gameplay requires a few steps. Please follow the instructions below :
-First, make sure to clone the repository to your local machine.
+
+- First, make sure to clone the repository to your local machine.
 
 ### Backend Setup
 1. Make sure you have a software like Laragon or WAMP installed on your machine.
