@@ -1,5 +1,5 @@
 # Froggle
-Froggle is a web-based version of the popular word game Boggle. This school project, developed by a team of three individuals, including myself as the project manager, aims to provide an enjoyable and interactive gaming experience.
+Froggle is a web-based version of the popular word game Boggle. This school project, developed by a team of three individuals aims to provide an enjoyable and interactive gaming experience.
 
 ## Features
 * Account Creation: Users can create an account to access additional features and personalize their experience.
