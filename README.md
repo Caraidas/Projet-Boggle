@@ -2,9 +2,9 @@
 Froggle is a web-based version of the popular word game Boggle. This school project, developed by a team of three individuals, including myself as the project manager, aims to provide an enjoyable and interactive gaming experience.
 
 ## Team
-IDRISSI Nidal : Project manager, lead frontend developper, lead designer, game engine developper (C), artist
-LEROY Laura :
-LUCAS Paul :
+* IDRISSI Nidal : Project manager, lead frontend developper, lead designer, game engine developper (C), artist
+* LEROY Laura :
+* LUCAS Paul :
 
 ## Features
 * Account Creation: Users can create an account to access additional features and personalize their experience.
